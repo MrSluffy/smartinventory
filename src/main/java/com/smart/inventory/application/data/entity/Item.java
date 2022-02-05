@@ -1,5 +1,6 @@
 package com.smart.inventory.application.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 import org.joda.time.DateTime;
 
@@ -28,6 +29,7 @@ public class Item extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date sqlTimestamp;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "buyer_id", referencedColumnName = "id")
     private Buyer buyer;
@@ -48,12 +50,7 @@ public class Item extends AbstractEntity {
     }
 
     public void setPiece(int piece) {
-        if(buyer != null)
-        if (buyer.getPiece() != 0) {
-            this.price = piece - buyer.getPiece();
-        }else {
-            this.piece = piece;
-        }
+        this.piece = piece;
     }
 
     public String getStrDate() {

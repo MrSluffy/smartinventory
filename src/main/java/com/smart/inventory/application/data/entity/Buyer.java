@@ -1,6 +1,5 @@
 package com.smart.inventory.application.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 
 import javax.persistence.*;
@@ -14,7 +13,6 @@ public class Buyer extends AbstractEntity {
     @NotEmpty
     private String name = "";
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "itemName")
     private Set<Item> item = new HashSet<>();
 
@@ -22,7 +20,6 @@ public class Buyer extends AbstractEntity {
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private Item soldItem;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "email")
     private Set<Employer> addedBy = new HashSet<>();
 
