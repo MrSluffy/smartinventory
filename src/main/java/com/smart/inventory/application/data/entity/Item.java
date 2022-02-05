@@ -28,6 +28,10 @@ public class Item extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date sqlTimestamp;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
+    private Buyer buyer;
+
     public Item(){
     }
 
@@ -44,7 +48,12 @@ public class Item extends AbstractEntity {
     }
 
     public void setPiece(int piece) {
-        this.piece = piece;
+        if(buyer != null)
+        if (buyer.getPiece() != 0) {
+            this.price = piece - buyer.getPiece();
+        }else {
+            this.piece = piece;
+        }
     }
 
     public String getStrDate() {
@@ -81,5 +90,13 @@ public class Item extends AbstractEntity {
 
     public void setAddedBy(Set<Employer> addedBy) {
         this.addedBy = addedBy;
+    }
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
     }
 }
