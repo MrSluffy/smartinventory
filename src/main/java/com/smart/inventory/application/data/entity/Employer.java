@@ -33,6 +33,9 @@ public class Employer extends AbstractEntity {
     @ManyToOne
     private Position position;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
+    private Buyer buyer;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
@@ -126,5 +129,13 @@ public class Employer extends AbstractEntity {
 
     public void setEmplyrCompany(Company emplyrCompany) {
         this.emplyrCompany = emplyrCompany;
+    }
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
     }
 }

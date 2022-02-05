@@ -3,8 +3,7 @@ package com.smart.inventory.application.data.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +17,11 @@ public class Buyer extends AbstractEntity {
     @JsonIgnore
     @ManyToMany(mappedBy = "itemName")
     private Set<Item> item = new HashSet<>();
+
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "email")
+    private Set<Employer> addedBy = new HashSet<>();
 
     public Buyer(){
     }
@@ -66,5 +70,13 @@ public class Buyer extends AbstractEntity {
 
     public void setTotalPrice(double value) {
         this.totalPrice = value * price;
+    }
+
+    public Set<Employer> getAddedBy() {
+        return addedBy;
+    }
+
+    public void setAddedBy(Set<Employer> addedBy) {
+        this.addedBy = addedBy;
     }
 }
