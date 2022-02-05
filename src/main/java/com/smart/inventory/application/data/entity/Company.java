@@ -1,5 +1,6 @@
 package com.smart.inventory.application.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 public class Company extends AbstractEntity {
 
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "company_owners",
@@ -23,10 +25,12 @@ public class Company extends AbstractEntity {
 
     private String name;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Owner owner;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "emplyrCompany")
     private Set<Employer> emplyr = new HashSet<>();
 
