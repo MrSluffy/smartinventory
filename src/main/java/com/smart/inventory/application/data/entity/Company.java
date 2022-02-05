@@ -10,13 +10,13 @@ import java.util.List;
 public class Company extends AbstractEntity {
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "company_employers",
-            joinColumns = @JoinColumn(name = "company_id"),
-            inverseJoinColumns = @JoinColumn(name = "employer_id")
+            name = "company_owners",
+            joinColumns = @JoinColumn(name = "companys_id"),
+            inverseJoinColumns = @JoinColumn(name = "owners_id")
     )
-    List<Employer> employersInCompany = new ArrayList<>();
+    List<Owner> ownerInCompany = new ArrayList<>();
 
 
     private String name;
@@ -37,12 +37,12 @@ public class Company extends AbstractEntity {
         this.owner = owner;
     }
 
-    public List<Employer> getEmployersInCompany() {
-        return employersInCompany;
+    public List<Owner> getOwnerInCompany() {
+        return ownerInCompany;
     }
 
-    public void setEmployersInCompany(List<Employer> employers) {
-        this.employersInCompany = employers;
+    public void setOwnerInCompany(List<Owner> owners) {
+        this.ownerInCompany = owners;
     }
 
     public String getName() {

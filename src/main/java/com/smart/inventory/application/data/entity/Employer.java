@@ -26,7 +26,7 @@ public class Employer extends AbstractEntity {
     private String email = "";
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "employersInCompany")
+    @ManyToMany(mappedBy = "ownerInCompany")
     private Set<Company> company = new HashSet<>();
 
     @NotNull
