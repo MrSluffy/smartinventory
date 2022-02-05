@@ -18,6 +18,9 @@ public class Buyer extends AbstractEntity {
     @ManyToMany(mappedBy = "itemName")
     private Set<Item> item = new HashSet<>();
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    private Item soldItem;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "email")
@@ -78,5 +81,13 @@ public class Buyer extends AbstractEntity {
 
     public void setAddedBy(Set<Employer> addedBy) {
         this.addedBy = addedBy;
+    }
+
+    public Item getSoldItem() {
+        return soldItem;
+    }
+
+    public void setSoldItem(Item soldItem) {
+        this.soldItem = soldItem;
     }
 }
