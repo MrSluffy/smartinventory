@@ -4,7 +4,9 @@ import com.smart.inventory.application.data.AbstractEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Company extends AbstractEntity {
@@ -24,6 +26,9 @@ public class Company extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Owner owner;
+
+    @OneToMany(mappedBy = "emplyrCompany")
+    private Set<Employer> emplyr = new HashSet<>();
 
 
     public Company(){
@@ -53,4 +58,7 @@ public class Company extends AbstractEntity {
         this.name = name;
     }
 
+    public Set<Employer> getEmplyr() {
+        return emplyr;
+    }
 }
