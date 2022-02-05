@@ -69,7 +69,7 @@ public class Buyer extends AbstractEntity {
     }
 
     public void setTotalPrice(double value) {
-        this.totalPrice = value * price;
+        this.totalPrice = value;
     }
 
     public Set<Employer> getAddedBy() {
