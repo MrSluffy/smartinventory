@@ -25,8 +25,6 @@ public class Employer extends AbstractEntity {
     @NotEmpty
     private String email = "";
 
-    private String companyName = "";
-
     @JsonIgnore
     @ManyToMany(mappedBy = "employersInCompany")
     private Set<Company> company = new HashSet<>();
@@ -62,7 +60,7 @@ public class Employer extends AbstractEntity {
 
     @Override
     public String toString() {
-        return firstName + " " + lastName + " " + companyName;
+        return firstName + " " + lastName;
     }
 
     public String getFirstName() {
@@ -117,11 +115,4 @@ public class Employer extends AbstractEntity {
         this.item = item;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
 }
