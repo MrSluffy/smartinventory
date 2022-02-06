@@ -107,8 +107,7 @@ public class DataGenerator {
             items.stream().map(item -> {
                 item.getAddedBy().add(employers.get(r.nextInt(employers.size())));
                 item.setTotalPrice(item.getPiece());
-                item.setStrDate(LocalDateTime.now().toString());
-                item.setBuyer(buyers.get(r.nextInt(items.size())));
+                item.setDate(LocalDateTime.now().toString());
                 return item;
             }).collect(Collectors.toList());
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -34,17 +36,20 @@ public class Employer extends AbstractEntity {
     private Position position;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @NotFound(
+            action = NotFoundAction.IGNORE)
     @JoinColumn(name = "buyer_id", referencedColumnName = "id")
     private Buyer buyer;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade={CascadeType.ALL, CascadeType.DETACH})
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company emplyrCompany;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private Item item;
 

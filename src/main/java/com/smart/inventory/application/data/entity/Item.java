@@ -1,10 +1,11 @@
 package com.smart.inventory.application.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,8 @@ import java.util.Set;
 @Entity
 public class Item extends AbstractEntity {
 
-    private String itemName;
+    @NotEmpty
+    private String itemName = "";
 
     private int piece;
 
@@ -20,7 +22,7 @@ public class Item extends AbstractEntity {
 
     private double totalPrice;
 
-    private String strDate;
+    private String dateAndTime;
 
     @OneToMany(mappedBy = "item")
     private Set<Employer> addedBy = new HashSet<>();
@@ -29,12 +31,8 @@ public class Item extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date sqlTimestamp;
 
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
-    private Buyer buyer;
-
     public Item(){
+        dateAndTime = LocalDateTime.now().toString();
     }
 
     public String getItemName() {
@@ -54,15 +52,15 @@ public class Item extends AbstractEntity {
     }
 
     public String getStrDate() {
-        return strDate;
+        return dateAndTime;
     }
 
     public String dt(){
         return DateTime.now().toString();
     }
 
-    public void setStrDate(String strDate) {
-        this.strDate = strDate;
+    public void setDate(String date) {
+        this.dateAndTime = date;
     }
 
     public double getPrice() {
@@ -89,11 +87,4 @@ public class Item extends AbstractEntity {
         this.addedBy = addedBy;
     }
 
-    public Buyer getBuyer() {
-        return buyer;
-    }
-
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
-    }
 }
