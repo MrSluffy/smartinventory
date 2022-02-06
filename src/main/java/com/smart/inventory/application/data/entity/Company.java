@@ -26,12 +26,12 @@ public class Company extends AbstractEntity {
     private String name;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade={CascadeType.ALL, CascadeType.DETACH})
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Owner owner;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "emplyrCompany")
+    @OneToMany(mappedBy = "emplyrCompany", orphanRemoval = true)
     private Set<Employer> emplyr = new HashSet<>();
 
 

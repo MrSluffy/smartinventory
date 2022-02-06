@@ -6,16 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SmartInventoryService {
 
-    private CompanyRepository companyRepository;
-    private BuyerRepository buyerRepository;
-    private EmployerRepository employerRepository;
-    private ItemRepository itemRepository;
-    private OwnerRepository ownerRepository;
-    private PositionRepository positionRepository;
+    private final CompanyRepository companyRepository;
+    private final BuyerRepository buyerRepository;
+    private final EmployerRepository employerRepository;
+    private final ItemRepository itemRepository;
+    private final OwnerRepository ownerRepository;
+    private final PositionRepository positionRepository;
 
 
     @Autowired
@@ -58,6 +59,14 @@ public class SmartInventoryService {
             return ownerRepository.findAll();
         } else {
             return ownerRepository.search(filterText);
+        }
+    }
+
+    public List<Item> findAllItem(String filterText){
+        if(filterText == null || filterText.isEmpty()){
+            return itemRepository.findAll();
+        } else {
+            return itemRepository.search(filterText);
         }
     }
 
@@ -108,5 +117,19 @@ public class SmartInventoryService {
     public PositionRepository getPositionRepository() {
         return positionRepository;
     }
+
+    public void saveItem(Item item) {
+        itemRepository.save(item);
+    }
+
+    public void deleteItem(Item item) {
+        itemRepository.delete(item);
+    }
+    
+    public Optional<Item> getItemById(Integer itemId){
+        return itemRepository.findItemById(itemId);
+    }
+
+
 
 }
