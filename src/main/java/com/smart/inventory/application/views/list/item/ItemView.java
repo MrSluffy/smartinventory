@@ -169,6 +169,7 @@ public class ItemView extends VerticalLayout {
             delete.setVisible(true);
             addClassName("editing");
         }
+        delete.setVisible(false);
     }
 
     private void closeEditor() {
