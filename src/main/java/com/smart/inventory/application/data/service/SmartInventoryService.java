@@ -18,7 +18,6 @@ public class SmartInventoryService {
     private final OwnerRepository ownerRepository;
     private final PositionRepository positionRepository;
 
-
     @Autowired
     public SmartInventoryService(BuyerRepository buyerRepository,
                                  CompanyRepository companyRepository,
@@ -125,11 +124,13 @@ public class SmartInventoryService {
     public void deleteItem(Item item) {
         itemRepository.delete(item);
     }
-    
+
     public Optional<Item> getItemById(Integer itemId){
         return itemRepository.findItemById(itemId);
     }
 
 
-
+    public void deleteItemSelected(List<Item> item) {
+        itemRepository.deleteAll(item);
+    }
 }
