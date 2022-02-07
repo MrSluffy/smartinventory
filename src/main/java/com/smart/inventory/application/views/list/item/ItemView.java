@@ -11,7 +11,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.gridpro.GridPro;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -24,6 +23,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.shared.Registration;
 
+import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class ItemView extends VerticalLayout {
 
     //TODO MAKE IT NICE :0
 
-    GridPro<Item> itemGrid = new GridPro<>(Item.class);
+    Grid<Item> itemGrid = new Grid<>(Item.class);
     TextField filterText = new TextField();
 
     Button plusButton, delete;
@@ -69,10 +69,10 @@ public class ItemView extends VerticalLayout {
         dialog.addConfirmListener(confirmEvent -> fireEvent(new ItemViewEvent.DeleteEvent(this, itemForm.getItem())));
     }
 
+    @Nonnull
     private Component getFooter() {
         HorizontalLayout footer = new HorizontalLayout(plusButton, delete);
         footer.getStyle().set("flex-wrap", "wrap");
-        footer.getVerticalComponentAlignment(configureGrid());
         return footer;
     }
 
@@ -101,6 +101,7 @@ public class ItemView extends VerticalLayout {
         itemGrid.setItems(service.findAllItem(filterText.getValue()));
     }
 
+    @Nonnull
     private Component getContent() {
         HorizontalLayout content = new HorizontalLayout(itemGrid, itemForm);
         content.setFlexGrow(2, itemGrid);
@@ -118,6 +119,7 @@ public class ItemView extends VerticalLayout {
         itemForm.addListener(ItemForm.ItemFormEvent.CloseEvent.class, closeEvent -> closeEditor());
     }
 
+    @Nonnull
     private Component getToolbar() {
         filterText.setPlaceholder("Search item by name...");
         filterText.setClearButtonVisible(true);
@@ -131,12 +133,12 @@ public class ItemView extends VerticalLayout {
         return toolbar;
     }
 
-    private Component configureGrid() {
+    private void configureGrid() {
         itemGrid.addClassName("configure-itemgrid");
         itemGrid.setSizeFull();
         itemGrid.setRowsDraggable(true);
         itemGrid.setSelectionMode(Grid.SelectionMode.MULTI);
-        itemGrid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT, GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_ROW_STRIPES);
+        itemGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_ROW_STRIPES);
 
         itemGrid.setColumns("id", "itemName", "piece", "price", "totalPrice");
         itemGrid.addColumn(Item::getStrDate).setHeader("Date added");
@@ -158,7 +160,6 @@ public class ItemView extends VerticalLayout {
             plusButton.setVisible(size == 0);
             delete.setVisible(size != 0);
         });
-        return itemGrid;
     }
 
     private void editItem(Item item) {
@@ -195,8 +196,7 @@ public class ItemView extends VerticalLayout {
         updateList();
         closeEditor();
 
-        Notification.show(itemForm.itemName.getValue() + " " +
-                                " successfully deleted",
+        Notification.show("Successfully deleted",
                         5000, Notification.Position.TOP_CENTER)
                 .addThemeVariants(NotificationVariant.LUMO_ERROR);
     }
