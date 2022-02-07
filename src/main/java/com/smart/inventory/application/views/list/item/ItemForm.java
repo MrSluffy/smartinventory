@@ -1,10 +1,7 @@
 package com.smart.inventory.application.views.list.item;
 
 import com.smart.inventory.application.data.entity.Item;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -101,13 +98,6 @@ public class ItemForm extends FormLayout {
         public ItemFormEvent(ItemForm source, Item item) {
             super(source, false);
             this.item = item;
-            if (item != null) {
-                source.piece.addValueChangeListener(valueChangeEvent -> {
-                    this.item.setTotalPrice(item.getPiece());
-                    source.totalPrice.setValue((item.getTotalPrice()));
-                });
-
-            }
         }
 
         public Item getItem() {
@@ -120,8 +110,7 @@ public class ItemForm extends FormLayout {
                 if (source.isVisible()) {
                     item.setTotalPrice(item.getPiece());
                     Notification.show(source.itemName.getValue() + " " +
-                                            " successfully updated" +
-                                            source.piece.getValue(),
+                                            " successfully updated",
                                     5000, Notification.Position.TOP_CENTER)
                             .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 }
