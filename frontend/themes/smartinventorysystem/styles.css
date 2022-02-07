@@ -6,3 +6,64 @@
         display: none;
     }
 }
+html {
+    --lumo-border-radius: calc(var(--lumo-size-m) / 2);
+    --lumo-size-xl: 4rem;
+    --lumo-size-l: 3rem;
+    --lumo-size-m: 2.5rem;
+    --lumo-size-s: 2rem;
+    --lumo-size-xs: 1.75rem;
+    --lumo-space-xl: 2.5rem;
+    --lumo-space-l: 1.75rem;
+    --lumo-space-m: 1.125rem;
+    --lumo-space-s: 0.75rem;
+    --lumo-space-xs: 0.375rem;
+
+
+    --lumo-tint-5pct: rgba(255, 237, 234, 0.05);
+    --lumo-tint-10pct: rgba(255, 237, 234, 0.1);
+    --lumo-tint-20pct: rgba(255, 237, 234, 0.2);
+    --lumo-tint-30pct: rgba(255, 237, 234, 0.3);
+    --lumo-tint-40pct: rgba(255, 237, 234, 0.4);
+    --lumo-tint-50pct: rgba(255, 237, 234, 0.5);
+    --lumo-tint-60pct: rgba(255, 237, 234, 0.6);
+    --lumo-tint-70pct: rgba(255, 237, 234, 0.7);
+    --lumo-tint-80pct: rgba(255, 237, 234, 0.8);
+    --lumo-tint-90pct: rgba(255, 237, 234, 0.9);
+
+    --lumo-shade-5pct: rgba(66, 0, 3, 0.05);
+    --lumo-shade-10pct: rgba(66, 0, 3, 0.1);
+    --lumo-shade-20pct: rgba(66, 0, 3, 0.2);
+    --lumo-shade-30pct: rgba(66, 0, 3, 0.3);
+    --lumo-shade-40pct: rgba(66, 0, 3, 0.4);
+    --lumo-shade-50pct: rgba(66, 0, 3, 0.5);
+    --lumo-shade-60pct: rgba(66, 0, 3, 0.6);
+    --lumo-shade-70pct: rgba(66, 0, 3, 0.7);
+    --lumo-shade-80pct: rgba(66, 0, 3, 0.8);
+    --lumo-shade-90pct: rgba(66, 0, 3, 0.9);
+    --lumo-primary-text-color: rgb(66, 0, 3);
+    --lumo-primary-color-50pct: rgba(66, 0, 3, 0.5);
+
+
+    --lumo-primary-color-10pct: rgba(66, 0, 3, 0.1);
+    --lumo-error-text-color: rgba(254, 91, 82, 0.6);
+    --lumo-error-color-50pct: rgba(254, 91, 82, 0.5);
+    --lumo-error-color-10pct: rgba(254, 91, 82, 0.1);
+    --lumo-success-text-color: rgb(39, 27, 2);
+    --lumo-success-color-50pct: rgba(39, 27, 2, 0.5);
+    --lumo-success-color-10pct: rgba(39, 27, 2, 0.1);
+
+    --lumo-tint: #FFEDEA;
+    --lumo-shade: hsl(357, 100%, 13%);
+    --lumo-primary-color: hsl(357, 100%, 13%);
+    --lumo-primary-contrast-color: #FFEDEA;
+    --lumo-error-color: hsla(3, 99%, 66%, 0.6);
+    --lumo-error-contrast-color: #FFEDEA;
+    --lumo-success-color: hsl(41, 90%, 8%);
+    --lumo-success-contrast-color: #FFEDEA;
+    --lumo-body-text-color: rgb(65, 0, 3);
+    --lumo-secondary-text-color: rgb(104, 1, 9);
+    --lumo-tertiary-text-color: rgb(130, 130, 130);
+}
+[theme~="dark"] {
+}
