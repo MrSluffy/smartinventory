@@ -45,7 +45,7 @@ public class SmartInventoryService {
         return employerRepository.findAll();
     }
 
-    private List<Item> findAllItem(){
+    public List<Item> findAllItem(){
         return itemRepository.findAll();
     }
 
@@ -73,6 +73,9 @@ public class SmartInventoryService {
         return  ownerRepository.count();
     }
 
+    public long countItems(){
+        return  itemRepository.count();
+    }
 
     public void deletePosition(Position position){
         positionRepository.delete(position);
