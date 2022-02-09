@@ -26,6 +26,7 @@ import com.vaadin.flow.shared.Registration;
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Route(value = "item")
 @PageTitle("Item Stock")
@@ -33,15 +34,15 @@ public class ItemView extends VerticalLayout {
 
     //TODO MAKE IT NICE :0
 
-    Grid<Item> itemGrid = new Grid<>(Item.class);
+    Grid<Item> itemGrid = new Grid<>(Item.class, false);
     TextField filterText = new TextField();
 
     Button plusButton, delete;
 
     ConfirmDialog dialog = new ConfirmDialog();
 
+    ItemForm itemForm = new ItemForm();
 
-    ItemForm itemForm;
     private final SmartInventoryService service;
 
     public ItemView(SmartInventoryService service) {
@@ -66,13 +67,15 @@ public class ItemView extends VerticalLayout {
         dialog.setConfirmText("Delete");
         dialog.setConfirmButtonTheme("error primary");
         dialog.setCancelable(true);
-        dialog.addConfirmListener(confirmEvent -> fireEvent(new ItemViewEvent.DeleteEvent(this, itemForm.getItem())));
+        dialog.addConfirmListener(confirmEvent -> deleteItem(new ItemViewEvent.DeleteEvent(this, itemForm.getItem())));
     }
 
     @Nonnull
-    private Component getFooter() {
+    private HorizontalLayout getFooter() {
         HorizontalLayout footer = new HorizontalLayout(plusButton, delete);
+        footer.setClassName("footer");
         footer.getStyle().set("flex-wrap", "wrap");
+        footer.setJustifyContentMode(JustifyContentMode.END);
         return footer;
     }
 
@@ -82,9 +85,9 @@ public class ItemView extends VerticalLayout {
         plusButton.setClassName("fab-plus");
         plusButton.setMaxHeight(8f, Unit.EX);
         plusButton.setWidth(8f, Unit.EX);
+        plusButton.getStyle().set("margin-inline-end", "auto");
         plusButton.getElement().setAttribute("aria-label", "Add item");
         plusButton.setAutofocus(true);
-        plusButton.getStyle().set("margin-inline-end", "auto");
         plusButton.addClickListener(click -> addItem());
 
         delete = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
@@ -92,12 +95,15 @@ public class ItemView extends VerticalLayout {
         delete.setClassName("fab-del");
         delete.setMaxHeight(8f, Unit.EX);
         delete.setWidth(8f, Unit.EX);
+        delete.getStyle().set("margin-inline-end", "auto");
         delete.getElement().setAttribute("aria-label", "Add item");
         delete.setAutofocus(true);
-        delete.getStyle().set("margin-inline-start", "auto");
     }
 
     private void updateList() {
+        itemGrid.getDataProvider().addDataProviderListener(
+                dataChangeEvent ->
+                        dataChangeEvent.getSource().refreshAll());
         itemGrid.setItems(service.findAllItem(filterText.getValue()));
     }
 
@@ -112,7 +118,6 @@ public class ItemView extends VerticalLayout {
     }
 
     private void configureForm() {
-        itemForm = new ItemForm();
         itemForm.setWidth("25em");
         itemForm.addListener(ItemForm.ItemFormEvent.SaveEvent.class, this::saveItem);
         addListener(ItemViewEvent.DeleteEvent.class, this::deleteItem);
@@ -125,7 +130,6 @@ public class ItemView extends VerticalLayout {
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateList());
-
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
         toolbar.addClassName("toolbar");
         plusButton.setVisible(false);
@@ -134,20 +138,51 @@ public class ItemView extends VerticalLayout {
     }
 
     private void configureGrid() {
+        List<Item> totalSize = service.getItemRepository().findAll();
+
         itemGrid.addClassName("configure-itemgrid");
         itemGrid.setSizeFull();
         itemGrid.setRowsDraggable(true);
         itemGrid.setSelectionMode(Grid.SelectionMode.MULTI);
         itemGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_ROW_STRIPES);
 
-        itemGrid.setColumns("id", "itemName", "piece", "price", "totalPrice");
-        itemGrid.addColumn(Item::getStrDate).setHeader("Date added");
-        itemGrid.getColumns().forEach(itemColumn -> itemColumn.setAutoWidth(true));
+        itemGrid.setColumns(
+                "id",
+                "itemName",
+                "piece",
+                "price",
+                "totalPrice");
+        itemGrid.getColumns()
+                .get(0).setHeader("Item ID")
+                .setFrozen(true)
+                .setFlexGrow(0);
+        itemGrid.getColumns().get(1)
+                .setHeader("Item Name")
+                .setFrozen(true)
+                .setFlexGrow(0);
+        itemGrid.getColumns().get(2)
+                .setHeader("Quantity");
+        itemGrid.getColumns().get(3)
+                .setHeader("Price");
+        itemGrid.getColumns().get(4)
+                .setHeader("Total Price");
+        itemGrid.addColumn(Item::getStrDate)
+                .setHeader("Last Updated ")
+                .setAutoWidth(false);
+        itemGrid.getColumns().forEach(itemColumn -> {
+            itemColumn.setResizable(true);
+            itemColumn.setAutoWidth(true);
+            itemColumn.setSortable(true);
+        });
+
         delete.addClickListener(deleteEvnt -> {
             int selectedSize = itemGrid.asMultiSelect().getValue().size();
-            if(!itemGrid.asMultiSelect().isEmpty()){
+            if (!itemGrid.asMultiSelect().isEmpty()) {
                 dialog.open();
-                dialog.setHeader("Delete "+ selectedSize + " selected items?");
+                dialog.setHeader(
+                        "Delete " +
+                                selectedSize +
+                                " selected items?");
             }
         });
         itemGrid.addSelectionListener(selection -> {
@@ -161,6 +196,17 @@ public class ItemView extends VerticalLayout {
             delete.setVisible(size != 0);
         });
     }
+
+
+    //TODO
+    private String createTotalFooterText(List<Item> item) {
+        double totalPrice = 0;
+        for (Item items : item) {
+            totalPrice += items.getTotalPrice();
+        }
+        return String.format("%s total amount", totalPrice);
+    }
+
 
     private void editItem(Item item) {
         if (item != null) {
@@ -178,6 +224,7 @@ public class ItemView extends VerticalLayout {
         plusButton.setVisible(true);
         delete.setVisible(false);
         removeClassName("editing");
+        itemGrid.asMultiSelect().clear();
     }
 
     private void addItem() {
@@ -185,20 +232,13 @@ public class ItemView extends VerticalLayout {
     }
 
     private void deleteItem(ItemViewEvent event) {
-        itemGrid.addSelectionListener(selection -> {
-            int size = selection.getAllSelectedItems().size();
-            plusButton.setVisible(size == 0);
-            delete.setVisible(size != 0);
-            itemGrid.asMultiSelect().addSelectionListener(multiSelectionEvent ->
-                    service.deleteItemSelected(new ArrayList<>(multiSelectionEvent.getAllSelectedItems())));
-        });
-        service.deleteItem(event.getItem());
+        service.deleteItemSelected(new ArrayList<>(itemGrid.getSelectedItems()));
+        itemGrid.getDataProvider().refreshAll();
         updateList();
-        closeEditor();
-
-        Notification.show("Successfully deleted",
+        Notification.show("Successfully deleted ",
                         5000, Notification.Position.TOP_CENTER)
                 .addThemeVariants(NotificationVariant.LUMO_ERROR);
+        closeEditor();
     }
 
     private void saveItem(ItemForm.ItemFormEvent.SaveEvent event) {
@@ -209,7 +249,7 @@ public class ItemView extends VerticalLayout {
         closeEditor();
     }
 
-    public static abstract class ItemViewEvent extends ComponentEvent<ItemView>{
+    public static abstract class ItemViewEvent extends ComponentEvent<ItemView> {
 
         private final Item item;
 
@@ -218,11 +258,12 @@ public class ItemView extends VerticalLayout {
             this.item = item;
 
         }
+
         public Item getItem() {
             return item;
         }
 
-        public static class DeleteEvent extends ItemViewEvent{
+        public static class DeleteEvent extends ItemViewEvent {
             DeleteEvent(ItemView source, Item item) {
                 super(source, item);
             }

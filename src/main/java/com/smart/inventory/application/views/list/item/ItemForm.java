@@ -5,12 +5,15 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
@@ -26,13 +29,17 @@ public class ItemForm extends FormLayout {
 
 
     TextField itemName = new TextField("Item Name");
-    IntegerField piece = new IntegerField("Piece");
+    IntegerField piece = new IntegerField("Quantity");
     NumberField price = new NumberField("Price");
     NumberField totalPrice = new NumberField("Total Price");
-
+    Select<String> selectCurrency = new Select<>();
 
     Button save = new Button("Save");
     Button cancel = new Button("Cancel");
+
+    Div currencyPrefix = new Div();
+    Div currencyPrefix1 = new Div();
+
 
     public Item getItem() {
         return item;
@@ -56,10 +63,30 @@ public class ItemForm extends FormLayout {
 
         add(itemName,
                 piece,
-                price,
+                createPriceLayout(),
                 totalPrice,
                 createButtonLayout());
+    }
 
+
+    private Component createPriceLayout() {
+        selectCurrency.setWidth(10f, Unit.EX);
+        selectCurrency.setLabel("Currency");
+        selectCurrency.setItems("₱", "$");
+        selectCurrency.setValue("₱");
+
+        currencyPrefix.setText(selectCurrency.getValue());
+        currencyPrefix1.setText(selectCurrency.getValue());
+        selectCurrency.addValueChangeListener(selectStringComponentValueChangeEvent -> {
+            currencyPrefix.setText(selectCurrency.getValue());
+            currencyPrefix1.setText(selectCurrency.getValue());
+        });
+        price.setPrefixComponent(currencyPrefix);
+        price.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
+        price.setSizeFull();
+        totalPrice.setPrefixComponent(currencyPrefix1);
+
+        return new HorizontalLayout(selectCurrency, price);
     }
 
     public void setItem(Item item) {
@@ -69,7 +96,7 @@ public class ItemForm extends FormLayout {
 
     private Component createButtonLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        cancel.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
         save.addClickShortcut(Key.ENTER);
         cancel.addClickShortcut(Key.ESCAPE);
@@ -107,6 +134,8 @@ public class ItemForm extends FormLayout {
         public static class SaveEvent extends ItemFormEvent {
             SaveEvent(ItemForm source, Item item) {
                 super(source, item);
+                source.currencyPrefix.setText(source.selectCurrency.getValue());
+                source.currencyPrefix1.setText(source.selectCurrency.getValue());
                 if (source.isVisible()) {
                     item.setTotalPrice(item.getPiece());
                     Notification.show(source.itemName.getValue() + " " +
