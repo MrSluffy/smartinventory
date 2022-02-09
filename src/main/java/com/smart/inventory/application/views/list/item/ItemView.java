@@ -2,6 +2,7 @@ package com.smart.inventory.application.views.list.item;
 
 import com.smart.inventory.application.data.entity.Item;
 import com.smart.inventory.application.data.service.SmartInventoryService;
+import com.smart.inventory.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -28,7 +29,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(value = "item")
+@Route(value="item", layout = MainLayout.class)
 @PageTitle("Item Stock")
 public class ItemView extends VerticalLayout {
 
@@ -127,6 +128,7 @@ public class ItemView extends VerticalLayout {
     @Nonnull
     private Component getToolbar() {
         filterText.setPlaceholder("Search item by name...");
+        filterText.setWidth(20f, Unit.EM);
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateList());
@@ -138,8 +140,6 @@ public class ItemView extends VerticalLayout {
     }
 
     private void configureGrid() {
-        List<Item> totalSize = service.getItemRepository().findAll();
-
         itemGrid.addClassName("configure-itemgrid");
         itemGrid.setSizeFull();
         itemGrid.setRowsDraggable(true);
