@@ -12,20 +12,20 @@ import java.util.Optional;
 public class SmartInventoryService {
 
     private final CompanyRepository companyRepository;
-    private final BuyerRepository buyerRepository;
+    private final CustomerRepository customerRepository;
     private final EmployerRepository employerRepository;
     private final ItemRepository itemRepository;
     private final OwnerRepository ownerRepository;
     private final PositionRepository positionRepository;
 
     @Autowired
-    public SmartInventoryService(BuyerRepository buyerRepository,
+    public SmartInventoryService(CustomerRepository customerRepository,
                                  CompanyRepository companyRepository,
                                  EmployerRepository employerRepository,
                                  ItemRepository itemRepository,
                                  OwnerRepository ownerRepository,
                                  PositionRepository positionRepository) {
-        this.buyerRepository = buyerRepository;
+        this.customerRepository = customerRepository;
         this.companyRepository = companyRepository;
         this.employerRepository = employerRepository;
         this.itemRepository = itemRepository;
@@ -33,15 +33,15 @@ public class SmartInventoryService {
         this.positionRepository = positionRepository;
     }
 
-    private List<Owner> findAllOwner() {
+    public List<Owner> findAllOwner() {
         return ownerRepository.findAll();
     }
 
-    private List<Company> findAllCompany(){
+    public List<Company> findAllCompany(){
         return companyRepository.findAll();
     }
 
-    private List<Employer> findAllEmployer(){
+    public List<Employer> findAllEmployer(){
         return employerRepository.findAll();
     }
 
@@ -102,8 +102,8 @@ public class SmartInventoryService {
     }
 
 
-    public BuyerRepository getBuyerRepository() {
-        return buyerRepository;
+    public CustomerRepository getCustomerRepository() {
+        return customerRepository;
     }
 
 
@@ -128,7 +128,7 @@ public class SmartInventoryService {
         itemRepository.delete(item);
     }
 
-    public Optional<Item> getItemById(Integer itemId){
+    public Optional<Item> getItemById(Integer itemId) {
         return itemRepository.findItemById(itemId);
     }
 

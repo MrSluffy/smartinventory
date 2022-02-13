@@ -12,6 +12,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -22,7 +23,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.shared.Registration;
+import org.vaadin.haijian.Exporter;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
@@ -42,8 +45,9 @@ public class ItemView extends VerticalLayout {
 
     ConfirmDialog dialog = new ConfirmDialog();
 
-    ItemForm itemForm = new ItemForm();
+    Anchor anchor;
 
+    ItemForm itemForm = new ItemForm();
     private final SmartInventoryService service;
 
     public ItemView(SmartInventoryService service) {
@@ -73,7 +77,8 @@ public class ItemView extends VerticalLayout {
 
     @Nonnull
     private HorizontalLayout getFooter() {
-        HorizontalLayout footer = new HorizontalLayout(plusButton, delete);
+        HorizontalLayout footer = new HorizontalLayout(plusButton, delete, anchor);
+        footer.setWidthFull();
         footer.setClassName("footer");
         footer.getStyle().set("flex-wrap", "wrap");
         footer.setJustifyContentMode(JustifyContentMode.END);
@@ -149,9 +154,10 @@ public class ItemView extends VerticalLayout {
         itemGrid.setColumns(
                 "id",
                 "itemName",
-                "piece",
+                "quantity",
                 "price",
-                "totalPrice");
+                "totalPrice",
+                "dateAndTime");
         itemGrid.getColumns()
                 .get(0).setHeader("Item ID")
                 .setFrozen(true)
@@ -166,14 +172,15 @@ public class ItemView extends VerticalLayout {
                 .setHeader("Price");
         itemGrid.getColumns().get(4)
                 .setHeader("Total Price");
-        itemGrid.addColumn(Item::getStrDate)
+        itemGrid.getColumns().get(5)
                 .setHeader("Last Updated ")
                 .setAutoWidth(false);
         itemGrid.getColumns().forEach(itemColumn -> {
             itemColumn.setResizable(true);
             itemColumn.setAutoWidth(true);
-            itemColumn.setSortable(true);
         });
+
+        anchor = new Anchor(new StreamResource("my-excel.xlsx", Exporter.exportAsExcel(itemGrid)), "Download As Excel");
 
         delete.addClickListener(deleteEvnt -> {
             int selectedSize = itemGrid.asMultiSelect().getValue().size();
@@ -242,7 +249,7 @@ public class ItemView extends VerticalLayout {
     }
 
     private void saveItem(ItemForm.ItemFormEvent.SaveEvent event) {
-        event.getItem().setDate(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-" + LocalDateTime.now().toLocalDate().toString());
+        event.getItem().setDateAndTime(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-" + LocalDateTime.now().toLocalDate().toString());
         service.saveItem(event.getItem());
         itemForm.totalPrice.setPlaceholder(String.valueOf(event.getItem().getTotalPrice()));
         updateList();

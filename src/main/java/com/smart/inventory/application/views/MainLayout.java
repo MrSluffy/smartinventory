@@ -9,8 +9,10 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
+@Route(value="")
 public class MainLayout extends AppLayout {
 
     public static class MenuItemInfo extends ListItem {

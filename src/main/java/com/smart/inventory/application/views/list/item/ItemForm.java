@@ -137,7 +137,7 @@ public class ItemForm extends FormLayout {
                 source.currencyPrefix.setText(source.selectCurrency.getValue());
                 source.currencyPrefix1.setText(source.selectCurrency.getValue());
                 if (source.isVisible()) {
-                    item.setTotalPrice(item.getPiece());
+                    item.setTotalPrice(item.getQuantity());
                     Notification.show(source.itemName.getValue() + " " +
                                             " successfully updated",
                                     5000, Notification.Position.TOP_CENTER)

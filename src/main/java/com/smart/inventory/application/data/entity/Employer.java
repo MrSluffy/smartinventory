@@ -29,7 +29,7 @@ public class Employer extends AbstractEntity {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "ownerInCompany")
-    private Set<Company> company = new HashSet<>();
+    private final Set<Company> company = new HashSet<>();
 
     @NotNull
     @ManyToOne
@@ -41,7 +41,7 @@ public class Employer extends AbstractEntity {
     @NotFound(
             action = NotFoundAction.IGNORE)
     @JoinColumn(name = "buyer_id", referencedColumnName = "id")
-    private Buyer buyer;
+    private Customer customer;
 
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.ALL, CascadeType.DETACH})
@@ -139,11 +139,11 @@ public class Employer extends AbstractEntity {
         this.emplyrCompany = emplyrCompany;
     }
 
-    public Buyer getBuyer() {
-        return buyer;
+    public Customer getBuyer() {
+        return customer;
     }
 
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
+    public void setBuyer(Customer customer) {
+        this.customer = customer;
     }
 }

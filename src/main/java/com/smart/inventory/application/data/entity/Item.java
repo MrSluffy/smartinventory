@@ -3,11 +3,11 @@ package com.smart.inventory.application.data.entity;
 import com.smart.inventory.application.data.AbstractEntity;
 import org.joda.time.DateTime;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,21 +18,18 @@ public class Item extends AbstractEntity {
     private String itemName = "";
 
     @NotNull
-    private int piece;
+    private int quantity;
 
     @NotNull
     private double price;
 
     private double totalPrice;
 
+    @NotNull
     private String dateAndTime;
 
     @OneToMany(mappedBy = "item")
     private Set<Employer> addedBy = new HashSet<>();
-
-    @Basic
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date sqlTimestamp;
 
     public Item(){
         dateAndTime = LocalDateTime.now().toString();
@@ -46,24 +43,16 @@ public class Item extends AbstractEntity {
         this.itemName = itemName;
     }
 
-    public int getPiece() {
-        return piece;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setPiece(int piece) {
-        this.piece = piece;
-    }
-
-    public String getStrDate() {
-        return dateAndTime;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String dt(){
         return DateTime.now().toString();
-    }
-
-    public void setDate(String date) {
-        this.dateAndTime = date;
     }
 
     public double getPrice() {
@@ -90,4 +79,11 @@ public class Item extends AbstractEntity {
         this.addedBy = addedBy;
     }
 
+    public String getDateAndTime() {
+        return dateAndTime;
+    }
+
+    public void setDateAndTime(String dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
 }
