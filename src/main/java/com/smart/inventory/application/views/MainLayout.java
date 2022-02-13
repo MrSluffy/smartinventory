@@ -1,5 +1,6 @@
 package com.smart.inventory.application.views;
 
+import com.smart.inventory.application.views.list.costing.IngredientView;
 import com.smart.inventory.application.views.list.dashboard.DashboardView;
 import com.smart.inventory.application.views.list.item.ItemView;
 import com.vaadin.flow.component.Component;
@@ -109,6 +110,8 @@ public class MainLayout extends AppLayout {
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
                 new MenuItemInfo("Item Stock", "la la-globe", ItemView.class), //
+
+                new MenuItemInfo("Costing", "la la-globe", IngredientView.class), //
 
                 new MenuItemInfo("Dashboard", "la la-file", DashboardView.class), //
 
