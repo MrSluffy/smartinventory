@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Buyer extends AbstractEntity {
+public class Customer extends AbstractEntity {
 
     @NotEmpty
     private String name = "";
@@ -23,14 +23,12 @@ public class Buyer extends AbstractEntity {
     @ManyToMany(mappedBy = "email")
     private Set<Employer> addedBy = new HashSet<>();
 
-    public Buyer(){
+    public Customer(){
     }
 
-    private double price;
+    private double purchaseAmount;
 
-    private int piece;
-
-    private double totalPrice;
+    private int quantity;
 
     public String getName() {
         return name;
@@ -48,28 +46,20 @@ public class Buyer extends AbstractEntity {
         this.item = item;
     }
 
-    public double getPrice() {
-        return price;
+    public double getPurchaseAmount() {
+        return purchaseAmount;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPurchaseAmount(double purchaseAmount) {
+        this.purchaseAmount = purchaseAmount;
     }
 
-    public int getPiece() {
-        return piece;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setPiece(int piece) {
-        this.piece = piece;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice ;
-    }
-
-    public void setTotalPrice(double value) {
-        this.totalPrice = value;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public Set<Employer> getAddedBy() {
