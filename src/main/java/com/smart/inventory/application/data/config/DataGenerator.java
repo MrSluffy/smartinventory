@@ -24,19 +24,19 @@ public class DataGenerator {
     private List<Company> companies;
     private List<Owner> owners;
     private List<Item> items;
-    private List<Buyer> buyers;
+    private List<Customer> customers;
     private ExampleDataGenerator<Company> companyGenerator;
     private ExampleDataGenerator<Employer> employerGenerator;
     private ExampleDataGenerator<Owner> ownerGenerator;
     private ExampleDataGenerator<Item> itemGenerator;
-    private ExampleDataGenerator<Buyer> buyerGenerator;
+    private ExampleDataGenerator<Customer> buyerGenerator;
 
 
     @Bean
     public CommandLineRunner loadData(OwnerRepository ownerRepository,
                                       CompanyRepository companyRepository,
                                       EmployerRepository employerRepository,
-                                      BuyerRepository buyerRepository,
+                                      CustomerRepository customerRepository,
                                       ItemRepository itemRepository,
                                       PositionRepository positionRepository) {
 
@@ -72,7 +72,7 @@ public class DataGenerator {
 
             itemGenerator = new ExampleDataGenerator<>(Item.class, LocalDateTime.now());
             itemGenerator.setData(Item::setItemName, DataType.FOOD_PRODUCT_NAME);
-            itemGenerator.setData(Item::setPiece, DataType.NUMBER_UP_TO_10);
+            itemGenerator.setData(Item::setQuantity, DataType.NUMBER_UP_TO_10);
             itemGenerator.setData(Item::setPrice, DataType.PRICE);
             items = itemGenerator.create(10, seed);
 
@@ -84,9 +84,9 @@ public class DataGenerator {
 
             owners = ownerGenerator.create(5, seed);
 
-            buyerGenerator = new ExampleDataGenerator<>(Buyer.class, LocalDateTime.now());
-            buyerGenerator.setData(Buyer::setName, DataType.FULL_NAME);
-            buyers = buyerGenerator.create(8, seed);
+            buyerGenerator = new ExampleDataGenerator<>(Customer.class, LocalDateTime.now());
+            buyerGenerator.setData(Customer::setName, DataType.FULL_NAME);
+            customers = buyerGenerator.create(8, seed);
 
             companies.stream().map(company -> {
                 company.getEmplyr().add(employers.get(r.nextInt(employers.size())));
@@ -100,32 +100,31 @@ public class DataGenerator {
                 employer.setPosition(positions.get(r.nextInt(positions.size())));
                 employer.setEmplyrCompany(companies.get(r.nextInt(companies.size())));
                 employer.setItem(items.get(r.nextInt(items.size())));
-                employer.setBuyer(buyers.get(r.nextInt(buyers.size())));
+                employer.setBuyer(customers.get(r.nextInt(customers.size())));
                 return employer;
             }).collect(Collectors.toList());
 
             items.stream().map(item -> {
                 item.getAddedBy().add(employers.get(r.nextInt(employers.size())));
-                item.setTotalPrice(item.getPiece());
-                item.setDate(LocalDateTime.now().toString());
+                item.setTotalPrice(item.getQuantity());
+                item.setDateAndTime(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-"+ LocalDateTime.now().toLocalDate().toString());
                 return item;
             }).collect(Collectors.toList());
 
-            buyers.stream().map(buyer -> {
-                buyer.getItem().add(items.get(r.nextInt(items.size())));
-                buyer.setPiece(items.get(r.nextInt(items.size())).getPiece());
-                buyer.setPrice(items.get(r.nextInt(items.size())).getPrice());
-                buyer.setTotalPrice(items.get(r.nextInt(items.size())).getTotalPrice());
-                buyer.getAddedBy().add(employers.get(r.nextInt(employers.size())));
-                buyer.setSoldItem(items.get(r.nextInt(items.size())));
-                return buyer;
+            customers.stream().map(customer -> {
+                customer.getItem().add(items.get(r.nextInt(items.size())));
+                customer.setQuantity(items.get(r.nextInt(items.size())).getQuantity());
+                customer.setPurchaseAmount(items.get(r.nextInt(items.size())).getPrice());
+                customer.getAddedBy().add(employers.get(r.nextInt(employers.size())));
+                customer.setSoldItem(items.get(r.nextInt(items.size())));
+                return customer;
             }).collect(Collectors.toList());
 
 
 
 
             itemRepository.saveAll(items);
-            buyerRepository.saveAll(buyers);
+            customerRepository.saveAll(customers);
             employerRepository.saveAll(employers);
             companyRepository.saveAll(companies);
             ownerRepository.saveAll(owners);
