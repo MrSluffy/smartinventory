@@ -41,7 +41,9 @@ public class ItemView extends VerticalLayout {
     Grid<Item> itemGrid = new Grid<>(Item.class, false);
     TextField filterText = new TextField();
 
-    Button plusButton, delete;
+    Button plusButton = new Button(new Icon(VaadinIcon.PLUS));
+
+    Button delete = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
 
     ConfirmDialog dialog = new ConfirmDialog();
 
@@ -54,8 +56,6 @@ public class ItemView extends VerticalLayout {
         this.service = service;
         addClassName("item-view");
         setSizeFull();
-
-        getFab();
 
         configureGrid();
         configureForm();
@@ -77,16 +77,15 @@ public class ItemView extends VerticalLayout {
 
     @Nonnull
     private HorizontalLayout getFooter() {
-        HorizontalLayout footer = new HorizontalLayout(plusButton, delete, anchor);
+        HorizontalLayout footer = new HorizontalLayout(anchor, getFab());
         footer.setWidthFull();
         footer.setClassName("footer");
         footer.getStyle().set("flex-wrap", "wrap");
-        footer.setJustifyContentMode(JustifyContentMode.END);
+        footer.setJustifyContentMode(JustifyContentMode.BETWEEN);
         return footer;
     }
 
-    private void getFab() {
-        plusButton = new Button(new Icon(VaadinIcon.PLUS));
+    private Component getFab() {
         plusButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ICON);
         plusButton.setClassName("fab-plus");
         plusButton.setMaxHeight(8f, Unit.EX);
@@ -96,7 +95,7 @@ public class ItemView extends VerticalLayout {
         plusButton.setAutofocus(true);
         plusButton.addClickListener(click -> addItem());
 
-        delete = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
+
         delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_ERROR);
         delete.setClassName("fab-del");
         delete.setMaxHeight(8f, Unit.EX);
@@ -104,6 +103,17 @@ public class ItemView extends VerticalLayout {
         delete.getStyle().set("margin-inline-end", "auto");
         delete.getElement().setAttribute("aria-label", "Add item");
         delete.setAutofocus(true);
+        delete.addClickListener(deleteEvnt -> {
+            int selectedSize = itemGrid.asMultiSelect().getValue().size();
+            if (!itemGrid.asMultiSelect().isEmpty()) {
+                dialog.open();
+                dialog.setHeader(
+                        "Delete " +
+                                selectedSize +
+                                " selected items?");
+            }
+        });
+        return new HorizontalLayout(plusButton, delete);
     }
 
     private void updateList() {
@@ -180,18 +190,7 @@ public class ItemView extends VerticalLayout {
             itemColumn.setAutoWidth(true);
         });
 
-        anchor = new Anchor(new StreamResource("my-excel.xlsx", Exporter.exportAsExcel(itemGrid)), "Download As Excel");
-
-        delete.addClickListener(deleteEvnt -> {
-            int selectedSize = itemGrid.asMultiSelect().getValue().size();
-            if (!itemGrid.asMultiSelect().isEmpty()) {
-                dialog.open();
-                dialog.setHeader(
-                        "Delete " +
-                                selectedSize +
-                                " selected items?");
-            }
-        });
+        anchor = new Anchor(new StreamResource("smartinventory-Items.xlsx", Exporter.exportAsExcel(itemGrid)), "Download As Excel");
         itemGrid.addSelectionListener(selection -> {
             int size = selection.getAllSelectedItems().size();
             if (selection.getFirstSelectedItem().isPresent()) {
