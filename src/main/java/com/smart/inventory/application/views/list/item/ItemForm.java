@@ -1,7 +1,11 @@
 package com.smart.inventory.application.views.list.item;
 
 import com.smart.inventory.application.data.entity.Item;
-import com.vaadin.flow.component.*;
+import com.smart.inventory.application.views.extension.CusComponent;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -13,7 +17,6 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
@@ -49,7 +52,6 @@ public class ItemForm extends FormLayout {
     public ItemForm() {
         addClassName("item-form");
 
-
         quantity.setHasControls(true);
         quantity.setMin(0);
         quantity.setMax(Integer.MAX_VALUE);
@@ -67,23 +69,7 @@ public class ItemForm extends FormLayout {
 
 
     private Component createPriceLayout() {
-        selectCurrency.setWidth(10f, Unit.EX);
-        selectCurrency.setLabel("Currency");
-        selectCurrency.setItems("₱", "$");
-        selectCurrency.setValue("₱");
-
-        currencyPrefix.setText(selectCurrency.getValue());
-        currencyPrefix1.setText(selectCurrency.getValue());
-        selectCurrency.addValueChangeListener(selectStringComponentValueChangeEvent -> {
-            currencyPrefix.setText(selectCurrency.getValue());
-            currencyPrefix1.setText(selectCurrency.getValue());
-        });
-        price.setPrefixComponent(currencyPrefix);
-        price.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
-        price.setSizeFull();
-        totalPrice.setPrefixComponent(currencyPrefix1);
-
-        return new HorizontalLayout(selectCurrency, price);
+        return CusComponent.getComponent(selectCurrency, currencyPrefix, currencyPrefix1, price, totalPrice);
     }
 
     public void setItem(Item item) {

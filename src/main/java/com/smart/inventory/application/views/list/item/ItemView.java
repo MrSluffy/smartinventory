@@ -84,6 +84,7 @@ public class ItemView extends VerticalLayout {
         return footer;
     }
 
+    @Nonnull
     private Component getFab() {
         plusButton.addClickListener(click -> addItem());
 
@@ -193,7 +194,7 @@ public class ItemView extends VerticalLayout {
 
 
     //TODO
-    private String createTotalFooterText(List<Item> item) {
+    private String createTotalFooterText(@Nonnull List<Item> item) {
         double totalPrice = 0;
         for (Item items : item) {
             totalPrice += items.getTotalPrice();
@@ -235,7 +236,7 @@ public class ItemView extends VerticalLayout {
         closeEditor();
     }
 
-    private void saveItem(ItemForm.ItemFormEvent.SaveEvent event) {
+    private void saveItem(@Nonnull ItemForm.ItemFormEvent.SaveEvent event) {
         event.getItem().setDateAndTime(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-" + LocalDateTime.now().toLocalDate().toString());
         service.saveItem(event.getItem());
         updateList();
