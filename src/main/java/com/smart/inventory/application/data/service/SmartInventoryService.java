@@ -1,12 +1,14 @@
 package com.smart.inventory.application.data.service;
 
 import com.smart.inventory.application.data.entity.*;
+import com.smart.inventory.application.data.entity.costing.Ingredients;
+import com.smart.inventory.application.data.entity.costing.QuantityUnit;
 import com.smart.inventory.application.data.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SmartInventoryService {
@@ -17,6 +19,8 @@ public class SmartInventoryService {
     private final ItemRepository itemRepository;
     private final OwnerRepository ownerRepository;
     private final PositionRepository positionRepository;
+    private final IngredientsRepository ingredientsRepository;
+    private final QuantityUnitRepository quantityUnitRepository;
 
     @Autowired
     public SmartInventoryService(CustomerRepository customerRepository,
@@ -24,13 +28,17 @@ public class SmartInventoryService {
                                  EmployerRepository employerRepository,
                                  ItemRepository itemRepository,
                                  OwnerRepository ownerRepository,
-                                 PositionRepository positionRepository) {
+                                 PositionRepository positionRepository,
+                                 IngredientsRepository ingredientsRepository,
+                                 QuantityUnitRepository quantityUnitRepository) {
         this.customerRepository = customerRepository;
         this.companyRepository = companyRepository;
         this.employerRepository = employerRepository;
         this.itemRepository = itemRepository;
         this.ownerRepository = ownerRepository;
         this.positionRepository = positionRepository;
+        this.ingredientsRepository = ingredientsRepository;
+        this.quantityUnitRepository = quantityUnitRepository;
     }
 
     public List<Owner> findAllOwner() {
@@ -66,6 +74,14 @@ public class SmartInventoryService {
             return itemRepository.findAll();
         } else {
             return itemRepository.search(filterText);
+        }
+    }
+
+    public List<Ingredients> findAllCosting(String filterText){
+        if(filterText == null || filterText.isEmpty()){
+            return ingredientsRepository.findAll();
+        } else {
+            return ingredientsRepository.search(filterText);
         }
     }
 
@@ -107,6 +123,9 @@ public class SmartInventoryService {
     }
 
 
+    public IngredientsRepository getCostingRepository(){
+        return ingredientsRepository;
+    }
 
     public EmployerRepository getEmployerRepository() {
         return employerRepository;
@@ -124,16 +143,19 @@ public class SmartInventoryService {
         itemRepository.save(item);
     }
 
-    public void deleteItem(Item item) {
-        itemRepository.delete(item);
-    }
-
-    public Optional<Item> getItemById(Integer itemId) {
-        return itemRepository.findItemById(itemId);
-    }
-
-
     public void deleteItemSelected(List<Item> item) {
         itemRepository.deleteAll(item);
+    }
+
+    public void deleteIngredientSelected(List<Ingredients> ingredients) {
+        ingredientsRepository.deleteAll(ingredients);
+    }
+
+    public void saveIngredient(@Nonnull Ingredients ingredients) {
+        ingredientsRepository.save(ingredients);
+    }
+
+    public List<QuantityUnit> findAllUnit() {
+        return quantityUnitRepository.findAll();
     }
 }
