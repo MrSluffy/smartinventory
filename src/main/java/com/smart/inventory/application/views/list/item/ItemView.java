@@ -3,24 +3,20 @@ package com.smart.inventory.application.views.list.item;
 import com.smart.inventory.application.data.entity.Item;
 import com.smart.inventory.application.data.service.SmartInventoryService;
 import com.smart.inventory.application.views.MainLayout;
+import com.smart.inventory.application.views.widgets.DeleteButton;
+import com.smart.inventory.application.views.widgets.FilterText;
+import com.smart.inventory.application.views.widgets.PlusButton;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
@@ -39,11 +35,11 @@ public class ItemView extends VerticalLayout {
     //TODO MAKE IT NICE :0
 
     Grid<Item> itemGrid = new Grid<>(Item.class, false);
-    TextField filterText = new TextField();
+    FilterText filterText = new FilterText();
 
-    Button plusButton = new Button(new Icon(VaadinIcon.PLUS));
+    PlusButton plusButton = new PlusButton();
 
-    Button delete = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
+    DeleteButton delete = new DeleteButton();
 
     ConfirmDialog dialog = new ConfirmDialog();
 
@@ -72,7 +68,10 @@ public class ItemView extends VerticalLayout {
         dialog.setConfirmText("Delete");
         dialog.setConfirmButtonTheme("error primary");
         dialog.setCancelable(true);
-        dialog.addConfirmListener(confirmEvent -> deleteItem(new ItemViewEvent.DeleteEvent(this, itemForm.getItem())));
+        dialog.addConfirmListener(confirmEvent ->
+                ItemView.this.deleteItem(
+                        new ItemViewEvent.DeleteEvent(ItemView.this,
+                                itemForm.getItem())));
     }
 
     @Nonnull
@@ -86,23 +85,8 @@ public class ItemView extends VerticalLayout {
     }
 
     private Component getFab() {
-        plusButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ICON);
-        plusButton.setClassName("fab-plus");
-        plusButton.setMaxHeight(8f, Unit.EX);
-        plusButton.setWidth(8f, Unit.EX);
-        plusButton.getStyle().set("margin-inline-end", "auto");
-        plusButton.getElement().setAttribute("aria-label", "Add item");
-        plusButton.setAutofocus(true);
         plusButton.addClickListener(click -> addItem());
 
-
-        delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_ERROR);
-        delete.setClassName("fab-del");
-        delete.setMaxHeight(8f, Unit.EX);
-        delete.setWidth(8f, Unit.EX);
-        delete.getStyle().set("margin-inline-end", "auto");
-        delete.getElement().setAttribute("aria-label", "Add item");
-        delete.setAutofocus(true);
         delete.addClickListener(deleteEvnt -> {
             int selectedSize = itemGrid.asMultiSelect().getValue().size();
             if (!itemGrid.asMultiSelect().isEmpty()) {
@@ -143,9 +127,6 @@ public class ItemView extends VerticalLayout {
     @Nonnull
     private Component getToolbar() {
         filterText.setPlaceholder("Search item by name...");
-        filterText.setWidth(20f, Unit.EM);
-        filterText.setClearButtonVisible(true);
-        filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateList());
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
         toolbar.addClassName("toolbar");
@@ -190,7 +171,9 @@ public class ItemView extends VerticalLayout {
             itemColumn.setAutoWidth(true);
         });
 
-        anchor = new Anchor(new StreamResource("smartinventory-Items.xlsx", Exporter.exportAsExcel(itemGrid)), "Download As Excel");
+        anchor = new Anchor(new StreamResource("smartinventory-" + getCurrentPageTitle()+
+                LocalDateTime.now().toLocalDate().toString() +".xlsx",
+                Exporter.exportAsExcel(itemGrid)), "Download As Excel");
         itemGrid.addSelectionListener(selection -> {
             int size = selection.getAllSelectedItems().size();
             if (selection.getFirstSelectedItem().isPresent()) {
@@ -201,6 +184,11 @@ public class ItemView extends VerticalLayout {
             plusButton.setVisible(size == 0);
             delete.setVisible(size != 0);
         });
+    }
+
+    private String getCurrentPageTitle() {
+        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
+        return title == null ? "" : title.value();
     }
 
 
@@ -250,7 +238,6 @@ public class ItemView extends VerticalLayout {
     private void saveItem(ItemForm.ItemFormEvent.SaveEvent event) {
         event.getItem().setDateAndTime(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-" + LocalDateTime.now().toLocalDate().toString());
         service.saveItem(event.getItem());
-        itemForm.totalPrice.setPlaceholder(String.valueOf(event.getItem().getTotalPrice()));
         updateList();
         closeEditor();
     }

@@ -29,7 +29,7 @@ public class ItemForm extends FormLayout {
 
 
     TextField itemName = new TextField("Item Name");
-    IntegerField piece = new IntegerField("Quantity");
+    IntegerField quantity = new IntegerField("Quantity");
     NumberField price = new NumberField("Price");
     NumberField totalPrice = new NumberField("Total Price");
     Select<String> selectCurrency = new Select<>();
@@ -49,20 +49,17 @@ public class ItemForm extends FormLayout {
     public ItemForm() {
         addClassName("item-form");
 
-        piece.setHasControls(true);
-        piece.setMin(0);
-        piece.setMax(Integer.MAX_VALUE);
+
+        quantity.setHasControls(true);
+        quantity.setMin(0);
+        quantity.setMax(Integer.MAX_VALUE);
 
         itemBinder.bindInstanceFields(this);
-
-        if (item != null) {
-            totalPrice.setPlaceholder(String.valueOf(item.getTotalPrice()));
-        }
 
         totalPrice.setReadOnly(true);
 
         add(itemName,
-                piece,
+                quantity,
                 createPriceLayout(),
                 totalPrice,
                 createButtonLayout());
@@ -92,6 +89,8 @@ public class ItemForm extends FormLayout {
     public void setItem(Item item) {
         this.item = item;
         itemBinder.readBean(item);
+        quantity.setValue(item.getQuantity());
+        totalPrice.setValue(item.getPrice() * item.getQuantity());
     }
 
     private Component createButtonLayout() {
