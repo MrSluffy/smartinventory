@@ -2,7 +2,6 @@ package com.smart.inventory.application.views.list.ingredient;
 
 import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import com.smart.inventory.application.data.services.ingredient.IngredientsService;
-import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
@@ -18,7 +17,6 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.shared.Registration;
 import org.vaadin.haijian.Exporter;
@@ -27,7 +25,6 @@ import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-@Route(value = "costing", layout = MainLayout.class)
 @PageTitle("Costing")
 public class IngredientView extends VerticalLayout {
 

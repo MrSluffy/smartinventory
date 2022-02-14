@@ -7,10 +7,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.annotation.Nonnull;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -33,25 +33,23 @@ public class Owner extends AbstractEntity {
     private String passwordSalt;
     private String passwordHash;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Nonnull
-    private Set<Role> roles;
+    private Role roles;
 
     private String signMethod;
 
 
     public Owner(){}
 
-    public Owner(@NotNull String signMethod, String email, String password, @Nonnull Set<Role> roles){
-        this.signMethod = signMethod;
+    public Owner(String email,
+                 String password, Role roles){
         this.email = email;
         this.roles = roles;
         this.passwordSalt = RandomStringUtils.random(32);
-        this.passwordHash =  DigestUtils.sha1Hex(password + passwordSalt);
+        this.passwordHash = DigestUtils.sha1Hex(password + passwordSalt);
     }
 
 
-    public boolean checkPassword(String password){
+    public boolean verifyPassword(String password){
         return DigestUtils.sha1Hex(password + passwordSalt).equals(passwordHash);
     }
 
@@ -102,11 +100,11 @@ public class Owner extends AbstractEntity {
     }
 
     @Nonnull
-    public Set<Role> getRoles() {
+    public Role getRoles() {
         return roles;
     }
 
-    public void setRoles(@Nonnull Set<Role> roles) {
+    public void setRoles(@Nonnull Role roles) {
         this.roles = roles;
     }
 
@@ -120,5 +118,9 @@ public class Owner extends AbstractEntity {
 
     public Set<Company> getCompany() {
         return company;
+    }
+
+    public void setCompany(Set<Company> company) {
+        this.company = company;
     }
 }

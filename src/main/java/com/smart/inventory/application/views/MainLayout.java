@@ -1,20 +1,26 @@
 package com.smart.inventory.application.views;
 
-import com.smart.inventory.application.views.list.ingredient.IngredientView;
-import com.smart.inventory.application.views.list.dashboard.DashboardView;
-import com.smart.inventory.application.views.list.item.ItemView;
+import com.smart.inventory.application.data.entity.Owner;
+import com.smart.inventory.application.data.services.owner.OwnerService;
+import com.smart.inventory.application.views.session.LogoutView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
 
-@Route(value="")
+//@PermitAll
+@Route(value="home")
 public class MainLayout extends AppLayout {
+
+
+    private OwnerService ownerService;
 
     public static class MenuItemInfo extends ListItem {
 
@@ -59,7 +65,8 @@ public class MainLayout extends AppLayout {
     private H1 viewTitle;
 
 
-    public MainLayout() {
+    public MainLayout(OwnerService ownerService) {
+        this.ownerService = ownerService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerContent());
@@ -108,20 +115,20 @@ public class MainLayout extends AppLayout {
     }
 
     private MenuItemInfo[] createMenuItems() {
-        return new MenuItemInfo[]{ //
-                new MenuItemInfo("Item Stock", "", ItemView.class), //
-
-                new MenuItemInfo("Costing", "", IngredientView.class), //
-
-                new MenuItemInfo("Dashboard", "", DashboardView.class), //
-
-        };
+        var owner = VaadinSession.getCurrent().getAttribute(Owner.class);
+        System.out.println("Session : "+VaadinSession.getCurrent().getAttribute(Owner.class));
+        return ownerService.getAuthorizedRoutes(owner.getRoles()).stream()
+                .map(authorizedRoute ->
+                        new MenuItemInfo(authorizedRoute.name(),
+                                "", authorizedRoute.view()))
+               .toArray(MenuItemInfo[]::new);
     }
 
     private Footer createFooter() {
-        Footer layout = new Footer();
+        Button logout = new Button("Log out");
+        logout.addClickListener(buttonClickEvent -> new LogoutView());
+        Footer layout = new Footer(logout);
         layout.addClassNames("flex", "items-center", "my-s", "px-m", "py-xs");
-
         return layout;
     }
 

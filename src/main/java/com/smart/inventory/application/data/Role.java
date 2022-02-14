@@ -2,9 +2,9 @@ package com.smart.inventory.application.data;
 
 public enum Role {
 
-    USER("customer"), ADMIN("admin");
+    EMPLOYER("employer"),CMP_OWNER("owner"), ADMIN("admin");
 
-    private String roleName;
+    private final String roleName;
 
     Role(String roleName) {
         this.roleName = roleName;
