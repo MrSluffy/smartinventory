@@ -1,7 +1,7 @@
-package com.smart.inventory.application.views.list.costing;
+package com.smart.inventory.application.views.list.ingredient;
 
-import com.smart.inventory.application.data.entity.costing.Ingredients;
-import com.smart.inventory.application.data.service.SmartInventoryService;
+import com.smart.inventory.application.data.entity.ingredients.Ingredients;
+import com.smart.inventory.application.data.services.ingredient.IngredientsService;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
@@ -45,15 +45,15 @@ public class IngredientView extends VerticalLayout {
 
     private final IngredientsForm ingredientsForm;
 
-    private final SmartInventoryService service;
+    private final IngredientsService service;
 
 
-    public IngredientView(SmartInventoryService service) {
+    public IngredientView(IngredientsService service) {
         this.service = service;
         addClassName("costing-view");
         setSizeFull();
 
-        ingredientsForm = new IngredientsForm(service.findAllUnit());
+        ingredientsForm = new IngredientsForm();
 
         configureGrid();
         configureForm();
@@ -105,7 +105,7 @@ public class IngredientView extends VerticalLayout {
         grid.getDataProvider().addDataProviderListener(
                 dataChangeEvent ->
                         dataChangeEvent.getSource().refreshAll());
-        grid.setItems(service.findAllCosting(filterText.getValue()));
+        grid.setItems(service.findAllIngredients(filterText.getValue()));
     }
 
     @Nonnull
@@ -145,7 +145,6 @@ public class IngredientView extends VerticalLayout {
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_ROW_STRIPES);
         grid.setColumns(
-                "id",
                 "productName",
                 "productQuantity",
                 "productPrice",

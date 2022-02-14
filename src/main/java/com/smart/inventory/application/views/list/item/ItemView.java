@@ -1,7 +1,7 @@
 package com.smart.inventory.application.views.list.item;
 
 import com.smart.inventory.application.data.entity.Item;
-import com.smart.inventory.application.data.service.SmartInventoryService;
+import com.smart.inventory.application.data.services.item.ItemsService;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
@@ -46,9 +46,9 @@ public class ItemView extends VerticalLayout {
     Anchor anchor;
 
     ItemForm itemForm = new ItemForm();
-    private final SmartInventoryService service;
+    private final ItemsService service;
 
-    public ItemView(SmartInventoryService service) {
+    public ItemView(ItemsService service) {
         this.service = service;
         addClassName("item-view");
         setSizeFull();
@@ -144,33 +144,25 @@ public class ItemView extends VerticalLayout {
         itemGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_ROW_STRIPES);
 
         itemGrid.setColumns(
-                "id",
                 "itemName",
                 "quantity",
                 "price",
                 "totalPrice",
                 "dateAndTime");
-        itemGrid.getColumns()
-                .get(0).setHeader("Item ID")
-                .setFrozen(true)
-                .setFlexGrow(0);
-        itemGrid.getColumns().get(1)
+        itemGrid.getColumns().get(0)
                 .setHeader("Item Name")
                 .setFrozen(true)
                 .setFlexGrow(0);
-        itemGrid.getColumns().get(2)
+        itemGrid.getColumns().get(1)
                 .setHeader("Quantity");
-        itemGrid.getColumns().get(3)
+        itemGrid.getColumns().get(2)
                 .setHeader("Price");
-        itemGrid.getColumns().get(4)
+        itemGrid.getColumns().get(3)
                 .setHeader("Total Price");
-        itemGrid.getColumns().get(5)
+        itemGrid.getColumns().get(4)
                 .setHeader("Last Updated ")
                 .setAutoWidth(false);
-        itemGrid.getColumns().forEach(itemColumn -> {
-            itemColumn.setResizable(true);
-            itemColumn.setAutoWidth(true);
-        });
+        itemGrid.getColumns().forEach(itemColumn -> itemColumn.setAutoWidth(true));
 
         anchor = new Anchor(new StreamResource("smartinventory-" + getCurrentPageTitle()+
                 LocalDateTime.now().toLocalDate().toString() +".xlsx",
