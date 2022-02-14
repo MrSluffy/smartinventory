@@ -1,28 +1,50 @@
 package com.smart.inventory.application.views.list.dashboard;
 
-import com.smart.inventory.application.data.service.SmartInventoryService;
+import com.smart.inventory.application.data.services.item.ItemsService;
 import com.smart.inventory.application.views.MainLayout;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import javax.annotation.Nonnull;
+
 @Route(value = "dashboard", layout = MainLayout.class)
 @PageTitle("Dashboard")
 public class DashboardView extends VerticalLayout {
-    private final SmartInventoryService service;
 
-    public DashboardView(SmartInventoryService service) {
+    private final ItemsService service;
+
+    public DashboardView(ItemsService service) {
         this.service = service;
         addClassName("dashboard-view");
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
 
-        add(getCompaniesChart());
+        add(configreContent());
     }
 
-    private Chart getCompaniesChart() {
-        Chart chart = new Chart(ChartType.getDefault());
+    private Component configreContent() {
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
+        verticalLayout.add(getSummary(), getItemsChart());
+        return verticalLayout;
+    }
+
+    private Component getSummary() {
+        Chart chart = new Chart(ChartType.LINE);
+        DataSeries series = new DataSeries();
+        service.findAllItem().forEach(item -> {
+            series.add(new DataSeriesItem(item.getItemName(), item.getPrice()));
+        });
+        chart.getConfiguration().addSeries(series);
+        return chart;
+    }
+
+    @Nonnull
+    private Chart getItemsChart() {
+        Chart chart = new Chart(ChartType.PIE);
         DataSeries dataSeries = new DataSeries();
         service.findAllItem().forEach(items ->
                 dataSeries.add(new DataSeriesItem(items.getItemName(),

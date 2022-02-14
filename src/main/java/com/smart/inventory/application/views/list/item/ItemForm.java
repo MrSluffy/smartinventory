@@ -52,6 +52,8 @@ public class ItemForm extends FormLayout {
     public ItemForm() {
         addClassName("item-form");
 
+        setHeightFull();
+
         quantity.setHasControls(true);
         quantity.setMin(0);
         quantity.setMax(Integer.MAX_VALUE);

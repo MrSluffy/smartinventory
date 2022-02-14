@@ -1,4 +1,4 @@
-package com.smart.inventory.application.data.entity.costing;
+package com.smart.inventory.application.data.entity.ingredients;
 
 import com.smart.inventory.application.data.AbstractEntity;
 

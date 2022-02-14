@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Integer> {
+public interface IItemRepository extends JpaRepository<Item, Integer> {
 
     @Query("select c from Item c " +
             "where lower(c.itemName) like lower(concat('%', :searchTerm, '%'))")

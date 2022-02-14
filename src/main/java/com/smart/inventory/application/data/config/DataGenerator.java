@@ -1,6 +1,8 @@
 package com.smart.inventory.application.data.config;
 
 import com.smart.inventory.application.data.entity.*;
+import com.smart.inventory.application.data.entity.ingredients.Ingredients;
+import com.smart.inventory.application.data.entity.ingredients.QuantityUnit;
 import com.smart.inventory.application.data.repository.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.slf4j.Logger;
@@ -25,20 +27,24 @@ public class DataGenerator {
     private List<Owner> owners;
     private List<Item> items;
     private List<Customer> customers;
+    private List<Ingredients> ingredients;
     private ExampleDataGenerator<Company> companyGenerator;
     private ExampleDataGenerator<Employer> employerGenerator;
     private ExampleDataGenerator<Owner> ownerGenerator;
     private ExampleDataGenerator<Item> itemGenerator;
     private ExampleDataGenerator<Customer> buyerGenerator;
+    private ExampleDataGenerator<Ingredients> costingDataGenerator;
 
 
     @Bean
-    public CommandLineRunner loadData(OwnerRepository ownerRepository,
-                                      CompanyRepository companyRepository,
-                                      EmployerRepository employerRepository,
-                                      CustomerRepository customerRepository,
-                                      ItemRepository itemRepository,
-                                      PositionRepository positionRepository) {
+    CommandLineRunner loadData(OwnerRepository ownerRepository,
+                               CompanyRepository companyRepository,
+                               EmployerRepository employerRepository,
+                               CustomerRepository customerRepository,
+                               IItemRepository IItemRepository,
+                               PositionRepository positionRepository,
+                               IIngredientsRepository IIngredientsRepository,
+                               QuantityUnitRepository quantityUnitRepository) {
 
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
@@ -56,6 +62,18 @@ public class DataGenerator {
             List<Position> positions = positionRepository
                     .saveAll(Stream.of("Imported lead", "Not contacted", "Contacted", "Janitor", "Closed (lost)", "Dismissed")
                             .map(Position::new).collect(Collectors.toList()));
+
+            List<QuantityUnit> quantityUnits = quantityUnitRepository.
+                    saveAll(Stream.of("kilo", "pounds", "cm", "milimeter", "per each")
+                            .map(QuantityUnit::new).collect(Collectors.toList()));
+
+
+            costingDataGenerator = new ExampleDataGenerator<>(Ingredients.class, LocalDateTime.now());
+            costingDataGenerator.setData(Ingredients::setProductName, DataType.FOOD_PRODUCT_NAME);
+            costingDataGenerator.setData(Ingredients::setProductQuantity, DataType.NUMBER_UP_TO_10);
+            costingDataGenerator.setData(Ingredients::setProductPrice, DataType.PRICE);
+
+            ingredients = costingDataGenerator.create(5, seed);
 
             companyGenerator = new ExampleDataGenerator<>(Company.class,
                     LocalDateTime.now());
@@ -121,9 +139,15 @@ public class DataGenerator {
             }).collect(Collectors.toList());
 
 
+            ingredients.stream().map(costing -> {
+                costing.setTotalCost(costing.getProductQuantity());
+                return costing;
+            }).collect(Collectors.toList());
 
 
-            itemRepository.saveAll(items);
+            quantityUnitRepository.saveAll(quantityUnits);
+            IIngredientsRepository.saveAll(ingredients);
+            IItemRepository.saveAll(items);
             customerRepository.saveAll(customers);
             employerRepository.saveAll(employers);
             companyRepository.saveAll(companies);

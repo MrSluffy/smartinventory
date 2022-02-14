@@ -1,7 +1,6 @@
-package com.smart.inventory.application.views.list.costing;
+package com.smart.inventory.application.views.list.ingredient;
 
-import com.smart.inventory.application.data.entity.costing.Ingredients;
-import com.smart.inventory.application.data.entity.costing.QuantityUnit;
+import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import com.smart.inventory.application.views.extension.CusComponent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
@@ -25,7 +24,6 @@ import com.vaadin.flow.shared.Registration;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public class IngredientsForm extends FormLayout {
     Binder<Ingredients> ingredientsBinder = new BeanValidationBinder<>(Ingredients.class);
@@ -51,7 +49,7 @@ public class IngredientsForm extends FormLayout {
     }
 
 
-    public IngredientsForm(List<QuantityUnit>quantityUnits) {
+    public IngredientsForm() {
         addClassName("item-form");
 
         productQuantity.setHasControls(true);
