@@ -2,7 +2,6 @@ package com.smart.inventory.application.views.list.item;
 
 import com.smart.inventory.application.data.entity.Item;
 import com.smart.inventory.application.data.services.item.ItemsService;
-import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
@@ -18,7 +17,6 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.shared.Registration;
 import org.vaadin.haijian.Exporter;
@@ -28,7 +26,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(value="item", layout = MainLayout.class)
 @PageTitle("Item Stock")
 public class ItemView extends VerticalLayout {
 

@@ -21,7 +21,6 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
-import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 
@@ -69,14 +68,12 @@ public class IngredientsForm extends FormLayout {
     }
 
     @Nonnull
-    @Contract(" -> new")
     private Component createQuantityLayout() {
         return new HorizontalLayout(productQuantity);
     }
 
 
     @Nonnull
-    @Contract(" -> new")
     private Component createPriceLayout() {
         return CusComponent.getComponent(selectCurrency, currencyPrefix, currencyPrefix1, productPrice, totalCost);
     }

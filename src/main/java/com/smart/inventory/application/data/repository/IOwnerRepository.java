@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OwnerRepository extends JpaRepository<Owner, Integer> {
+public interface IOwnerRepository extends JpaRepository<Owner, Integer> {
 
     @Query("select c from Owner c " +
             "where lower(c.firstName) like lower(concat('%', :searchTerm, '%')) " +
@@ -18,4 +18,6 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
     List<Owner> search(@Param("searchTerm") String searchTerm);
 
     Optional<Owner> findOwnerByEmail(String value);
+
+    Owner getByEmail(String email);
 }

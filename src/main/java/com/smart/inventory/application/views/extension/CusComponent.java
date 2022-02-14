@@ -8,9 +8,12 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 
+import javax.annotation.Nonnull;
+
 public class CusComponent {
 
-    public static Component getComponent(Select<String> selectCurrency, Div currencyPrefix, Div currencyPrefix1, NumberField price, NumberField totalPrice) {
+    @Nonnull
+    public static Component getComponent(@Nonnull Select<String> selectCurrency, @Nonnull Div currencyPrefix, @Nonnull Div currencyPrefix1, @Nonnull NumberField price, @Nonnull NumberField totalPrice) {
         selectCurrency.setWidth(10f, Unit.EX);
         selectCurrency.setLabel("Currency");
         selectCurrency.setItems("₱", "$");

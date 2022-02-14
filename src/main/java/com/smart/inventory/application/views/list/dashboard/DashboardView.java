@@ -1,17 +1,14 @@
 package com.smart.inventory.application.views.list.dashboard;
 
 import com.smart.inventory.application.data.services.item.ItemsService;
-import com.smart.inventory.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 
 import javax.annotation.Nonnull;
 
-@Route(value = "dashboard", layout = MainLayout.class)
 @PageTitle("Dashboard")
 public class DashboardView extends VerticalLayout {
 
