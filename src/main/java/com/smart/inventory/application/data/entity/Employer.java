@@ -32,7 +32,7 @@ public class Employer extends AbstractEntity {
     private final Set<Company> company = new HashSet<>();
 
     @ManyToOne
-    private Position position;
+    private Position position = new Position();
 
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,

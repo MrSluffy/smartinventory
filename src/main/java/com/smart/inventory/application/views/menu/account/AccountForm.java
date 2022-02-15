@@ -1,12 +1,14 @@
 package com.smart.inventory.application.views.menu.account;
 
 import com.smart.inventory.application.data.entity.Employer;
+import com.smart.inventory.application.data.entity.Position;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -18,6 +20,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
+import java.util.List;
+
 public class AccountForm extends FormLayout {
 
     Binder<Employer> employerBinder = new BeanValidationBinder<>(Employer.class);
@@ -25,7 +29,11 @@ public class AccountForm extends FormLayout {
     public TextField firstName = new TextField("First Name");
     public TextField lastName = new TextField("Last Name");
     public TextField email = new TextField("Email");
+
     public PasswordField passwordField = new PasswordField("Password");
+
+    ComboBox<Position> position = new ComboBox<>("Status");
+
 
     Button cancel = new Button("Cancel");
 
@@ -35,11 +43,14 @@ public class AccountForm extends FormLayout {
 
     private Employer employer;
 
-    public AccountForm(){
+    public AccountForm(List<Position> positions){
         addClassName("item-form");
         employerBinder.bindInstanceFields(this);
 
-        add(firstName, lastName, email, passwordField, createButtonLayout());
+        position.setItems(positions);
+        position.setItemLabelGenerator(Position::getPostionName);
+
+        add(firstName, lastName, email, passwordField, position, createButtonLayout());
 
 
     }
