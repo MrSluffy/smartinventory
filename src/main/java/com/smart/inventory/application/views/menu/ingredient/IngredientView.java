@@ -1,4 +1,4 @@
-package com.smart.inventory.application.views.list.ingredient;
+package com.smart.inventory.application.views.menu.ingredient;
 
 import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import com.smart.inventory.application.data.services.ingredient.IngredientsService;
@@ -47,7 +47,7 @@ public class IngredientView extends VerticalLayout {
 
     public IngredientView(IngredientsService service) {
         this.service = service;
-        addClassName("costing-view");
+        addClassName("gen-view");
         setSizeFull();
 
         ingredientsForm = new IngredientsForm();
@@ -206,7 +206,7 @@ public class IngredientView extends VerticalLayout {
         return title == null ? "" : title.value();
     }
 
-    public static abstract class CostingViewEvent extends ComponentEvent<IngredientView> {
+    public static abstract class CostingViewEvent extends ComponentEvent<IngredientView>{
 
         private final Ingredients ingredients;
 
