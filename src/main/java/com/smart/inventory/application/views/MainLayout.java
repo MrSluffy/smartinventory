@@ -86,8 +86,8 @@ public class MainLayout extends AppLayout {
     }
 
     private Component createDrawerContent() {
-        H2 appName = new H2("Smart Inventory");
-        appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
+        H1 appName = new H1("Smart Inventory");
+        appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-l");
 
         com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,
                 createNavigation(), createFooter());

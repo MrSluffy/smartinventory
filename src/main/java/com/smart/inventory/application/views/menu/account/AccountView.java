@@ -50,7 +50,7 @@ public class AccountView extends VerticalLayout {
         addClassName("gen-view");
         setSizeFull();
 
-        form = new AccountForm();
+        form = new AccountForm(service.findAllPosition());
 
         configureGrid();
         configureForm();
@@ -161,7 +161,7 @@ public class AccountView extends VerticalLayout {
     }
 
     private void addEmployer(AccountForm.AccountFormEvent.AddEvent addEvent){
-        service.addNewEmployer(form.email.getValue(), form.firstName.getValue(), form.lastName.getValue(), form.passwordField.getValue());
+        service.addNewEmployer(form.email.getValue(), form.firstName.getValue(), form.lastName.getValue(), form.passwordField.getValue(), form.position.getValue());
         updateList();
         closeEditor();
     }
@@ -182,8 +182,8 @@ public class AccountView extends VerticalLayout {
         grid.setColumns(
                 "email",
                 "firstName",
-                "lastName",
-                "position");
+                "lastName");
+        grid.addColumn(employer -> employer.getPosition().getPostionName()).setHeader("Position");
         anchor = new Anchor(new StreamResource("smartinventory-" + getCurrentPageTitle() +
                 LocalDateTime.now().toLocalDate().toString() + ".xlsx",
                 Exporter.exportAsExcel(grid)), "Download As Excel");
