@@ -1,4 +1,4 @@
-package com.smart.inventory.application.views.list.dashboard;
+package com.smart.inventory.application.views.menu.dashboard;
 
 import com.smart.inventory.application.data.services.item.ItemsService;
 import com.vaadin.flow.component.Component;

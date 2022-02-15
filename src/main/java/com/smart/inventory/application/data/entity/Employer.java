@@ -2,6 +2,7 @@ package com.smart.inventory.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
+import com.smart.inventory.application.data.Role;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.NotFound;
@@ -10,7 +11,6 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +31,6 @@ public class Employer extends AbstractEntity {
     @ManyToMany(mappedBy = "ownerInCompany")
     private final Set<Company> company = new HashSet<>();
 
-    @NotNull
     @ManyToOne
     private Position position;
 
@@ -57,10 +56,13 @@ public class Employer extends AbstractEntity {
     private String passwordSalt;
     private String passwordHash;
 
-    private String signMethod;
+    private Role roles;
 
-    public Employer(String signMethod, String email, String password){
-        this.signMethod = signMethod;
+
+    public Employer(String email, String firstName, String lastName, String password, Role role){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.roles = role;
         this.email = email;
         this.passwordSalt = RandomStringUtils.random(32);
         this.passwordHash = DigestUtils.sha1Hex(password + passwordSalt);
@@ -70,7 +72,7 @@ public class Employer extends AbstractEntity {
 
     }
 
-    public boolean checkPassword(String password){
+    public boolean verifyPassword(String password){
         return DigestUtils.sha1Hex(password + passwordSalt).equals(passwordHash);
     }
 
@@ -107,14 +109,6 @@ public class Employer extends AbstractEntity {
         return company;
     }
 
-    public String getSignMethod() {
-        return signMethod;
-    }
-
-    public void setSignMethod(String signMethod) {
-        this.signMethod = signMethod;
-    }
-
     public Position getPosition() {
         return position;
     }
@@ -145,5 +139,13 @@ public class Employer extends AbstractEntity {
 
     public void setBuyer(Customer customer) {
         this.customer = customer;
+    }
+
+    public Role getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Role roles) {
+        this.roles = roles;
     }
 }

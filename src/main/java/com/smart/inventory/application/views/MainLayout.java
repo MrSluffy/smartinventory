@@ -1,5 +1,6 @@
 package com.smart.inventory.application.views;
 
+import com.smart.inventory.application.data.entity.Employer;
 import com.smart.inventory.application.data.entity.Owner;
 import com.smart.inventory.application.data.services.owner.OwnerService;
 import com.smart.inventory.application.views.session.LogoutView;
@@ -11,16 +12,13 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
 
-//@PermitAll
-@Route(value="home")
 public class MainLayout extends AppLayout {
 
 
-    private OwnerService ownerService;
+    private final OwnerService ownerService;
 
     public static class MenuItemInfo extends ListItem {
 
@@ -116,12 +114,20 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         var owner = VaadinSession.getCurrent().getAttribute(Owner.class);
-        System.out.println("Session : "+VaadinSession.getCurrent().getAttribute(Owner.class));
-        return ownerService.getAuthorizedRoutes(owner.getRoles()).stream()
+        var employer = VaadinSession.getCurrent().getAttribute(Employer.class);
+
+        if(owner != null){
+            return ownerService.getAuthorizedRoutes(owner.getRoles()).stream()
+                    .map(authorizedRoute ->
+                            new MenuItemInfo(authorizedRoute.name(),
+                                    "", authorizedRoute.view()))
+                    .toArray(MenuItemInfo[]::new);
+        }
+        return ownerService.getAuthorizedRoutes(employer.getRoles()).stream()
                 .map(authorizedRoute ->
                         new MenuItemInfo(authorizedRoute.name(),
                                 "", authorizedRoute.view()))
-               .toArray(MenuItemInfo[]::new);
+                .toArray(MenuItemInfo[]::new);
     }
 
     private Footer createFooter() {

@@ -1,4 +1,4 @@
-package com.smart.inventory.application.views.list.item;
+package com.smart.inventory.application.views.menu.item;
 
 import com.smart.inventory.application.data.entity.Item;
 import com.smart.inventory.application.data.services.item.ItemsService;
@@ -47,7 +47,7 @@ public class ItemView extends VerticalLayout {
 
     public ItemView(ItemsService service) {
         this.service = service;
-        addClassName("item-view");
+        addClassName("gen-view");
         setSizeFull();
 
         configureGrid();

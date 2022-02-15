@@ -1,8 +1,8 @@
 @import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
 @import url('./main-layout.css');
 @media all and (max-width: 700px) {
-    .item-view.editing .toolbar,
-    .item-view.editing .configure-itemgrid {
+    .gen-view.editing .toolbar,
+    .gen-view.editing .configure-itemgrid {
         display: none;
     }
 }

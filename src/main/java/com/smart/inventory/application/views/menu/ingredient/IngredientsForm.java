@@ -1,6 +1,6 @@
-package com.smart.inventory.application.views.list.item;
+package com.smart.inventory.application.views.menu.ingredient;
 
-import com.smart.inventory.application.data.entity.Item;
+import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import com.smart.inventory.application.views.extension.CusComponent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
@@ -22,20 +22,19 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
-import javax.persistence.Transient;
+import javax.annotation.Nonnull;
 
-public class ItemForm extends FormLayout {
-    Binder<Item> itemBinder = new BeanValidationBinder<>(Item.class);
+public class IngredientsForm extends FormLayout {
+    Binder<Ingredients> ingredientsBinder = new BeanValidationBinder<>(Ingredients.class);
 
-    @Transient
-    private Item item;
+    private Ingredients ingredients;
 
-
-    TextField itemName = new TextField("Item Name");
-    IntegerField quantity = new IntegerField("Quantity");
-    NumberField price = new NumberField("Price");
-    NumberField totalPrice = new NumberField("Total Price");
+    TextField productName = new TextField("Product Name");
+    IntegerField productQuantity = new IntegerField("Product Quantity");
+    NumberField productPrice = new NumberField("Product Price");
+    NumberField totalCost = new NumberField("Total Cost");
     Select<String> selectCurrency = new Select<>();
+
 
     Button save = new Button("Save");
     Button cancel = new Button("Cancel");
@@ -44,41 +43,47 @@ public class ItemForm extends FormLayout {
     Div currencyPrefix1 = new Div();
 
 
-    public Item getItem() {
-        return item;
+    public Ingredients getCosting() {
+        return ingredients;
     }
 
 
-    public ItemForm() {
+    public IngredientsForm() {
         addClassName("item-form");
 
-        setHeightFull();
+        productQuantity.setHasControls(true);
+        productQuantity.setMin(0);
+        productQuantity.setMax(Integer.MAX_VALUE);
 
-        quantity.setHasControls(true);
-        quantity.setMin(0);
-        quantity.setMax(Integer.MAX_VALUE);
+        ingredientsBinder.bindInstanceFields(this);
 
-        itemBinder.bindInstanceFields(this);
 
-        totalPrice.setReadOnly(true);
+        totalCost.setReadOnly(true);
 
-        add(itemName,
-                quantity,
+        add(productName,
+                createQuantityLayout(),
                 createPriceLayout(),
-                totalPrice,
+                totalCost,
                 createButtonLayout());
     }
 
-
-    private Component createPriceLayout() {
-        return CusComponent.getComponent(selectCurrency, currencyPrefix, currencyPrefix1, price, totalPrice);
+    @Nonnull
+    private Component createQuantityLayout() {
+        return new HorizontalLayout(productQuantity);
     }
 
-    public void setItem(Item item) {
-        this.item = item;
-        itemBinder.readBean(item);
-        quantity.setValue(item.getQuantity());
-        totalPrice.setValue(item.getPrice() * item.getQuantity());
+
+    @Nonnull
+    private Component createPriceLayout() {
+        return CusComponent.getComponent(selectCurrency, currencyPrefix, currencyPrefix1, productPrice, totalCost);
+    }
+
+
+
+    public void setCosting(Ingredients ingredients) {
+        this.ingredients = ingredients;
+        ingredientsBinder.readBean(ingredients);
+        totalCost.setValue(ingredients.getProductPrice() * ingredients.getProductQuantity());
     }
 
     private Component createButtonLayout() {
@@ -89,43 +94,43 @@ public class ItemForm extends FormLayout {
         cancel.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(event -> validateAndSave());
-        cancel.addClickListener(event -> fireEvent(new ItemFormEvent.CloseEvent(this)));
+        cancel.addClickListener(event -> fireEvent(new CostingFormEvent.CloseEvent(this)));
 
-        itemBinder.addStatusChangeListener(e -> save.setEnabled(itemBinder.isValid()));
+        ingredientsBinder.addStatusChangeListener(e -> save.setEnabled(ingredientsBinder.isValid()));
         return new HorizontalLayout(save, cancel);
     }
 
     private void validateAndSave() {
         try {
-            itemBinder.writeBean(item);
-            fireEvent(new ItemFormEvent.SaveEvent(this, item));
+            ingredientsBinder.writeBean(ingredients);
+            fireEvent(new CostingFormEvent.SaveEvent(this, ingredients));
         } catch (ValidationException e) {
             e.printStackTrace();
         }
     }
 
 
-    public static abstract class ItemFormEvent extends ComponentEvent<ItemForm> {
+    public static abstract class CostingFormEvent extends ComponentEvent<IngredientsForm> {
 
-        private final Item item;
+        private final Ingredients ingredients;
 
-        public ItemFormEvent(ItemForm source, Item item) {
+        public CostingFormEvent(IngredientsForm source, Ingredients ingredients) {
             super(source, false);
-            this.item = item;
+            this.ingredients = ingredients;
         }
 
-        public Item getItem() {
-            return item;
+        public Ingredients getCosting(){
+            return ingredients;
         }
 
-        public static class SaveEvent extends ItemFormEvent {
-            SaveEvent(ItemForm source, Item item) {
-                super(source, item);
+        public static class SaveEvent extends CostingFormEvent {
+            SaveEvent(IngredientsForm source, Ingredients ingredients) {
+                super(source, ingredients);
                 source.currencyPrefix.setText(source.selectCurrency.getValue());
                 source.currencyPrefix1.setText(source.selectCurrency.getValue());
                 if (source.isVisible()) {
-                    item.setTotalPrice(item.getQuantity());
-                    Notification.show(source.itemName.getValue() + " " +
+                    ingredients.setTotalCost(ingredients.getProductQuantity());
+                    Notification.show(source.productName.getValue() + " " +
                                             " successfully updated",
                                     5000, Notification.Position.TOP_CENTER)
                             .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
@@ -133,8 +138,8 @@ public class ItemForm extends FormLayout {
             }
         }
 
-        public static class CloseEvent extends ItemFormEvent {
-            CloseEvent(ItemForm source) {
+        public static class CloseEvent extends CostingFormEvent {
+            CloseEvent(IngredientsForm source) {
                 super(source, null);
             }
         }
@@ -146,3 +151,4 @@ public class ItemForm extends FormLayout {
     }
 
 }
+

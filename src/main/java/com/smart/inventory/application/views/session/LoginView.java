@@ -1,6 +1,7 @@
 package com.smart.inventory.application.views.session;
 
 import com.smart.inventory.application.data.services.owner.OwnerService;
+import com.smart.inventory.application.exeptions.AuthException;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -35,8 +36,8 @@ public class LoginView extends VerticalLayout {
         btnLogin.addClickListener(buttonClickEvent ->{
             try {
                 ownerService.authenticate(email.getValue(), password.getValue());
-                UI.getCurrent().navigate("home");
-            } catch (OwnerService.AuthException e) {
+                UI.getCurrent().navigate("item");
+            } catch (AuthException e) {
                 Notification.show("Wrong Credentials");
             }
         });
