@@ -38,6 +38,8 @@ public class IngredientView extends VerticalLayout {
 
     ConfirmDialog dialog = new ConfirmDialog();
 
+    private final Ingredients ingredients = new Ingredients();
+
     Anchor anchor;
 
     private final IngredientsForm ingredientsForm;
@@ -50,7 +52,7 @@ public class IngredientView extends VerticalLayout {
         addClassName("gen-view");
         setSizeFull();
 
-        ingredientsForm = new IngredientsForm();
+        ingredientsForm = new IngredientsForm(service.findAllUnit());
 
         configureGrid();
         configureForm();
@@ -83,7 +85,7 @@ public class IngredientView extends VerticalLayout {
     }
 
     private Component getFab() {
-        plusButton.addClickListener(click -> addNewCosting());
+        plusButton.addClickListener(click -> addNewIngredient());
 
         delete.addClickListener(deleteEvnt -> {
             int selectedSize = grid.asMultiSelect().getValue().size();
@@ -118,6 +120,7 @@ public class IngredientView extends VerticalLayout {
     private void configureForm() {
         ingredientsForm.setWidth("25em");
         ingredientsForm.addListener(IngredientsForm.CostingFormEvent.SaveEvent.class, this::saveIngredient);
+        ingredientsForm.addListener(IngredientsForm.CostingFormEvent.AddEvent.class, this::addNewIngredient);
         addListener(CostingViewEvent.DeleteEvent.class, this::deleteIngredient);
         ingredientsForm.addListener(IngredientsForm.CostingFormEvent.CloseEvent.class, closeEvent -> closeEditor());
     }
@@ -146,6 +149,7 @@ public class IngredientView extends VerticalLayout {
                 "productQuantity",
                 "productPrice",
                 "totalCost");
+        grid.addColumn(ingredients -> ingredients.getQuantityUnit().getUnitName()).setHeader("Unit/Measurement");
         anchor = new Anchor(new StreamResource("smartinventory-" + getCurrentPageTitle() +
                 LocalDateTime.now().toLocalDate().toString() + ".xlsx",
                 Exporter.exportAsExcel(grid)), "Download As Excel");
@@ -161,9 +165,21 @@ public class IngredientView extends VerticalLayout {
         });
     }
 
+    private void addNewIngredient() {
+        ingredientsForm.setCosting(new Ingredients());
+        ingredientsForm.add.setVisible(true);
+        ingredientsForm.save.setVisible(false);
+        ingredientsForm.setVisible(true);
+        plusButton.setVisible(false);
+        delete.setVisible(true);
+        addClassName("editing");
+    }
+
     private void editCosting(Ingredients ingredients) {
         if (ingredients != null) {
             ingredientsForm.setCosting(ingredients);
+            ingredientsForm.save.setVisible(true);
+            ingredientsForm.add.setVisible(false);
             ingredientsForm.setVisible(true);
             plusButton.setVisible(false);
             delete.setVisible(true);
@@ -181,8 +197,10 @@ public class IngredientView extends VerticalLayout {
         grid.asMultiSelect().clear();
     }
 
-    private void addNewCosting() {
-        editCosting(new Ingredients());
+    private void addNewIngredient(IngredientsForm.CostingFormEvent.AddEvent addEvent) {
+        service.addIngredient(addEvent.getCosting(), ingredientsForm.unit.getValue());
+        updateList();
+        closeEditor();
     }
 
     private void deleteIngredient(CostingViewEvent.DeleteEvent deleteEvent) {
@@ -196,7 +214,12 @@ public class IngredientView extends VerticalLayout {
     }
 
     private void saveIngredient(IngredientsForm.CostingFormEvent.SaveEvent saveEvent) {
-        service.saveIngredient(saveEvent.getCosting());
+        Ingredients ingredients = saveEvent.getCosting();
+        service.updateIngredient(ingredients.getId(),
+                ingredientsForm.productName.getValue(),
+                ingredientsForm.productQuantity.getValue(),
+                ingredientsForm.productPrice.getValue(),
+                ingredientsForm.unit.getValue());
         updateList();
         closeEditor();
     }
