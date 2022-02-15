@@ -3,6 +3,7 @@ package com.smart.inventory.application.data.entity.ingredients;
 import com.smart.inventory.application.data.AbstractEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -19,6 +20,10 @@ public class Ingredients extends AbstractEntity {
 
     @NotNull
     private int productQuantity;
+
+    @NotNull
+    @ManyToOne
+    private QuantityUnit quantityUnit = new QuantityUnit("");
 
 
     public Ingredients(){
@@ -44,8 +49,8 @@ public class Ingredients extends AbstractEntity {
         return totalCost;
     }
 
-    public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost * productPrice;
+    public void setTotalCost(double value) {
+        this.totalCost = value * productPrice;
     }
 
     public int getProductQuantity() {
@@ -64,5 +69,13 @@ public class Ingredients extends AbstractEntity {
                 ", totalCost=" + totalCost +
                 ", productQuantity=" + productQuantity +
                 '}';
+    }
+
+    public QuantityUnit getQuantityUnit() {
+        return quantityUnit;
+    }
+
+    public void setQuantityUnit(QuantityUnit quantityUnit) {
+        this.quantityUnit = quantityUnit;
     }
 }
