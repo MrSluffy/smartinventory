@@ -1,8 +1,10 @@
 package com.smart.inventory.application.data.services.owner;
 
 import com.smart.inventory.application.data.Role;
+import com.smart.inventory.application.data.entity.Company;
 import com.smart.inventory.application.data.entity.Employer;
 import com.smart.inventory.application.data.entity.Owner;
+import com.smart.inventory.application.data.repository.ICompanyRepository;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IOwnerRepository;
 import com.smart.inventory.application.exeptions.AuthException;
@@ -35,10 +37,13 @@ public class OwnerService implements IOwnerService {
 
     private final IEmployerRepository employerRepository;
 
+    private final ICompanyRepository companyRepository;
+
     @Autowired
-    public OwnerService(IOwnerRepository ownerRepository, IEmployerRepository employerRepository) {
+    public OwnerService(IOwnerRepository ownerRepository, IEmployerRepository employerRepository, ICompanyRepository companyRepository) {
         this.ownerRepository = ownerRepository;
         this.employerRepository = employerRepository;
+        this.companyRepository = companyRepository;
     }
 
     @Override
@@ -55,6 +60,28 @@ public class OwnerService implements IOwnerService {
             throw new AuthException();
         }
 
+    }
+
+    @Override
+    public void register(String fname,
+                         String lname,
+                         String password,
+                         String email,
+                         String companyName) {
+
+        Owner owner = new Owner(
+                fname,
+                lname,
+                email,
+                password,
+                Role.CMP_OWNER);
+
+        Company company = new Company();
+        company.setName(companyName);
+        company.getOwnerInCompany().add(owner);
+        company.setOwner(owner);
+        companyRepository.save(company);
+        ownerRepository.save(owner);
     }
 
     private void createRoutes(Role roles) {

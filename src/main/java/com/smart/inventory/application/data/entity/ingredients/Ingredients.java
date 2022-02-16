@@ -23,7 +23,7 @@ public class Ingredients extends AbstractEntity {
 
     @NotNull
     @ManyToOne
-    private QuantityUnit quantityUnit = new QuantityUnit("");
+    private QuantityUnit quantityUnit;
 
 
     public Ingredients(){

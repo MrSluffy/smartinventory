@@ -40,8 +40,10 @@ public class Owner extends AbstractEntity {
 
     public Owner(){}
 
-    public Owner(String email,
+    public Owner(String firstName, String lastName, String email,
                  String password, Role roles){
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.roles = roles;
         this.passwordSalt = RandomStringUtils.random(32);
