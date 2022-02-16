@@ -4,6 +4,7 @@ import com.smart.inventory.application.data.AbstractEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 public class Customer extends AbstractEntity {
 
     @NotEmpty
+    @NotNull
     private String name = "";
 
     @ManyToMany(mappedBy = "itemName")
@@ -26,8 +28,10 @@ public class Customer extends AbstractEntity {
     public Customer(){
     }
 
+    @NotNull
     private double purchaseAmount;
 
+    @NotNull
     private int quantity;
 
     public String getName() {

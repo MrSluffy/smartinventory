@@ -11,6 +11,7 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,13 +19,16 @@ import java.util.Set;
 public class Employer extends AbstractEntity {
 
     @NotEmpty
+    @NotNull
     private String firstName = "";
 
     @NotEmpty
+    @NotNull
     private String lastName = "";
 
     @Email
     @NotEmpty
+    @NotNull
     private String email = "";
 
     @JsonIgnore
@@ -32,7 +36,7 @@ public class Employer extends AbstractEntity {
     private final Set<Company> company = new HashSet<>();
 
     @ManyToOne
-    private Position position = new Position();
+    private Position position;
 
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,
