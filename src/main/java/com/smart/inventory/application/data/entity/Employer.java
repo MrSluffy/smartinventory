@@ -31,6 +31,7 @@ public class Employer extends AbstractEntity {
     @NotNull
     private String email = "";
 
+    @NotNull
     @JsonIgnore
     @ManyToMany(mappedBy = "ownerInCompany")
     private final Set<Company> company = new HashSet<>();
@@ -47,7 +48,8 @@ public class Employer extends AbstractEntity {
     private Customer customer;
 
     @JsonIgnore
-    @ManyToOne(cascade={CascadeType.ALL, CascadeType.DETACH})
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company emplyrCompany;
 
