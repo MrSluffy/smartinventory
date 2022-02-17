@@ -9,10 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.vaadin.artur.exampledata.DataType;
 import org.vaadin.artur.exampledata.ExampleDataGenerator;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -37,18 +35,18 @@ public class DataGenerator {
 
 
     @Bean
-    CommandLineRunner loadData(OwnerRepository ownerRepository,
-                               CompanyRepository companyRepository,
-                               EmployerRepository employerRepository,
+    CommandLineRunner loadData(IOwnerRepository ownerRepository,
+                               ICompanyRepository ICompanyRepository,
+                               IEmployerRepository IEmployerRepository,
                                CustomerRepository customerRepository,
                                IItemRepository IItemRepository,
-                               PositionRepository positionRepository,
+                               IPositionRepository IPositionRepository,
                                IIngredientsRepository IIngredientsRepository,
-                               QuantityUnitRepository quantityUnitRepository) {
+                               IQuantityUnitRepository IQuantityUnitRepository) {
 
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
-            if (employerRepository.count() != 0L) {
+            if (IEmployerRepository.count() != 0L) {
                 logger.info("Using existing database");
                 return;
             }
@@ -59,99 +57,118 @@ public class DataGenerator {
 
             Random r = new Random(seed);
 
-            List<Position> positions = positionRepository
-                    .saveAll(Stream.of("Imported lead", "Not contacted", "Contacted", "Janitor", "Closed (lost)", "Dismissed")
+            List<Position> positions = IPositionRepository
+                    .saveAll(Stream.of("Imported lead", "Not contacted", "Deliver", "Janitor", "Lead", "Dismissed", "Suspended")
                             .map(Position::new).collect(Collectors.toList()));
 
-            List<QuantityUnit> quantityUnits = quantityUnitRepository.
+            List<QuantityUnit> quantityUnits = IQuantityUnitRepository.
                     saveAll(Stream.of("kilo", "pounds", "cm", "milimeter", "per each")
                             .map(QuantityUnit::new).collect(Collectors.toList()));
+//
+//
+//            costingDataGenerator = new ExampleDataGenerator<>(Ingredients.class, LocalDateTime.now());
+//            costingDataGenerator.setData(Ingredients::setProductName, DataType.FOOD_PRODUCT_NAME);
+//            costingDataGenerator.setData(Ingredients::setProductQuantity, DataType.NUMBER_UP_TO_10);
+//            costingDataGenerator.setData(Ingredients::setProductPrice, DataType.PRICE);
+//
+//            ingredients = costingDataGenerator.create(5, seed);
+//
+//            companyGenerator = new ExampleDataGenerator<>(Company.class,
+//                    LocalDateTime.now());
+//            companyGenerator.setData(Company::setName, DataType.COMPANY_NAME);
+//            companies = companyGenerator.create(5, seed);
+//
+//
+//            employerGenerator = new ExampleDataGenerator<>(Employer.class,
+//                    LocalDateTime.now());
+//            employerGenerator.setData(Employer::setFirstName, DataType.FIRST_NAME);
+//            employerGenerator.setData(Employer::setLastName, DataType.LAST_NAME);
+//            employerGenerator.setData(Employer::setEmail, DataType.EMAIL);
+//            employers = employerGenerator.create(50, seed);
+//
+//            itemGenerator = new ExampleDataGenerator<>(Item.class, LocalDateTime.now());
+//            itemGenerator.setData(Item::setItemName, DataType.FOOD_PRODUCT_NAME);
+//            itemGenerator.setData(Item::setQuantity, DataType.NUMBER_UP_TO_10);
+//            itemGenerator.setData(Item::setPrice, DataType.PRICE);
+//            items = itemGenerator.create(10, seed);
+//
+//            ownerGenerator = new ExampleDataGenerator<>(Owner.class,
+//                    LocalDateTime.now());
+//            ownerGenerator.setData(Owner::setFirstName, DataType.FIRST_NAME);
+//            ownerGenerator.setData(Owner::setLastName, DataType.LAST_NAME);
+//            ownerGenerator.setData(Owner::setEmail, DataType.EMAIL);
+//
+//            owners = ownerGenerator.create(5, seed);
+//
+//            buyerGenerator = new ExampleDataGenerator<>(Customer.class, LocalDateTime.now());
+//            buyerGenerator.setData(Customer::setName, DataType.FULL_NAME);
+//            customers = buyerGenerator.create(8, seed);
+//
+//            companies.stream().map(company -> {
+//                company.getEmplyr().add(employers.get(r.nextInt(employers.size())));
+//                company.getOwnerInCompany().add(owners.get(r.nextInt(owners.size())));
+//                company.setOwner(owners.get(r.nextInt(owners.size())));
+//                return company;
+//            }).collect(Collectors.toList());
+//
+//            employers.stream().map(employer -> {
+//                employer.getCompany().add(companies.get(r.nextInt(companies.size())));
+//                employer.setPosition(positions.get(r.nextInt(positions.size())));
+//                employer.setEmplyrCompany(companies.get(r.nextInt(companies.size())));
+//                employer.setItem(items.get(r.nextInt(items.size())));
+//                employer.setBuyer(customers.get(r.nextInt(customers.size())));
+//                return employer;
+//            }).collect(Collectors.toList());
+//
+//            items.stream().map(item -> {
+//                item.getAddedBy().add(employers.get(r.nextInt(employers.size())));
+//                item.setTotalPrice(item.getQuantity());
+//                item.setDateAndTime(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-"+ LocalDateTime.now().toLocalDate().toString());
+//                return item;
+//            }).collect(Collectors.toList());
+//
+//            customers.stream().map(customer -> {
+//                customer.getItem().add(items.get(r.nextInt(items.size())));
+//                customer.setQuantity(items.get(r.nextInt(items.size())).getQuantity());
+//                customer.setPurchaseAmount(items.get(r.nextInt(items.size())).getPrice());
+//                customer.getAddedBy().add(employers.get(r.nextInt(employers.size())));
+//                customer.setSoldItem(items.get(r.nextInt(items.size())));
+//                return customer;
+//            }).collect(Collectors.toList());
+//
+//
+//            ingredients.stream().map(costing -> {
+//                costing.setTotalCost(costing.getProductQuantity());
+//                return costing;
+//            }).collect(Collectors.toList());
 
 
-            costingDataGenerator = new ExampleDataGenerator<>(Ingredients.class, LocalDateTime.now());
-            costingDataGenerator.setData(Ingredients::setProductName, DataType.FOOD_PRODUCT_NAME);
-            costingDataGenerator.setData(Ingredients::setProductQuantity, DataType.NUMBER_UP_TO_10);
-            costingDataGenerator.setData(Ingredients::setProductPrice, DataType.PRICE);
+//            quantityUnitRepository.saveAll(quantityUnits);
+//            IIngredientsRepository.saveAll(ingredients);
+//            IItemRepository.saveAll(items);
+//            customerRepository.saveAll(customers);
+//            employerRepository.saveAll(employers);
+//            companyRepository.saveAll(companies);
+//            ownerRepository.saveAll(owners);
 
-            ingredients = costingDataGenerator.create(5, seed);
+//            Company company = new Company();
+//            company.setName("Pixelated");
+//
+//            Owner owner = new Owner("w@gmail.com","a", Role.CMP_OWNER );
+//            owner.setFirstName("Mr");
+//            owner.setLastName("LothBrok");
+//
+//            Owner admin = new Owner("s@gmail.com","a", Role.ADMIN );
+//            admin.setFirstName("Mr");
+//            admin.setLastName("Iron Side");
+//
+            IPositionRepository.saveAll(positions);
 
-            companyGenerator = new ExampleDataGenerator<>(Company.class,
-                    LocalDateTime.now());
-            companyGenerator.setData(Company::setName, DataType.COMPANY_NAME);
-            companies = companyGenerator.create(5, seed);
-
-
-            employerGenerator = new ExampleDataGenerator<>(Employer.class,
-                    LocalDateTime.now());
-            employerGenerator.setData(Employer::setFirstName, DataType.FIRST_NAME);
-            employerGenerator.setData(Employer::setLastName, DataType.LAST_NAME);
-            employerGenerator.setData(Employer::setEmail, DataType.EMAIL);
-            employers = employerGenerator.create(50, seed);
-
-            itemGenerator = new ExampleDataGenerator<>(Item.class, LocalDateTime.now());
-            itemGenerator.setData(Item::setItemName, DataType.FOOD_PRODUCT_NAME);
-            itemGenerator.setData(Item::setQuantity, DataType.NUMBER_UP_TO_10);
-            itemGenerator.setData(Item::setPrice, DataType.PRICE);
-            items = itemGenerator.create(10, seed);
-
-            ownerGenerator = new ExampleDataGenerator<>(Owner.class,
-                    LocalDateTime.now());
-            ownerGenerator.setData(Owner::setFirstName, DataType.FIRST_NAME);
-            ownerGenerator.setData(Owner::setLastName, DataType.LAST_NAME);
-            ownerGenerator.setData(Owner::setEmail, DataType.EMAIL);
-
-            owners = ownerGenerator.create(5, seed);
-
-            buyerGenerator = new ExampleDataGenerator<>(Customer.class, LocalDateTime.now());
-            buyerGenerator.setData(Customer::setName, DataType.FULL_NAME);
-            customers = buyerGenerator.create(8, seed);
-
-            companies.stream().map(company -> {
-                company.getEmplyr().add(employers.get(r.nextInt(employers.size())));
-                company.getOwnerInCompany().add(owners.get(r.nextInt(owners.size())));
-                company.setOwner(owners.get(r.nextInt(owners.size())));
-                return company;
-            }).collect(Collectors.toList());
-
-            employers.stream().map(employer -> {
-                employer.getCompany().add(companies.get(r.nextInt(companies.size())));
-                employer.setPosition(positions.get(r.nextInt(positions.size())));
-                employer.setEmplyrCompany(companies.get(r.nextInt(companies.size())));
-                employer.setItem(items.get(r.nextInt(items.size())));
-                employer.setBuyer(customers.get(r.nextInt(customers.size())));
-                return employer;
-            }).collect(Collectors.toList());
-
-            items.stream().map(item -> {
-                item.getAddedBy().add(employers.get(r.nextInt(employers.size())));
-                item.setTotalPrice(item.getQuantity());
-                item.setDateAndTime(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-"+ LocalDateTime.now().toLocalDate().toString());
-                return item;
-            }).collect(Collectors.toList());
-
-            customers.stream().map(customer -> {
-                customer.getItem().add(items.get(r.nextInt(items.size())));
-                customer.setQuantity(items.get(r.nextInt(items.size())).getQuantity());
-                customer.setPurchaseAmount(items.get(r.nextInt(items.size())).getPrice());
-                customer.getAddedBy().add(employers.get(r.nextInt(employers.size())));
-                customer.setSoldItem(items.get(r.nextInt(items.size())));
-                return customer;
-            }).collect(Collectors.toList());
-
-
-            ingredients.stream().map(costing -> {
-                costing.setTotalCost(costing.getProductQuantity());
-                return costing;
-            }).collect(Collectors.toList());
-
-
-            quantityUnitRepository.saveAll(quantityUnits);
-            IIngredientsRepository.saveAll(ingredients);
-            IItemRepository.saveAll(items);
-            customerRepository.saveAll(customers);
-            employerRepository.saveAll(employers);
-            companyRepository.saveAll(companies);
-            ownerRepository.saveAll(owners);
+            IQuantityUnitRepository.saveAll(quantityUnits);
+//
+//            companyRepository.save(company);
+//            ownerRepository.save(admin);
+//            ownerRepository.save(owner);
 
             logger.info("Generated demo data");
         };
