@@ -52,14 +52,14 @@ public class OwnerService implements IOwnerService {
     public void authenticate(String email, String password, String companyName) throws AuthException {
         Owner owner = ownerRepository.getByEmail(email);
         Employer employer = employerRepository.getByEmail(email);
+        Company company = companyRepository.getCompanyByName(companyName);
         if(!companyName.trim().isEmpty()){
-            Company company = companyRepository.getCompanyByName(companyName);
             VaadinSession.getCurrent().setAttribute(Company.class, company);
         }
-        if (owner != null && owner.verifyPassword(password)) {
+        if (owner != null && owner.verifyPassword(password) && company.getOwner().getId().equals(owner.getId())) {
             VaadinSession.getCurrent().setAttribute(Owner.class, owner);
             createRoutes(owner.getRoles());
-        } else if(employer != null && employer.verifyPassword(password)){
+        } else if(employer != null && employer.verifyPassword(password) && employer.getEmplyrCompany().getName().equals(companyName)){
             VaadinSession.getCurrent().setAttribute(Employer.class, employer);
             createRoutes(employer.getRoles());
         } else {
