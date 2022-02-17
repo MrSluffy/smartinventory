@@ -1,5 +1,6 @@
 package com.smart.inventory.application.views.menu.account;
 
+import com.smart.inventory.application.data.entity.Company;
 import com.smart.inventory.application.data.entity.Employer;
 import com.smart.inventory.application.data.services.employer.EmployerService;
 import com.smart.inventory.application.views.widgets.DeleteButton;
@@ -8,6 +9,7 @@ import com.smart.inventory.application.views.widgets.PlusButton;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -16,8 +18,10 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.Registration;
 import org.vaadin.haijian.Exporter;
 
@@ -43,6 +47,8 @@ public class AccountView extends VerticalLayout {
     private final AccountForm form;
 
     private final EmployerService service;
+
+    private final Company company = VaadinSession.getCurrent().getAttribute(Company.class);
 
 
     public AccountView(EmployerService service){
@@ -76,7 +82,7 @@ public class AccountView extends VerticalLayout {
         grid.getDataProvider().addDataProviderListener(
                 dataChangeEvent ->
                         dataChangeEvent.getSource().refreshAll());
-        grid.setItems(service.findAllEmployer(filterText.getValue()));
+        grid.setItems(company.getEmplyr());
     }
 
     @Nonnull
@@ -130,12 +136,21 @@ public class AccountView extends VerticalLayout {
     @Nonnull
     private Component getToolbar() {
         filterText.setPlaceholder("Search employer by email...");
-        filterText.addValueChangeListener(e -> updateList());
+        filterText.addValueChangeListener(this::onNameFilterTextChange);
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
         toolbar.addClassName("toolbar");
         plusButton.setVisible(false);
         delete.setVisible(true);
         return toolbar;
+    }
+
+    private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
+        ListDataProvider<Employer> dataProvider = (ListDataProvider<Employer>) grid.getDataProvider();
+        dataProvider.setFilter(Employer::getEmail, s -> caseInsensitiveContains(s, event.getValue()));
+    }
+
+    private Boolean caseInsensitiveContains(String where, String what) {
+        return where.toLowerCase().contains(what.toLowerCase());
     }
 
 
@@ -184,6 +199,7 @@ public class AccountView extends VerticalLayout {
         grid.setRowsDraggable(true);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_ROW_STRIPES);
+
         grid.setColumns(
                 "email",
                 "firstName",
