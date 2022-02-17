@@ -40,16 +40,22 @@ public class OwnerService implements IOwnerService {
     private final ICompanyRepository companyRepository;
 
     @Autowired
-    public OwnerService(IOwnerRepository ownerRepository, IEmployerRepository employerRepository, ICompanyRepository companyRepository) {
+    public OwnerService(IOwnerRepository ownerRepository,
+                        IEmployerRepository employerRepository,
+                        ICompanyRepository companyRepository) {
         this.ownerRepository = ownerRepository;
         this.employerRepository = employerRepository;
         this.companyRepository = companyRepository;
     }
 
     @Override
-    public void authenticate(String email, String password) throws AuthException {
+    public void authenticate(String email, String password, String companyName) throws AuthException {
         Owner owner = ownerRepository.getByEmail(email);
         Employer employer = employerRepository.getByEmail(email);
+        if(!companyName.trim().isEmpty()){
+            Company company = companyRepository.getCompanyByName(companyName);
+            VaadinSession.getCurrent().setAttribute(Company.class, company);
+        }
         if (owner != null && owner.verifyPassword(password)) {
             VaadinSession.getCurrent().setAttribute(Owner.class, owner);
             createRoutes(owner.getRoles());
@@ -59,7 +65,6 @@ public class OwnerService implements IOwnerService {
         } else {
             throw new AuthException();
         }
-
     }
 
     @Override
@@ -97,16 +102,18 @@ public class OwnerService implements IOwnerService {
 
         var routes = new ArrayList<AuthorizedRoute>();
 
+        String company = VaadinSession.getCurrent().getAttribute(Company.class).getName().trim().toLowerCase();
+
         if (role.equals(Role.CMP_OWNER)) {
-            routes.add(new AuthorizedRoute("item", "Item Stock", ItemView.class));
-            routes.add(new AuthorizedRoute("costing", "Costing", IngredientView.class));
-            routes.add(new AuthorizedRoute("employer", "My Employer", AccountView.class));
+            routes.add(new AuthorizedRoute(company + "/item", "Item Stock", ItemView.class));
+            routes.add(new AuthorizedRoute(company +"/costing", "Costing", IngredientView.class));
+            routes.add(new AuthorizedRoute(company +"/employer", "My Employer", AccountView.class));
         } else if (role.equals(Role.EMPLOYER)) {
-            routes.add(new AuthorizedRoute("item", "Item Stock", ItemView.class));
+            routes.add(new AuthorizedRoute(company + "/employer/item", "Item Stock", ItemView.class));
         } else if (role.equals(Role.ADMIN)) {
-            routes.add(new AuthorizedRoute("dashboard", "Dashboard", DashboardView.class));
-            routes.add(new AuthorizedRoute("item", "Item Stock", ItemView.class));
-            routes.add(new AuthorizedRoute("costing", "Costing", IngredientView.class));
+            routes.add(new AuthorizedRoute("admin/dashboard", "Dashboard", DashboardView.class));
+            routes.add(new AuthorizedRoute("admin/item", "Item Stock", ItemView.class));
+            routes.add(new AuthorizedRoute("admin/costing", "Costing", IngredientView.class));
         }
         return routes;
     }

@@ -161,7 +161,12 @@ public class AccountView extends VerticalLayout {
     }
 
     private void addEmployer(AccountForm.AccountFormEvent.AddEvent addEvent){
-        service.addNewEmployer(form.email.getValue(), form.firstName.getValue(), form.lastName.getValue(), form.passwordField.getValue(), form.position.getValue());
+        service.addNewEmployer(
+                form.email.getValue(),
+                form.firstName.getValue(),
+                form.lastName.getValue(),
+                form.passwordField.getValue(),
+                form.position.getValue());
         updateList();
         closeEditor();
     }

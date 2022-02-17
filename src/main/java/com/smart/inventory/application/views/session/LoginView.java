@@ -29,6 +29,8 @@ public class LoginView extends VerticalLayout {
         setJustifyContentMode(JustifyContentMode.CENTER);
         var email = new TextField("Email");
         email.setWidth(widthSize);
+        var companyName = new TextField("Company Name");
+        companyName.setWidth(widthSize);
         var password = new PasswordField("Password");
         password.setWidth(widthSize);
         var btnLogin = new Button("Login");
@@ -36,8 +38,8 @@ public class LoginView extends VerticalLayout {
         btnLogin.setWidth(widthSize);
         btnLogin.addClickListener(buttonClickEvent ->{
             try {
-                ownerService.authenticate(email.getValue(), password.getValue());
-                UI.getCurrent().navigate("item");
+                ownerService.authenticate(email.getValue(), password.getValue(), companyName.getValue());
+                UI.getCurrent().navigate("home");
             } catch (AuthException e) {
                 Notification.show("Wrong Credentials");
             }
@@ -46,6 +48,7 @@ public class LoginView extends VerticalLayout {
         add(new H1("Welcome !"),
                 email,
                 password,
+                companyName,
                 btnLogin,
         new RouterLink("Register", RegisterView.class));
     }
