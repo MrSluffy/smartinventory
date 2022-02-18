@@ -6,14 +6,15 @@ import com.smart.inventory.application.data.services.employer.EmployerService;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -40,7 +41,7 @@ public class AccountView extends VerticalLayout {
 
     DeleteButton delete = new DeleteButton();
 
-    ConfirmDialog dialog = new ConfirmDialog();
+    Dialog dialog = new Dialog();
 
     Anchor anchor;
 
@@ -79,10 +80,7 @@ public class AccountView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.getDataProvider().addDataProviderListener(
-                dataChangeEvent ->
-                        dataChangeEvent.getSource().refreshAll());
-        grid.setItems(company.getEmplyr());
+        grid.setItems(service.findAllEmployer(company.getName()));
     }
 
     @Nonnull
@@ -96,18 +94,11 @@ public class AccountView extends VerticalLayout {
     }
 
     private Component getFab() {
-        plusButton.addClickListener(click -> {
-            addNewEmployer();
-        });
+        plusButton.addClickListener(click -> addNewEmployer());
 
         delete.addClickListener(deleteEvnt -> {
-            int selectedSize = grid.asMultiSelect().getValue().size();
             if (!grid.asMultiSelect().isEmpty()) {
                 dialog.open();
-                dialog.setHeader(
-                        "Delete " +
-                                selectedSize +
-                                " selected employer?");
             }
         });
         return new HorizontalLayout(plusButton, delete);
@@ -146,24 +137,54 @@ public class AccountView extends VerticalLayout {
 
     private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
         ListDataProvider<Employer> dataProvider = (ListDataProvider<Employer>) grid.getDataProvider();
-        dataProvider.setFilter(Employer::getEmail, s -> caseInsensitiveContains(s, event.getValue()));
+        dataProvider.setFilter(Employer::getEmail, s -> caseInsensitiveContainsFilter(s, event.getValue()));
     }
 
-    private Boolean caseInsensitiveContains(String where, String what) {
-        return where.toLowerCase().contains(what.toLowerCase());
+    private Boolean caseInsensitiveContainsFilter(String value, String filter) {
+        return value.toLowerCase().contains(filter.toLowerCase());
     }
 
 
     private void configureDialog() {
-        dialog.setText("Are you sure you want to permanently delete this employer?");
-        dialog.setConfirmText("Delete");
-        dialog.setConfirmButtonTheme("error primary");
-        dialog.setCancelable(true);
-        dialog.addConfirmListener(confirmEvent ->
-                this.deleteEmployer(new AccountViewEvent.DeleteEvent(this, form.getEmployer())));
 
+        VerticalLayout dialogLayout = createDialogLayout(dialog);
+        dialog.add(dialogLayout);
     }
 
+    private VerticalLayout createDialogLayout(Dialog dialog) {
+
+        H4 header = new H4("Delete selected employer?");
+
+        if (!grid.asMultiSelect().isEmpty()) {
+            int selectedSize = grid.asMultiSelect().getValue().size();
+            header = new H4("Delete " +
+                    selectedSize +
+                    " selected employer?");
+        }
+
+        dialog.addThemeVariants(DialogVariant.LUMO_NO_PADDING);
+        
+        var layout = new VerticalLayout();
+        var text = new Text("Are you sure you want to permanently delete this employer?");
+
+        var confirmBtn = new Button("Delete");
+        var cancelBtn = new Button("Cancel");
+        cancelBtn.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        confirmBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
+        confirmBtn.addClickListener(confirmEvent -> {
+            this.deleteEmployer(new AccountViewEvent.DeleteEvent(this, form.getEmployer()));
+            dialog.close();
+        });
+
+        cancelBtn.addClickListener(cancelEvent -> dialog.close());
+        HorizontalLayout buttonLayout = new HorizontalLayout(cancelBtn, confirmBtn);
+        buttonLayout.setWidthFull();
+        buttonLayout.getStyle().set("flex-wrap", "wrap");
+        buttonLayout.setJustifyContentMode(JustifyContentMode.END);
+        layout.add(header, text, buttonLayout);
+
+        return layout;
+    }
 
     private void deleteEmployer(AccountViewEvent.DeleteEvent deleteEvent) {
         service.deleteEmployerSelected(new ArrayList<>(grid.getSelectedItems()));
@@ -182,8 +203,8 @@ public class AccountView extends VerticalLayout {
                 form.lastName.getValue(),
                 form.passwordField.getValue(),
                 form.position.getValue());
-        updateList();
         closeEditor();
+        updateList();
     }
 
     private void configureForm() {
