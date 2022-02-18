@@ -12,7 +12,6 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("Register")
 public class RegisterView extends Composite {
@@ -28,7 +27,6 @@ public class RegisterView extends Composite {
     TextField company = new TextField("Company Name");
     Button btnRegister = new Button("Register");
 
-    @Autowired
     public RegisterView(OwnerService ownerService) {
         this.ownerService = ownerService;
     }
@@ -47,6 +45,8 @@ public class RegisterView extends Composite {
         return new VerticalLayout(head, line1, line2, line3, btnRegister);
     }
 
+
+    //TODO use binder
     private void register(String fname,
                           String lname,
                           String email,
@@ -54,17 +54,19 @@ public class RegisterView extends Composite {
                           String password2,
                           String company) {
 
-        if(fname.trim().isEmpty()){
+        if (fname.trim().isEmpty()) {
             notif(fname);
-        } else if(lname.trim().isEmpty()){
+        } else if (lname.trim().isEmpty()) {
             notif(lname);
-        } else if(email.trim().isEmpty()){
+        } else if (email.trim().isEmpty()) {
             notif(email);
-        } else if(!password1.equals(password2)){
+        } else if (!password1.equals(password2)) {
             Notification.show("Password don't match");
-        } else if(password1.isEmpty()){
+        } else if (ownerService.getOwnerEmail(email).isPresent()) {
+            Notification.show(email + " email is already taken");
+        } else if (password1.isEmpty()) {
             notif(password1);
-        } else if(company.trim().isEmpty()){
+        } else if (company.trim().isEmpty()) {
             notif(company);
         } else {
             ownerService.register(fname, lname, password1, email, company);
@@ -72,7 +74,7 @@ public class RegisterView extends Composite {
 
     }
 
-    private void notif(String label){
-        Notification.show(label+" cannot be empty");
+    private void notif(String label) {
+        Notification.show(label + " cannot be empty");
     }
 }
