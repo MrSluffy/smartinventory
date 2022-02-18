@@ -1,5 +1,6 @@
 package com.smart.inventory.application.views.menu.item;
 
+import com.smart.inventory.application.data.entity.Company;
 import com.smart.inventory.application.data.entity.Item;
 import com.smart.inventory.application.data.services.item.ItemsService;
 import com.smart.inventory.application.views.widgets.DeleteButton;
@@ -8,6 +9,7 @@ import com.smart.inventory.application.views.widgets.PlusButton;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -16,8 +18,10 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.Registration;
 import org.vaadin.haijian.Exporter;
 
@@ -42,13 +46,17 @@ public class ItemView extends VerticalLayout {
 
     Anchor anchor;
 
-    ItemForm itemForm = new ItemForm();
+    private final ItemForm itemForm;
     private final ItemsService service;
+
+    private final Company company = VaadinSession.getCurrent().getAttribute(Company.class);
 
     public ItemView(ItemsService service) {
         this.service = service;
         addClassName("gen-view");
         setSizeFull();
+
+        itemForm = new ItemForm();
 
         configureGrid();
         configureForm();
@@ -99,10 +107,16 @@ public class ItemView extends VerticalLayout {
     }
 
     private void updateList() {
-        itemGrid.getDataProvider().addDataProviderListener(
-                dataChangeEvent ->
-                        dataChangeEvent.getSource().refreshAll());
-        itemGrid.setItems(service.findAllItem(filterText.getValue()));
+        itemGrid.setItems(service.findAllItem(company.getId().toString()));
+    }
+
+    private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
+        ListDataProvider<Item> dataProvider = (ListDataProvider<Item>) itemGrid.getDataProvider();
+        dataProvider.setFilter(Item::getItemName, s -> caseInsensitiveContainsFilter(s, event.getValue()));
+    }
+
+    private Boolean caseInsensitiveContainsFilter(String value, String filter) {
+        return value.toLowerCase().contains(filter.toLowerCase());
     }
 
     @Nonnull
@@ -125,7 +139,7 @@ public class ItemView extends VerticalLayout {
     @Nonnull
     private Component getToolbar() {
         filterText.setPlaceholder("Search item by name...");
-        filterText.addValueChangeListener(e -> updateList());
+        filterText.addValueChangeListener(this::onNameFilterTextChange);
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
         toolbar.addClassName("toolbar");
         plusButton.setVisible(false);

@@ -1,10 +1,10 @@
 package com.smart.inventory.application.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 import org.joda.time.DateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -28,8 +28,22 @@ public class Item extends AbstractEntity {
     @NotNull
     private String dateAndTime;
 
-    @OneToMany(mappedBy = "item")
-    private Set<Employer> addedBy = new HashSet<>();
+    @NotNull
+    @JsonIgnore
+    @ManyToMany(mappedBy = "itemInCompany")
+    private final Set<Company> company = new HashSet<>();
+
+    @OneToMany(mappedBy = "item", orphanRemoval = true)
+    private Set<Employer> addedByEmployer = new HashSet<>();
+
+    @OneToMany(mappedBy = "itemOwner", orphanRemoval = true)
+    private Set<Owner> addedByOwner = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company itemCompany;
 
     public Item(){
         dateAndTime = LocalDateTime.now().toString();
@@ -71,19 +85,33 @@ public class Item extends AbstractEntity {
         this.totalPrice = value * this.price;
     }
 
-    public Set<Employer> getAddedBy() {
-        return addedBy;
-    }
-
-    public void setAddedBy(Set<Employer> addedBy) {
-        this.addedBy = addedBy;
-    }
-
     public String getDateAndTime() {
         return dateAndTime;
     }
 
     public void setDateAndTime(String dateAndTime) {
         this.dateAndTime = dateAndTime;
+    }
+
+    public Set<Owner> getAddedByOwner() {
+        return addedByOwner;
+    }
+
+
+    public Set<Employer> getAddedByEmployer() {
+        return addedByEmployer;
+    }
+
+
+    public Company getItemCompany() {
+        return itemCompany;
+    }
+
+    public void setItemCompany(Company itemCompany) {
+        this.itemCompany = itemCompany;
+    }
+
+    public Set<Company> getCompany() {
+        return company;
     }
 }

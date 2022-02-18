@@ -7,8 +7,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.annotation.Nonnull;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
@@ -36,6 +35,11 @@ public class Owner extends AbstractEntity {
     private Role roles;
 
     private String signMethod;
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private Item itemOwner;
 
 
     public Owner(){}
@@ -124,5 +128,13 @@ public class Owner extends AbstractEntity {
 
     public void setCompany(Set<Company> company) {
         this.company = company;
+    }
+
+    public Item getItemOwner() {
+        return itemOwner;
+    }
+
+    public void setItemOwner(Item itemOwner) {
+        this.itemOwner = itemOwner;
     }
 }
