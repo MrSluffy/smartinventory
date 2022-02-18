@@ -121,6 +121,7 @@
     "@webcomponents/shadycss": "1.9.6",
     "construct-style-sheets-polyfill": "3.0.4",
     "date-fns": "2.23.0",
+    "line-awesome": "1.3.0",
     "lit": "2.0.0"
   },
   "devDependencies": {
@@ -381,6 +382,7 @@
       "@webcomponents/shadycss": "1.9.6",
       "construct-style-sheets-polyfill": "3.0.4",
       "date-fns": "2.23.0",
+      "line-awesome": "1.3.0",
       "lit": "2.0.0"
     },
     "devDependencies": {
@@ -405,6 +407,6 @@
       "workbox-precaching": "6.4.2",
       "workbox-webpack-plugin": "6.4.2"
     },
-    "hash": "4ee7bd92918d8d59107078cc005a229b4f94dec794b1adfed31f6bb4a1d254b5"
+    "hash": "8f40509dbba38e804e3b1db01145b99e497fa5c5788a2e62919ab2d563d5433e"
   }
 }
