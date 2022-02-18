@@ -8,6 +8,7 @@ import com.smart.inventory.application.data.repository.ICompanyRepository;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IOwnerRepository;
 import com.smart.inventory.application.exeptions.AuthException;
+import com.smart.inventory.application.exeptions.ValueExeptionHandler;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.menu.account.AccountView;
 import com.smart.inventory.application.views.menu.dashboard.DashboardView;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("unchecked")
 @Service
@@ -53,6 +55,9 @@ public class OwnerService implements IOwnerService {
         Owner owner = ownerRepository.getByEmail(email);
         Employer employer = employerRepository.getByEmail(email);
         Company company = companyRepository.getCompanyByName(companyName);
+        if(company == null){
+            throw new AuthException();
+        }
         if(!companyName.trim().isEmpty()){
             VaadinSession.getCurrent().setAttribute(Company.class, company);
         }
@@ -65,6 +70,7 @@ public class OwnerService implements IOwnerService {
         } else {
             throw new AuthException();
         }
+
     }
 
     @Override
@@ -86,7 +92,16 @@ public class OwnerService implements IOwnerService {
         company.getOwnerInCompany().add(owner);
         company.setOwner(owner);
         companyRepository.save(company);
-        ownerRepository.save(owner);
+        if(ownerRepository.findOwnerByEmail(email).isPresent()){
+            throw new ValueExeptionHandler(email +" email is already taken");
+        } else {
+            ownerRepository.save(owner);
+        }
+    }
+
+    @Override
+    public Optional<Owner> getOwnerEmail(String value){
+        return ownerRepository.findOwnerByEmail(value);
     }
 
     private void createRoutes(Role roles) {
