@@ -23,6 +23,16 @@ public class Company extends AbstractEntity {
     List<Owner> ownerInCompany = new ArrayList<>();
 
 
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "company_items",
+            joinColumns = @JoinColumn(name = "companys_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    List<Item> itemInCompany = new ArrayList<>();
+
+
     private String name;
 
     @JsonIgnore
@@ -33,6 +43,10 @@ public class Company extends AbstractEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "emplyrCompany", orphanRemoval = true)
     private Set<Employer> emplyr = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "itemCompany", orphanRemoval = true)
+    private Set<Item> companyItems = new HashSet<>();
 
 
     public Company(){
@@ -64,5 +78,13 @@ public class Company extends AbstractEntity {
 
     public Set<Employer> getEmplyr() {
         return emplyr;
+    }
+
+    public Set<Item> getCompanyItems() {
+        return companyItems;
+    }
+
+    public void setCompanyItems(Set<Item> companyItems) {
+        this.companyItems = companyItems;
     }
 }

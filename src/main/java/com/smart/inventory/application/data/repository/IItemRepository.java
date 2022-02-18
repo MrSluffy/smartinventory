@@ -7,15 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface IItemRepository extends JpaRepository<Item, Integer> {
 
     @Query("select c from Item c " +
-            "where lower(c.itemName) like lower(concat('%', :searchTerm, '%'))")
+            "where lower(c.itemCompany) like lower(concat('%', :searchTerm, '%'))")
     List<Item> search(@Param("searchTerm") String searchTerm);
-
-    Optional<Item> findItemById(Integer id);
 
 }

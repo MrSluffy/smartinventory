@@ -54,10 +54,10 @@ public class Employer extends AbstractEntity {
     private Company emplyrCompany;
 
     @JsonIgnore
-    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.DETACH})
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private Item item;
-
 
     private String passwordSalt;
     private String passwordHash;
