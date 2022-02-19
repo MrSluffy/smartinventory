@@ -162,10 +162,10 @@ public class ItemView extends VerticalLayout {
                 "dateAndTime");
         itemGrid.getColumns().get(0)
                 .setHeader("Item Name")
-                .setFrozen(true)
-                .setFlexGrow(0);
+                .setAutoWidth(true);
         itemGrid.getColumns().get(1)
-                .setHeader("Quantity");
+                .setHeader("Quantity")
+                .setAutoWidth(false);
         itemGrid.getColumns().get(2)
                 .setHeader("Price");
         itemGrid.getColumns().get(3)
@@ -173,7 +173,6 @@ public class ItemView extends VerticalLayout {
         itemGrid.getColumns().get(4)
                 .setHeader("Last Updated ")
                 .setAutoWidth(false);
-        itemGrid.getColumns().forEach(itemColumn -> itemColumn.setAutoWidth(true));
 
         anchor = new Anchor(new StreamResource("smartinventory-" + getCurrentPageTitle()+
                 LocalDateTime.now().toLocalDate().toString() +".xlsx",
