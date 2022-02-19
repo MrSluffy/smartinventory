@@ -4,6 +4,7 @@ on:
   push:
     branches: [ dev ]
 jobs:
+  build:
     - name: Deploy to Heroku
       uses: AkhileshNS/heroku-deploy@v3.12.12
       with:
