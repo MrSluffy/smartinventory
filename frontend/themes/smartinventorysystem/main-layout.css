@@ -7,6 +7,29 @@
     margin-top: calc(var(--lumo-space-xs) * 0.5);
 }
 
+
+.role {
+    align-self: self-end;
+    top: 46px;
+    opacity: 60%;
+    height: 10px;
+    position: fixed;
+}
+
+.sub {
+    align-self: self-start;
+    top: 50px;
+    opacity: 80%;
+    font-size: 12px;
+    position: fixed;
+}
+
+.secTitle {
+    align-self: self-start;
+    top: 30px;
+    height: 200px;
+}
+
 [slot='drawer'] nav a::before {
     border-radius: var(--lumo-border-radius);
     bottom: calc(var(--lumo-space-xs) * 0.5);
