@@ -1,5 +1,6 @@
 package com.smart.inventory.application.views;
 
+import com.smart.inventory.application.data.entity.Company;
 import com.smart.inventory.application.data.entity.Employer;
 import com.smart.inventory.application.data.entity.Owner;
 import com.smart.inventory.application.data.services.owner.OwnerService;
@@ -11,16 +12,21 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
 
-@Route("home")
 public class MainLayout extends AppLayout {
 
 
     private final OwnerService ownerService;
+
+    private final Company company = VaadinSession.getCurrent().getAttribute(Company.class);
+
+    private final Owner owner = VaadinSession.getCurrent().getAttribute(Owner.class);
+
+    private final Employer employer = VaadinSession.getCurrent().getAttribute(Employer.class);
 
     public static class MenuItemInfo extends ListItem {
 
@@ -87,13 +93,48 @@ public class MainLayout extends AppLayout {
         return header;
     }
 
-    private Component createDrawerContent() {
-        H1 appName = new H1("Smart Inventory");
-        appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-l");
 
-        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,
+    private Component createHeaderTitle() {
+
+        String text = "";
+        if (owner != null) {
+            text = owner.getRoles().getRoleName();
+        }
+
+        if (employer != null) {
+            text = employer.getRoles().getRoleName();
+        }
+
+        var sub = new Label("(Smart Inventory)");
+        sub.addClassName("sub");
+        sub.addClassNames("m-0", "px-m");
+
+
+        var role = new Label(text);
+        role.addClassName("role");
+        role.setHeight("12px");
+        role.addClassNames("m-0", "px-m");
+
+        H3 cmpName = new H3(company.getName());
+        cmpName.addClassName("secTitle");
+        cmpName.addClassNames("m-0", "px-m");
+
+
+        VerticalLayout layout = new VerticalLayout(cmpName, sub);
+        layout.setWidthFull();
+        layout.addClassNames("flex", "my-s", "px-m", "py-xs");
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setHeight("3.7em");
+
+
+        return layout;
+    }
+
+    private Component createDrawerContent() {
+        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(createHeaderTitle(),
                 createNavigation(), createFooter());
-        section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
+        section.addClassNames("flex", "flex-col", "max-h-full", "min-h-full", "overflow-auto");
         return section;
     }
 
@@ -104,7 +145,7 @@ public class MainLayout extends AppLayout {
 
         // Wrap the links in a list; improves accessibility
         UnorderedList list = new UnorderedList();
-        list.addClassNames("list-none", "m-0", "p-0");
+        list.addClassNames("list-none", "m-0", "p-0", "text-l");
         nav.add(list);
 
         for (MenuItemInfo menuItem : createMenuItems()) {
@@ -115,10 +156,8 @@ public class MainLayout extends AppLayout {
     }
 
     private MenuItemInfo[] createMenuItems() {
-        var owner = VaadinSession.getCurrent().getAttribute(Owner.class);
-        var employer = VaadinSession.getCurrent().getAttribute(Employer.class);
 
-        if(owner != null){
+        if (owner != null) {
             return ownerService.getAuthorizedRoutes(owner.getRoles()).stream()
                     .map(authorizedRoute ->
                             new MenuItemInfo(authorizedRoute.name(),
@@ -135,6 +174,7 @@ public class MainLayout extends AppLayout {
     private Footer createFooter() {
         Button logout = new Button("Log out");
         logout.addClickListener(buttonClickEvent -> new LogoutView());
+        logout.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         Footer layout = new Footer(logout);
         layout.addClassNames("flex", "items-center", "my-s", "px-m", "py-xs");
         return layout;
