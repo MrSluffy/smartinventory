@@ -22,7 +22,7 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Maven
-      run: mvn clean packahe -Pproduction
+      run: mvn clean package -Pproduction
     - name: Heroku Build
 
       uses: behe/heroku-build@v1
