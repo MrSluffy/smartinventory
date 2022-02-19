@@ -1,7 +1,9 @@
 package com.smart.inventory.application.views;
 
+import com.smart.inventory.application.data.entity.Company;
+import com.smart.inventory.application.data.entity.Employer;
+import com.smart.inventory.application.data.entity.Owner;
 import com.smart.inventory.application.data.services.owner.OwnerService;
-import com.smart.inventory.application.util.Utilities;
 import com.smart.inventory.application.views.session.LogoutView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -13,11 +15,16 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
 
 public class MainLayout extends AppLayout {
 
 
     private final OwnerService ownerService;
+
+    private final Company company = VaadinSession.getCurrent().getAttribute(Company.class);
+    private final Owner owner = VaadinSession.getCurrent().getAttribute(Owner.class);
+    private final Employer employer = VaadinSession.getCurrent().getAttribute(Employer.class);
 
     public static class MenuItemInfo extends ListItem {
 
@@ -88,12 +95,12 @@ public class MainLayout extends AppLayout {
     private Component createHeaderTitle() {
 
         String text = "";
-        if (Utilities.owner != null) {
-            text = Utilities.owner.getRoles().getRoleName();
+        if (owner != null) {
+            text = owner.getRoles().getRoleName();
         }
 
-        if (Utilities.employer != null) {
-            text = Utilities.employer.getRoles().getRoleName();
+        if (employer != null) {
+            text = employer.getRoles().getRoleName();
         }
 
         var sub = new Label("(Smart Inventory)");
@@ -106,7 +113,7 @@ public class MainLayout extends AppLayout {
         role.setHeight("12px");
         role.addClassNames("m-0", "px-m");
 
-        H3 cmpName = new H3(Utilities.company.getName());
+        H3 cmpName = new H3(company.getName());
         cmpName.addClassName("secTitle");
         cmpName.addClassNames("m-0", "px-m");
 
@@ -148,14 +155,14 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
 
-        if (Utilities.owner != null) {
-            return ownerService.getAuthorizedRoutes(Utilities.owner.getRoles()).stream()
+        if (owner != null) {
+            return ownerService.getAuthorizedRoutes(owner.getRoles()).stream()
                     .map(authorizedRoute ->
                             new MenuItemInfo(authorizedRoute.name(),
                                     "", authorizedRoute.view()))
                     .toArray(MenuItemInfo[]::new);
         }
-        return ownerService.getAuthorizedRoutes(Utilities.employer.getRoles()).stream()
+        return ownerService.getAuthorizedRoutes(employer.getRoles()).stream()
                 .map(authorizedRoute ->
                         new MenuItemInfo(authorizedRoute.name(),
                                 "", authorizedRoute.view()))

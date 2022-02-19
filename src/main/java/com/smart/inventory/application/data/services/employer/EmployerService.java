@@ -7,10 +7,11 @@ import com.smart.inventory.application.data.entity.Position;
 import com.smart.inventory.application.data.repository.ICompanyRepository;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IPositionRepository;
-import com.vaadin.flow.server.VaadinSession;
+import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 @Service
@@ -52,9 +53,14 @@ public class EmployerService implements IEmployerService{
     }
 
     @Override
-    public void addNewEmployer(String email, String firstname, String lastname, String password, Position position) {
+    public void addNewEmployer(String email,
+                               String firstname,
+                               String lastname,
+                               String password,
+                               Position position,
+                               @Nonnull Utilities utilities) {
         var employer = new Employer(email, firstname, lastname, password, Role.EMPLOYER);
-        Company company = VaadinSession.getCurrent().getAttribute(Company.class);
+        Company company = utilities.company;
         employer.getCompany().add(company);
         employer.setPosition(position);
         employer.setEmplyrCompany(company);

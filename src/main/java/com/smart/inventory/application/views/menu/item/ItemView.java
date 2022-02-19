@@ -42,6 +42,8 @@ public class ItemView extends VerticalLayout {
 
     DeleteButton delete = new DeleteButton();
 
+    Utilities utilities = new Utilities();
+
     Dialog dialog = new Dialog();
 
     Anchor anchor;
@@ -101,7 +103,7 @@ public class ItemView extends VerticalLayout {
     }
 
     private void updateList() {
-        itemGrid.setItems(service.findAllItem(Utilities.company.getId().toString()));
+        itemGrid.setItems(service.findAllItem(utilities.company.getId().toString()));
     }
 
     private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
@@ -230,7 +232,7 @@ public class ItemView extends VerticalLayout {
 
     private void saveItem(@Nonnull ItemForm.ItemFormEvent.SaveEvent event) {
         event.getItem().setDateAndTime(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-" + LocalDateTime.now().toLocalDate().toString());
-        service.saveItem(event.getItem());
+        service.saveItem(event.getItem(), utilities);
         updateList();
         closeEditor();
     }

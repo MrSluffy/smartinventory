@@ -33,8 +33,8 @@ public class IngredientsService implements IIngredientsService {
     }
 
     @Override
-    public void addIngredient(@Nonnull Ingredients ingredients, QuantityUnit unit) {
-        utils(unit, ingredients);
+    public void addIngredient(@Nonnull Ingredients ingredients, QuantityUnit unit, Utilities utilities) {
+        utils(unit, ingredients, utilities);
         ingredientsRepository.save(ingredients);
     }
 
@@ -57,12 +57,17 @@ public class IngredientsService implements IIngredientsService {
 
     @Transactional
     @Override
-    public void updateIngredient(Integer id, String productName, int productQuantity, Double productPrice, QuantityUnit unit) {
+    public void updateIngredient(Integer id,
+                                 String productName,
+                                 int productQuantity,
+                                 Double productPrice,
+                                 QuantityUnit unit,
+                                 Utilities utilities) {
         Ingredients ingredients = getIngredientById(id);
         ingredients.setProductName(productName);
         ingredients.setProductQuantity(productQuantity);
         ingredients.setProductPrice(productPrice);
-        utils(unit, ingredients);
+        utils(unit, ingredients, utilities);
         ingredients.setTotalCost(productQuantity);
 
         ingredientsRepository.save(ingredients);
@@ -72,15 +77,17 @@ public class IngredientsService implements IIngredientsService {
         return ingredientsRepository.findAll();
     }
 
-    private void utils(QuantityUnit unit, Ingredients ingredients) {
-        if(Utilities.employer != null){
-            ingredients.getAddedByEmployer().add(Utilities.employer);
+    private void utils(QuantityUnit unit,
+                       Ingredients ingredients,
+                       Utilities utilities) {
+        if(utilities.employer != null){
+            ingredients.getAddedByEmployer().add(utilities.employer);
         }
-        if(Utilities.owner != null){
-            ingredients.getAddedByOwner().add(Utilities.owner);
+        if(utilities.owner != null){
+            ingredients.getAddedByOwner().add(utilities.owner);
         }
-        ingredients.getCompany().add(Utilities.company);
-        ingredients.setIngredientCompany(Utilities.company);
+        ingredients.getCompany().add(utilities.company);
+        ingredients.setIngredientCompany(utilities.company);
         ingredients.setQuantityUnit(unit);
     }
 }
