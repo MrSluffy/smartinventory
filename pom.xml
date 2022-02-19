@@ -201,8 +201,8 @@
             <id>production</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
                 </dependency>
             </dependencies>
             <build>
