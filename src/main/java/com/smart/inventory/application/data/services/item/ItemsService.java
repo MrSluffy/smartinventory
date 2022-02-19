@@ -42,17 +42,16 @@ public class ItemsService implements IItemsService{
     }
 
     @Override
-    public void saveItem(Item item) {
-
-        if(Utilities.employer != null) {
-            item.getAddedByEmployer().add(Utilities.employer);
+    public void saveItem(Item item, Utilities utilities) {
+        if(utilities.employer != null) {
+            item.getAddedByEmployer().add(utilities.employer);
         }
 
-        if(Utilities.owner != null){
-            item.getAddedByOwner().add(Utilities.owner);
+        if(utilities.owner != null){
+            item.getAddedByOwner().add(utilities.owner);
         }
-        item.getCompany().add(Utilities.company);
-        item.setItemCompany(Utilities.company);
+        item.getCompany().add(utilities.company);
+        item.setItemCompany(utilities.company);
         itemRepository.save(item);
     }
 

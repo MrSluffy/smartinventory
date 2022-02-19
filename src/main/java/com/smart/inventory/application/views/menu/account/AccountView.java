@@ -42,6 +42,8 @@ public class AccountView extends VerticalLayout {
 
     Dialog dialog = new Dialog();
 
+    Utilities utilities = new Utilities();
+
     Anchor anchor;
 
     private final AccountForm form;
@@ -76,7 +78,7 @@ public class AccountView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.findAllEmployer(Utilities.company.getName()));
+        grid.setItems(service.findAllEmployer(utilities.company.getName()));
     }
 
     @Nonnull
@@ -161,7 +163,7 @@ public class AccountView extends VerticalLayout {
                 form.firstName.getValue(),
                 form.lastName.getValue(),
                 form.passwordField.getValue(),
-                form.position.getValue());
+                form.position.getValue(), utilities);
         closeEditor();
         updateList();
     }

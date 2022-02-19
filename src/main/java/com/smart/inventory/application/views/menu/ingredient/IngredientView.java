@@ -48,6 +48,8 @@ public class IngredientView extends VerticalLayout {
 
     private final IngredientsService service;
 
+    Utilities utilities = new Utilities();
+
 
     public IngredientView(IngredientsService service) {
         this.service = service;
@@ -99,7 +101,7 @@ public class IngredientView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.findAllIngredients(Utilities.company.getName()));
+        grid.setItems(service.findAllIngredients(utilities.company.getName()));
     }
 
     private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
@@ -176,7 +178,7 @@ public class IngredientView extends VerticalLayout {
     }
 
     private void addNewIngredient(IngredientsForm.CostingFormEvent.AddEvent addEvent) {
-        service.addIngredient(addEvent.getCosting(), ingredientsForm.unit.getValue());
+        service.addIngredient(addEvent.getCosting(), ingredientsForm.unit.getValue(), utilities);
         updateList();
         closeEditor();
     }
@@ -221,7 +223,7 @@ public class IngredientView extends VerticalLayout {
                 ingredientsForm.productName.getValue(),
                 ingredientsForm.productQuantity.getValue(),
                 ingredientsForm.productPrice.getValue(),
-                ingredientsForm.unit.getValue());
+                ingredientsForm.unit.getValue(), utilities);
         updateList();
         closeEditor();
     }
