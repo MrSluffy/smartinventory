@@ -1,11 +1,16 @@
 package com.smart.inventory.application.data.entity.ingredients;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
+import com.smart.inventory.application.data.entity.Company;
+import com.smart.inventory.application.data.entity.Employer;
+import com.smart.inventory.application.data.entity.Owner;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Ingredients extends AbstractEntity {
@@ -20,6 +25,23 @@ public class Ingredients extends AbstractEntity {
 
     @NotNull
     private int productQuantity;
+
+    @NotNull
+    @JsonIgnore
+    @ManyToMany(mappedBy = "ingredientsInCompany")
+    private final Set<Company> company = new HashSet<>();
+
+    @OneToMany(mappedBy = "ingredients", orphanRemoval = true)
+    private Set<Employer> addedByEmployer = new HashSet<>();
+
+    @OneToMany(mappedBy = "ingredientsOwner", orphanRemoval = true)
+    private Set<Owner> addedByOwner = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company ingredientCompany;
 
     @NotNull
     @ManyToOne
@@ -77,5 +99,33 @@ public class Ingredients extends AbstractEntity {
 
     public void setQuantityUnit(QuantityUnit quantityUnit) {
         this.quantityUnit = quantityUnit;
+    }
+
+    public Company getIngredientCompany() {
+        return ingredientCompany;
+    }
+
+    public void setIngredientCompany(Company ingredientCompany) {
+        this.ingredientCompany = ingredientCompany;
+    }
+
+    public Set<Owner> getAddedByOwner() {
+        return addedByOwner;
+    }
+
+    public void setAddedByOwner(Set<Owner> addedByOwner) {
+        this.addedByOwner = addedByOwner;
+    }
+
+    public Set<Employer> getAddedByEmployer() {
+        return addedByEmployer;
+    }
+
+    public void setAddedByEmployer(Set<Employer> addedByEmployer) {
+        this.addedByEmployer = addedByEmployer;
+    }
+
+    public Set<Company> getCompany() {
+        return company;
     }
 }

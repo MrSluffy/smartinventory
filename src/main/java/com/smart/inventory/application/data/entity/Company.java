@@ -2,6 +2,7 @@ package com.smart.inventory.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
+import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -33,6 +34,16 @@ public class Company extends AbstractEntity {
     List<Item> itemInCompany = new ArrayList<>();
 
 
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "company_ingredient",
+            joinColumns = @JoinColumn(name = "companys_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    List<Ingredients> ingredientsInCompany = new ArrayList<>();
+
+
     private String name;
 
     @JsonIgnore
@@ -47,6 +58,10 @@ public class Company extends AbstractEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "itemCompany", orphanRemoval = true)
     private Set<Item> companyItems = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "ingredientCompany", orphanRemoval = true)
+    private Set<Ingredients> companyIngredients = new HashSet<>();
 
 
     public Company(){
@@ -86,5 +101,13 @@ public class Company extends AbstractEntity {
 
     public void setCompanyItems(Set<Item> companyItems) {
         this.companyItems = companyItems;
+    }
+
+    public Set<Ingredients> getCompanyIngredients() {
+        return companyIngredients;
+    }
+
+    public void setCompanyIngredients(Set<Ingredients> companyIngredients) {
+        this.companyIngredients = companyIngredients;
     }
 }

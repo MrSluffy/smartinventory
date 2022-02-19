@@ -125,6 +125,7 @@ public class OwnerService implements IOwnerService {
             routes.add(new AuthorizedRoute(company +"/employer", "My Employer", AccountView.class));
         } else if (role.equals(Role.EMPLOYER)) {
             routes.add(new AuthorizedRoute(company + "/employer/item", "Item Stock", ItemView.class));
+            routes.add(new AuthorizedRoute(company +"/costing", "Costing", IngredientView.class));
         } else if (role.equals(Role.ADMIN)) {
             routes.add(new AuthorizedRoute("admin/dashboard", "Dashboard", DashboardView.class));
             routes.add(new AuthorizedRoute("admin/item", "Item Stock", ItemView.class));

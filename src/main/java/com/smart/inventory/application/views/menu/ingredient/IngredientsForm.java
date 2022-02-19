@@ -155,6 +155,7 @@ public class IngredientsForm extends FormLayout {
                 source.currencyPrefix.setText(source.selectCurrency.getValue());
                 source.currencyPrefix1.setText(source.selectCurrency.getValue());
                 if (source.isVisible()) {
+                    ingredients.setTotalCost(ingredients.getProductQuantity());
                     Notification.show(source.productName.getValue() + " " +
                                             " successfully updated",
                                     5000, Notification.Position.TOP_CENTER)
@@ -170,6 +171,7 @@ public class IngredientsForm extends FormLayout {
                 source.currencyPrefix1.setText(source.selectCurrency.getValue());
                 ingredients.setTotalCost(ingredients.getProductQuantity());
                 if (source.isVisible()) {
+                    ingredients.setTotalCost(ingredients.getProductQuantity());
                     Notification.show(source.productName.getValue() + "  " +
                                             " successfully added",
                                     5000, Notification.Position.TOP_CENTER)

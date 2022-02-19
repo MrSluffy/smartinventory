@@ -1,13 +1,10 @@
 package com.smart.inventory.application.data.services.item;
 
-import com.smart.inventory.application.data.entity.Company;
-import com.smart.inventory.application.data.entity.Employer;
 import com.smart.inventory.application.data.entity.Item;
-import com.smart.inventory.application.data.entity.Owner;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IItemRepository;
 import com.smart.inventory.application.data.repository.IOwnerRepository;
-import com.vaadin.flow.server.VaadinSession;
+import com.smart.inventory.application.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,18 +43,16 @@ public class ItemsService implements IItemsService{
 
     @Override
     public void saveItem(Item item) {
-        var employer = VaadinSession.getCurrent().getAttribute(Employer.class);
-        var owner = VaadinSession.getCurrent().getAttribute(Owner.class);
-        var company = VaadinSession.getCurrent().getAttribute(Company.class);
-        if(employer != null) {
-            item.getAddedByEmployer().add(employer);
+
+        if(Helper.employer != null) {
+            item.getAddedByEmployer().add(Helper.employer);
         }
 
-        if(owner != null){
-            item.getAddedByOwner().add(owner);
+        if(Helper.owner != null){
+            item.getAddedByOwner().add(Helper.owner);
         }
-        item.getCompany().add(company);
-        item.setItemCompany(company);
+        item.getCompany().add(Helper.company);
+        item.setItemCompany(Helper.company);
         itemRepository.save(item);
     }
 

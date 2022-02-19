@@ -3,6 +3,7 @@ package com.smart.inventory.application.data.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 import com.smart.inventory.application.data.Role;
+import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -40,6 +41,11 @@ public class Owner extends AbstractEntity {
     @ManyToOne(cascade={CascadeType.MERGE,
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Item itemOwner;
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private Ingredients ingredientsOwner;
 
 
     public Owner(){}
@@ -136,5 +142,13 @@ public class Owner extends AbstractEntity {
 
     public void setItemOwner(Item itemOwner) {
         this.itemOwner = itemOwner;
+    }
+
+    public Ingredients getIngredientsOwner() {
+        return ingredientsOwner;
+    }
+
+    public void setIngredientsOwner(Ingredients ingredientsOwner) {
+        this.ingredientsOwner = ingredientsOwner;
     }
 }
