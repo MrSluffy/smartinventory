@@ -5,6 +5,7 @@ import com.smart.inventory.application.data.entity.ingredients.QuantityUnit;
 import com.smart.inventory.application.data.repository.IIngredientsRepository;
 import com.smart.inventory.application.data.repository.IQuantityUnitRepository;
 import com.smart.inventory.application.exeptions.NotFoundExeption;
+import com.smart.inventory.application.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,8 @@ public class IngredientsService implements IIngredientsService {
     private final IQuantityUnitRepository quantityUnitRepository;
 
     @Autowired
-    public IngredientsService(IIngredientsRepository ingredientsRepository, IQuantityUnitRepository quantityUnitRepository) {
+    public IngredientsService(IIngredientsRepository ingredientsRepository,
+                              IQuantityUnitRepository quantityUnitRepository) {
         this.ingredientsRepository = ingredientsRepository;
         this.quantityUnitRepository = quantityUnitRepository;
     }
@@ -32,7 +34,7 @@ public class IngredientsService implements IIngredientsService {
 
     @Override
     public void addIngredient(@Nonnull Ingredients ingredients, QuantityUnit unit) {
-        ingredients.setQuantityUnit(unit);
+        utils(unit, ingredients);
         ingredientsRepository.save(ingredients);
     }
 
@@ -60,9 +62,25 @@ public class IngredientsService implements IIngredientsService {
         ingredients.setProductName(productName);
         ingredients.setProductQuantity(productQuantity);
         ingredients.setProductPrice(productPrice);
-        ingredients.setQuantityUnit(unit);
+        utils(unit, ingredients);
         ingredients.setTotalCost(productQuantity);
 
         ingredientsRepository.save(ingredients);
+    }
+
+    public List<Ingredients> findAllIngredients() {
+        return ingredientsRepository.findAll();
+    }
+
+    private void utils(QuantityUnit unit, Ingredients ingredients) {
+        if(Helper.employer != null){
+            ingredients.getAddedByEmployer().add(Helper.employer);
+        }
+        if(Helper.owner != null){
+            ingredients.getAddedByOwner().add(Helper.owner);
+        }
+        ingredients.getCompany().add(Helper.company);
+        ingredients.setIngredientCompany(Helper.company);
+        ingredients.setQuantityUnit(unit);
     }
 }

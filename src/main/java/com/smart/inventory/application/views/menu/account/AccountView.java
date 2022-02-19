@@ -14,7 +14,7 @@ import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -153,14 +153,7 @@ public class AccountView extends VerticalLayout {
 
     private VerticalLayout createDialogLayout(Dialog dialog) {
 
-        H4 header = new H4("Delete selected employer?");
-
-        if (!grid.asMultiSelect().isEmpty()) {
-            int selectedSize = grid.asMultiSelect().getValue().size();
-            header = new H4("Delete " +
-                    selectedSize +
-                    " selected employer?");
-        }
+        H3 header = new H3("Delete selected employer?");
 
         dialog.addThemeVariants(DialogVariant.LUMO_NO_PADDING);
         

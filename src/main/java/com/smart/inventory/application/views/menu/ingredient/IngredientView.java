@@ -2,12 +2,14 @@ package com.smart.inventory.application.views.menu.ingredient;
 
 import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import com.smart.inventory.application.data.services.ingredient.IngredientsService;
+import com.smart.inventory.application.util.Helper;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -16,6 +18,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.shared.Registration;
@@ -37,8 +40,6 @@ public class IngredientView extends VerticalLayout {
     DeleteButton delete = new DeleteButton();
 
     ConfirmDialog dialog = new ConfirmDialog();
-
-    private final Ingredients ingredients = new Ingredients();
 
     Anchor anchor;
 
@@ -101,10 +102,16 @@ public class IngredientView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.getDataProvider().addDataProviderListener(
-                dataChangeEvent ->
-                        dataChangeEvent.getSource().refreshAll());
-        grid.setItems(service.findAllIngredients(filterText.getValue()));
+        grid.setItems(service.findAllIngredients(Helper.company.getName()));
+    }
+
+    private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
+        ListDataProvider<Ingredients> dataProvider = (ListDataProvider<Ingredients>) grid.getDataProvider();
+        dataProvider.setFilter(Ingredients::getProductName, s -> caseInsensitiveContainsFilter(s, event.getValue()));
+    }
+
+    private Boolean caseInsensitiveContainsFilter(String value, String filter) {
+        return value.toLowerCase().contains(filter.toLowerCase());
     }
 
     @Nonnull
@@ -129,7 +136,7 @@ public class IngredientView extends VerticalLayout {
     private Component getToolbar() {
         filterText.setPlaceholder("Search item by ingredients...");
 
-        filterText.addValueChangeListener(e -> updateList());
+        filterText.addValueChangeListener(this::onNameFilterTextChange);
         HorizontalLayout toolbar = new HorizontalLayout(filterText);
         toolbar.addClassName("toolbar");
         plusButton.setVisible(false);
@@ -175,6 +182,13 @@ public class IngredientView extends VerticalLayout {
         addClassName("editing");
     }
 
+    private void addNewIngredient(IngredientsForm.CostingFormEvent.AddEvent addEvent) {
+        service.addIngredient(addEvent.getCosting(), ingredientsForm.unit.getValue());
+        updateList();
+        closeEditor();
+    }
+
+
     private void editCosting(Ingredients ingredients) {
         if (ingredients != null) {
             ingredientsForm.setCosting(ingredients);
@@ -197,11 +211,6 @@ public class IngredientView extends VerticalLayout {
         grid.asMultiSelect().clear();
     }
 
-    private void addNewIngredient(IngredientsForm.CostingFormEvent.AddEvent addEvent) {
-        service.addIngredient(addEvent.getCosting(), ingredientsForm.unit.getValue());
-        updateList();
-        closeEditor();
-    }
 
     private void deleteIngredient(CostingViewEvent.DeleteEvent deleteEvent) {
         service.deleteIngredientSelected(new ArrayList<>(grid.getSelectedItems()));

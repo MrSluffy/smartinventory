@@ -3,6 +3,7 @@ package com.smart.inventory.application.data.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 import com.smart.inventory.application.data.Role;
+import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.NotFound;
@@ -58,6 +59,12 @@ public class Employer extends AbstractEntity {
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private Item item;
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
+    private Ingredients ingredients;
 
     private String passwordSalt;
     private String passwordHash;
@@ -153,5 +160,13 @@ public class Employer extends AbstractEntity {
 
     public void setRoles(Role roles) {
         this.roles = roles;
+    }
+
+    public Ingredients getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Ingredients ingredients) {
+        this.ingredients = ingredients;
     }
 }
