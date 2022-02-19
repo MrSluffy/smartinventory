@@ -1,7 +1,7 @@
 package com.smart.inventory.application.views.menu.item;
 
 import com.smart.inventory.application.data.entity.Item;
-import com.smart.inventory.application.util.CusComponent;
+import com.smart.inventory.application.util.Utilities;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -71,7 +71,11 @@ public class ItemForm extends FormLayout {
 
 
     private Component createPriceLayout() {
-        return CusComponent.getComponent(selectCurrency, currencyPrefix, currencyPrefix1, price, totalPrice);
+        return Utilities.getComponent(selectCurrency,
+                currencyPrefix,
+                currencyPrefix1,
+                price,
+                totalPrice);
     }
 
     public void setItem(Item item) {
