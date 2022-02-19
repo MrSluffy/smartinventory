@@ -19,9 +19,7 @@ jobs:
       run: mvn clean package -Pproduction
           
     - name: Heroku Run
-  # You may pin to the exact commit or the version.
-  # uses: michcio1234/heroku-run@d5b56a5f3b44d4d848b92fb2300d8b98980efa74
-          uses: michcio1234/heroku-run@0.1.1
+       uses: michcio1234/heroku-run@0.1.1
        with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
