@@ -3,18 +3,18 @@ package com.smart.inventory.application.views.menu.account;
 import com.smart.inventory.application.data.entity.Employer;
 import com.smart.inventory.application.data.services.employer.EmployerService;
 import com.smart.inventory.application.util.Utilities;
+import com.smart.inventory.application.views.widgets.CustomDialog;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
-import com.vaadin.flow.component.*;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -137,37 +137,12 @@ public class AccountView extends VerticalLayout {
     }
 
     private void configureDialog() {
-
-        VerticalLayout dialogLayout = createDialogLayout(dialog);
-        dialog.add(dialogLayout);
-    }
-
-    private VerticalLayout createDialogLayout(Dialog dialog) {
-
-        H3 header = new H3("Delete selected employer?");
-
-        dialog.addThemeVariants(DialogVariant.LUMO_NO_PADDING);
-        
-        var layout = new VerticalLayout();
-        var text = new Text("Are you sure you want to permanently delete this employer?");
-
-        var confirmBtn = new Button("Delete");
-        var cancelBtn = new Button("Cancel");
-        cancelBtn.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        confirmBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
-        confirmBtn.addClickListener(confirmEvent -> {
+        CustomDialog customDialog = new CustomDialog(dialog, "employer");
+        customDialog.confirm(clickEvent -> {
             this.deleteEmployer(new AccountViewEvent.DeleteEvent(this, form.getEmployer()));
             dialog.close();
         });
-
-        cancelBtn.addClickListener(cancelEvent -> dialog.close());
-        HorizontalLayout buttonLayout = new HorizontalLayout(cancelBtn, confirmBtn);
-        buttonLayout.setWidthFull();
-        buttonLayout.getStyle().set("flex-wrap", "wrap");
-        buttonLayout.setJustifyContentMode(JustifyContentMode.END);
-        layout.add(header, text, buttonLayout);
-
-        return layout;
+        dialog.add(customDialog);
     }
 
     private void deleteEmployer(AccountViewEvent.DeleteEvent deleteEvent) {

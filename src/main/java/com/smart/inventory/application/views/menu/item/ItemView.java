@@ -3,6 +3,7 @@ package com.smart.inventory.application.views.menu.item;
 import com.smart.inventory.application.data.entity.Item;
 import com.smart.inventory.application.data.services.item.ItemsService;
 import com.smart.inventory.application.util.Utilities;
+import com.smart.inventory.application.views.widgets.CustomDialog;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
@@ -10,7 +11,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
@@ -41,7 +42,7 @@ public class ItemView extends VerticalLayout {
 
     DeleteButton delete = new DeleteButton();
 
-    ConfirmDialog dialog = new ConfirmDialog();
+    Dialog dialog = new Dialog();
 
     Anchor anchor;
 
@@ -66,14 +67,14 @@ public class ItemView extends VerticalLayout {
     }
 
     private void configureDialog() {
-        dialog.setText("Are you sure you want to permanently delete this item?");
-        dialog.setConfirmText("Delete");
-        dialog.setConfirmButtonTheme("error primary");
-        dialog.setCancelable(true);
-        dialog.addConfirmListener(confirmEvent ->
-                ItemView.this.deleteItem(
-                        new ItemViewEvent.DeleteEvent(ItemView.this,
-                                itemForm.getItem())));
+        CustomDialog customDialog = new CustomDialog(dialog, "item");
+        customDialog.confirm(clickEvent -> {
+            ItemView.this.deleteItem(
+                    new ItemViewEvent.DeleteEvent(ItemView.this,
+                            itemForm.getItem()));
+            dialog.close();
+        });
+        dialog.add(customDialog);
     }
 
     @Nonnull
@@ -94,10 +95,6 @@ public class ItemView extends VerticalLayout {
             int selectedSize = itemGrid.asMultiSelect().getValue().size();
             if (!itemGrid.asMultiSelect().isEmpty()) {
                 dialog.open();
-                dialog.setHeader(
-                        "Delete " +
-                                selectedSize +
-                                " selected items?");
             }
         });
         return new HorizontalLayout(plusButton, delete);

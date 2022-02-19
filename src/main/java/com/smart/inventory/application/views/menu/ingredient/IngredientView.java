@@ -3,6 +3,7 @@ package com.smart.inventory.application.views.menu.ingredient;
 import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import com.smart.inventory.application.data.services.ingredient.IngredientsService;
 import com.smart.inventory.application.util.Utilities;
+import com.smart.inventory.application.views.widgets.CustomDialog;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
@@ -10,7 +11,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
@@ -39,7 +40,7 @@ public class IngredientView extends VerticalLayout {
 
     DeleteButton delete = new DeleteButton();
 
-    ConfirmDialog dialog = new ConfirmDialog();
+    Dialog dialog = new Dialog();
 
     Anchor anchor;
 
@@ -67,12 +68,12 @@ public class IngredientView extends VerticalLayout {
     }
 
     private void configureDialog() {
-        dialog.setText("Are you sure you want to permanently delete this ingredient?");
-        dialog.setConfirmText("Delete");
-        dialog.setConfirmButtonTheme("error primary");
-        dialog.setCancelable(true);
-        dialog.addConfirmListener(confirmEvent ->
-                this.deleteIngredient(new CostingViewEvent.DeleteEvent(this, ingredientsForm.getCosting())));
+        CustomDialog customDialog = new CustomDialog(dialog, "product");
+        customDialog.confirm(clickEvent -> {
+            this.deleteIngredient(new CostingViewEvent.DeleteEvent(this, ingredientsForm.getCosting()));
+            dialog.close();
+        });
+        dialog.add(customDialog);
     }
 
     @Nonnull
@@ -92,10 +93,6 @@ public class IngredientView extends VerticalLayout {
             int selectedSize = grid.asMultiSelect().getValue().size();
             if (!grid.asMultiSelect().isEmpty()) {
                 dialog.open();
-                dialog.setHeader(
-                        "Delete " +
-                                selectedSize +
-                                " selected ingredients?");
             }
         });
         return new HorizontalLayout(plusButton, delete);
