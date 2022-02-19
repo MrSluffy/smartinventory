@@ -5,6 +5,10 @@ on:
     branches: [ dev ]
 jobs:
   build:
+
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Deploy to Heroku
       uses: AkhileshNS/heroku-deploy@v3.12.12
       with:
