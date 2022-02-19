@@ -4,7 +4,7 @@ import com.smart.inventory.application.data.entity.Item;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IItemRepository;
 import com.smart.inventory.application.data.repository.IOwnerRepository;
-import com.smart.inventory.application.util.Helper;
+import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,15 +44,15 @@ public class ItemsService implements IItemsService{
     @Override
     public void saveItem(Item item) {
 
-        if(Helper.employer != null) {
-            item.getAddedByEmployer().add(Helper.employer);
+        if(Utilities.employer != null) {
+            item.getAddedByEmployer().add(Utilities.employer);
         }
 
-        if(Helper.owner != null){
-            item.getAddedByOwner().add(Helper.owner);
+        if(Utilities.owner != null){
+            item.getAddedByOwner().add(Utilities.owner);
         }
-        item.getCompany().add(Helper.company);
-        item.setItemCompany(Helper.company);
+        item.getCompany().add(Utilities.company);
+        item.setItemCompany(Utilities.company);
         itemRepository.save(item);
     }
 

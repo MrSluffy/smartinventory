@@ -1,8 +1,8 @@
 package com.smart.inventory.application.views.menu.account;
 
-import com.smart.inventory.application.data.entity.Company;
 import com.smart.inventory.application.data.entity.Employer;
 import com.smart.inventory.application.data.services.employer.EmployerService;
+import com.smart.inventory.application.util.Utilities;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
@@ -22,7 +22,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.Registration;
 import org.vaadin.haijian.Exporter;
 
@@ -48,9 +47,6 @@ public class AccountView extends VerticalLayout {
     private final AccountForm form;
 
     private final EmployerService service;
-
-    private final Company company = VaadinSession.getCurrent().getAttribute(Company.class);
-
 
     public AccountView(EmployerService service){
         this.service = service;
@@ -80,7 +76,7 @@ public class AccountView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.findAllEmployer(company.getName()));
+        grid.setItems(service.findAllEmployer(Utilities.company.getName()));
     }
 
     @Nonnull
@@ -137,13 +133,8 @@ public class AccountView extends VerticalLayout {
 
     private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
         ListDataProvider<Employer> dataProvider = (ListDataProvider<Employer>) grid.getDataProvider();
-        dataProvider.setFilter(Employer::getEmail, s -> caseInsensitiveContainsFilter(s, event.getValue()));
+        dataProvider.setFilter(Employer::getEmail, s -> Utilities.caseInsensitiveContainsFilter(s, event.getValue()));
     }
-
-    private Boolean caseInsensitiveContainsFilter(String value, String filter) {
-        return value.toLowerCase().contains(filter.toLowerCase());
-    }
-
 
     private void configureDialog() {
 
