@@ -1,7 +1,7 @@
 package com.smart.inventory.application.views.menu.item;
 
 import com.smart.inventory.application.data.entity.Item;
-import com.smart.inventory.application.views.extension.CusComponent;
+import com.smart.inventory.application.util.CusComponent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;

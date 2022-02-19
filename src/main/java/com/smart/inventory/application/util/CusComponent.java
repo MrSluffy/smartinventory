@@ -1,4 +1,4 @@
-package com.smart.inventory.application.views.extension;
+package com.smart.inventory.application.util;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
