@@ -5,7 +5,7 @@ import com.smart.inventory.application.data.entity.ingredients.QuantityUnit;
 import com.smart.inventory.application.data.repository.IIngredientsRepository;
 import com.smart.inventory.application.data.repository.IQuantityUnitRepository;
 import com.smart.inventory.application.exeptions.NotFoundExeption;
-import com.smart.inventory.application.util.Helper;
+import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,14 +73,14 @@ public class IngredientsService implements IIngredientsService {
     }
 
     private void utils(QuantityUnit unit, Ingredients ingredients) {
-        if(Helper.employer != null){
-            ingredients.getAddedByEmployer().add(Helper.employer);
+        if(Utilities.employer != null){
+            ingredients.getAddedByEmployer().add(Utilities.employer);
         }
-        if(Helper.owner != null){
-            ingredients.getAddedByOwner().add(Helper.owner);
+        if(Utilities.owner != null){
+            ingredients.getAddedByOwner().add(Utilities.owner);
         }
-        ingredients.getCompany().add(Helper.company);
-        ingredients.setIngredientCompany(Helper.company);
+        ingredients.getCompany().add(Utilities.company);
+        ingredients.setIngredientCompany(Utilities.company);
         ingredients.setQuantityUnit(unit);
     }
 }

@@ -2,7 +2,7 @@ package com.smart.inventory.application.views.menu.ingredient;
 
 import com.smart.inventory.application.data.entity.ingredients.Ingredients;
 import com.smart.inventory.application.data.services.ingredient.IngredientsService;
-import com.smart.inventory.application.util.Helper;
+import com.smart.inventory.application.util.Utilities;
 import com.smart.inventory.application.views.widgets.DeleteButton;
 import com.smart.inventory.application.views.widgets.FilterText;
 import com.smart.inventory.application.views.widgets.PlusButton;
@@ -102,16 +102,12 @@ public class IngredientView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.findAllIngredients(Helper.company.getName()));
+        grid.setItems(service.findAllIngredients(Utilities.company.getName()));
     }
 
     private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
         ListDataProvider<Ingredients> dataProvider = (ListDataProvider<Ingredients>) grid.getDataProvider();
-        dataProvider.setFilter(Ingredients::getProductName, s -> caseInsensitiveContainsFilter(s, event.getValue()));
-    }
-
-    private Boolean caseInsensitiveContainsFilter(String value, String filter) {
-        return value.toLowerCase().contains(filter.toLowerCase());
+        dataProvider.setFilter(Ingredients::getProductName, s -> Utilities.caseInsensitiveContainsFilter(s, event.getValue()));
     }
 
     @Nonnull

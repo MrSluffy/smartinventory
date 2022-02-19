@@ -9,6 +9,7 @@ import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IOwnerRepository;
 import com.smart.inventory.application.exeptions.AuthException;
 import com.smart.inventory.application.exeptions.ValueExeptionHandler;
+import com.smart.inventory.application.util.Utilities;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.menu.account.AccountView;
 import com.smart.inventory.application.views.menu.dashboard.DashboardView;
@@ -117,7 +118,7 @@ public class OwnerService implements IOwnerService {
 
         var routes = new ArrayList<AuthorizedRoute>();
 
-        String company = VaadinSession.getCurrent().getAttribute(Company.class).getName().trim().toLowerCase();
+        String company = Utilities.company.getName().trim().toLowerCase();
 
         if (role.equals(Role.CMP_OWNER)) {
             routes.add(new AuthorizedRoute(company + "/item", "Item Stock", ItemView.class));
