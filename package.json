@@ -408,5 +408,14 @@
       "workbox-webpack-plugin": "6.4.2"
     },
     "hash": "8f40509dbba38e804e3b1db01145b99e497fa5c5788a2e62919ab2d563d5433e"
+  },
+
+  "scripts": {
+    "dev": "react-scripts start",
+    "start": "serve -s build",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "npm run build"
   }
 }
