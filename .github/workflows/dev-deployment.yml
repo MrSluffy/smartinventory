@@ -7,22 +7,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 17
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-        cache: maven
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: maven
 
-    - name: Build with Maven
-      run: mvn clean package -Pproduction
-          
+      - name: Build with Maven
+        run: mvn clean package -Pproduction
 
-    - name: Heroku Action
-      uses: CDNievas/heroku-action@v1.0
-      with:
+      - name: Heroku Run
+        uses: michcio1234/heroku-run@0.1.1
+        with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           heroku_app_name: ${{secrets.HEROKU_APP}}
-          branch: main
+          command: heroku open -a ${{secrets.HEROKU_APP}}
