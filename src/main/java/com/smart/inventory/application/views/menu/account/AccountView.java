@@ -78,7 +78,7 @@ public class AccountView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.findAllEmployer(utilities.company.getName()));
+        grid.setItems(service.findAllEmployer(utilities.company.getId()));
     }
 
     @Nonnull

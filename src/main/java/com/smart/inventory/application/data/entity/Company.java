@@ -67,6 +67,10 @@ public class Company extends AbstractEntity {
     public Company(){
     }
 
+    public List<Item> getItemInCompany() {
+        return itemInCompany;
+    }
+
     public Owner getOwner() {
         return owner;
     }

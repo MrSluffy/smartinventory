@@ -39,12 +39,8 @@ public class EmployerService implements IEmployerService{
     }
 
     @Override
-    public List<Employer> findAllEmployer(String filterText) {
-        if (filterText == null || filterText.isEmpty()) {
-            return employerRepository.findAll();
-        } else {
-            return employerRepository.search(filterText);
-        }
+    public List<Employer> findAllEmployer(Integer id) {
+        return employerRepository.search(id);
     }
 
     @Override

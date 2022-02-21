@@ -101,7 +101,9 @@ public class IngredientView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.findAllIngredients(utilities.company.getId().toString()));
+        if(!service.findAllIngredients().isEmpty()){
+            grid.setItems(service.findAllIngredients(utilities.company.getId()));
+        }
     }
 
     private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {

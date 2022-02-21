@@ -11,8 +11,7 @@ import java.util.List;
 @Repository
 public interface IIngredientsRepository extends JpaRepository<Ingredients, Integer> {
 
-    @Query("select c from Ingredients c " +
-            "where lower(c.ingredientCompany) like lower(concat('%', :searchTerm, '%'))")
-    List<Ingredients> search(@Param("searchTerm") String searchTerm);
+    @Query("select c from Ingredients c where c.ingredientCompany.id = :#{#company}")
+    List<Ingredients> search(@Param("company") Integer company);
 
 }

@@ -13,7 +13,7 @@ public interface IIngredientsService {
 
     void addIngredient(@Nonnull Ingredients ingredients, QuantityUnit unit, Utilities utilities);
 
-    List<Ingredients> findAllIngredients(String filterText);
+    List<Ingredients> findAllIngredients(Integer id);
 
     void updateIngredient(Integer id,
                           String productName,

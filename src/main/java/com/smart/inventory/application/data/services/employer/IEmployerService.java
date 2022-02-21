@@ -12,7 +12,7 @@ public interface IEmployerService {
 
     void addNewEmployer(String email, String firstname, String lastname, String password, Position position, Utilities utilities);
 
-    List<Employer> findAllEmployer(String filterText);
+    List<Employer> findAllEmployer(Integer id);
 
     List<Position> findAllPosition();
 }

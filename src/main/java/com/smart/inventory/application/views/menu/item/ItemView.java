@@ -91,7 +91,7 @@ public class ItemView extends VerticalLayout {
 
     @Nonnull
     private Component getFab() {
-        plusButton.addClickListener(click -> addItem());
+        plusButton.addClickListener(click -> addNewItem());
 
         delete.addClickListener(deleteEvnt -> {
             int selectedSize = itemGrid.asMultiSelect().getValue().size();
@@ -103,7 +103,9 @@ public class ItemView extends VerticalLayout {
     }
 
     private void updateList() {
-        itemGrid.setItems(service.findAllItem(utilities.company.getName()));
+        if(!service.findAllItem().isEmpty()){
+            itemGrid.setItems(service.findAllItem(utilities.company.getId()));
+        }
     }
 
     private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
@@ -124,6 +126,7 @@ public class ItemView extends VerticalLayout {
     private void configureForm() {
         itemForm.setWidth("25em");
         itemForm.addListener(ItemForm.ItemFormEvent.SaveEvent.class, this::saveItem);
+        itemForm.addListener(ItemForm.ItemFormEvent.AddEvent.class, this::addNewItem);
         addListener(ItemViewEvent.DeleteEvent.class, this::deleteItem);
         itemForm.addListener(ItemForm.ItemFormEvent.CloseEvent.class, closeEvent -> closeEditor());
     }
@@ -201,6 +204,8 @@ public class ItemView extends VerticalLayout {
         if (item != null) {
             itemForm.setItem(item);
             itemForm.setVisible(true);
+            itemForm.save.setVisible(true);
+            itemForm.add.setVisible(false);
             plusButton.setVisible(false);
             delete.setVisible(true);
             addClassName("editing");
@@ -216,8 +221,20 @@ public class ItemView extends VerticalLayout {
         itemGrid.asMultiSelect().clear();
     }
 
-    private void addItem() {
-        editItem(new Item());
+    private void addNewItem() {
+        itemForm.setItem(new Item());
+        itemForm.add.setVisible(true);
+        itemForm.save.setVisible(false);
+        itemForm.setVisible(true);
+        plusButton.setVisible(false);
+        delete.setVisible(true);
+        addClassName("editing");
+    }
+
+    private void addNewItem(ItemForm.ItemFormEvent.AddEvent addEvent) {
+        service.addNewItem(addEvent.getItem(), utilities);
+        updateList();
+        closeEditor();
     }
 
     private void deleteItem(ItemViewEvent event) {
@@ -231,8 +248,13 @@ public class ItemView extends VerticalLayout {
     }
 
     private void saveItem(@Nonnull ItemForm.ItemFormEvent.SaveEvent event) {
-        event.getItem().setDateAndTime(LocalDateTime.now().toLocalTime().toString().substring(0, 5) + "-" + LocalDateTime.now().toLocalDate().toString());
-        service.saveItem(event.getItem(), utilities);
+        Item items = event.getItem();
+        service.updateItem(items.getId(),
+                itemForm.itemName.getValue(),
+                itemForm.quantity.getValue(),
+                itemForm.price.getValue(),
+                itemForm.totalPrice.getValue(),
+                utilities);
         updateList();
         closeEditor();
     }

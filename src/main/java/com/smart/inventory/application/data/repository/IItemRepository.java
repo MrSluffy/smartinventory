@@ -11,8 +11,7 @@ import java.util.List;
 @Repository
 public interface IItemRepository extends JpaRepository<Item, Integer> {
 
-    @Query("select c from Item c " +
-            "where lower(c.itemName) like lower(concat('%', :searchTerm, '%'))")
-    List<Item> search(@Param("searchTerm") String searchTerm);
+    @Query("select c from Item c where c.itemCompany.id = :#{#company}")
+    List<Item> search(@Param("company") Integer company);
 
 }
