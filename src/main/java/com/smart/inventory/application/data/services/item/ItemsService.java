@@ -8,6 +8,7 @@ import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 @Service
@@ -34,6 +35,9 @@ public class ItemsService implements IItemsService{
 
     @Override
     public List<Item> findAllItem(String filterText) {
+        if(findAllItem().isEmpty()){
+            return null;
+        }
         if(filterText == null || filterText.isEmpty()){
             return itemRepository.findAll();
         } else {
@@ -42,7 +46,7 @@ public class ItemsService implements IItemsService{
     }
 
     @Override
-    public void saveItem(Item item, Utilities utilities) {
+    public void saveItem(Item item, @Nonnull Utilities utilities) {
         if(utilities.employer != null) {
             item.getAddedByEmployer().add(utilities.employer);
         }
