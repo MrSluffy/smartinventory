@@ -35,9 +35,6 @@ public class ItemsService implements IItemsService{
 
     @Override
     public List<Item> findAllItem(String filterText) {
-        if(findAllItem().isEmpty()){
-            return null;
-        }
         if(filterText == null || filterText.isEmpty()){
             return itemRepository.findAll();
         } else {
