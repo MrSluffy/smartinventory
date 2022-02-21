@@ -103,7 +103,7 @@ public class ItemView extends VerticalLayout {
     }
 
     private void updateList() {
-        itemGrid.setItems(service.findAllItem(utilities.company.getId().toString()));
+        itemGrid.setItems(service.findAllItem(utilities.company.getName()));
     }
 
     private void onNameFilterTextChange(HasValue.ValueChangeEvent<String> event) {
