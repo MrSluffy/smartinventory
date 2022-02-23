@@ -40,6 +40,9 @@ public class ItemForm extends FormLayout {
     Button save = new Button("Save");
     Button cancel = new Button("Cancel");
 
+    Button add = new Button("Add");
+
+
     Div currencyPrefix = new Div();
     Div currencyPrefix1 = new Div();
 
@@ -87,16 +90,32 @@ public class ItemForm extends FormLayout {
 
     private Component createButtonLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        add.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         cancel.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
         save.addClickShortcut(Key.ENTER);
+        add.addClickShortcut(Key.ENTER);
         cancel.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(event -> validateAndSave());
+        add.addClickListener(event -> addNewItem());
         cancel.addClickListener(event -> fireEvent(new ItemFormEvent.CloseEvent(this)));
 
-        itemBinder.addStatusChangeListener(e -> save.setEnabled(itemBinder.isValid()));
-        return new HorizontalLayout(save, cancel);
+        itemBinder.addStatusChangeListener(e -> {
+            save.setEnabled(itemBinder.isValid());
+            add.setEnabled(itemBinder.isValid());
+        });
+        return new HorizontalLayout(add, save, cancel);
+    }
+
+
+    private void addNewItem() {
+        try {
+            itemBinder.writeBean(item);
+            fireEvent(new ItemFormEvent.AddEvent(this, item));
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
     }
 
     private void validateAndSave() {
@@ -136,6 +155,22 @@ public class ItemForm extends FormLayout {
                 }
             }
         }
+
+        public static class AddEvent extends ItemFormEvent {
+            AddEvent(ItemForm source, Item item) {
+                super(source, item);
+                source.currencyPrefix.setText(source.selectCurrency.getValue());
+                source.currencyPrefix1.setText(source.selectCurrency.getValue());
+                if (source.isVisible()) {
+                    item.setTotalPrice(item.getQuantity());
+                    Notification.show(source.itemName.getValue() + " " +
+                                            " successfully added",
+                                    5000, Notification.Position.TOP_CENTER)
+                            .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                }
+            }
+        }
+
 
         public static class CloseEvent extends ItemFormEvent {
             CloseEvent(ItemForm source) {

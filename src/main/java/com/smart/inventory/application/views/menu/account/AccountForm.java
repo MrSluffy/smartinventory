@@ -105,7 +105,7 @@ public class AccountForm extends FormLayout {
             AddEvent(AccountForm source, Employer employer) {
                 super(source, employer);
                 if (source.isVisible()) {
-                    Notification.show( " successfully added",
+                    Notification.show( source.email.getValue() + " successfully added",
                                     5000, Notification.Position.TOP_CENTER)
                             .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 }

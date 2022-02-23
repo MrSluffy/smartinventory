@@ -9,11 +9,13 @@ public interface IItemsService {
 
     List<Item> findAllItem();
 
-    List<Item> findAllItem(String filterText);
-
-    void saveItem(Item item, Utilities utilities);
+    List<Item> findAllItem(Integer items);
 
     long countItems();
 
     void deleteItemSelected(List<Item> item);
+
+    void addNewItem(Item item, Utilities utilities);
+
+    void updateItem(Integer id, String name, Integer quantity, Double price, Double totalPrice, Utilities utilities);
 }

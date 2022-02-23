@@ -12,8 +12,8 @@ import java.util.List;
 public interface IEmployerRepository extends JpaRepository<Employer, Integer> {
 
     @Query("select c from Employer c " +
-            "where lower(c.email) like lower(concat('%', :searchTerm, '%'))")
-    List<Employer> search(@Param("searchTerm") String searchTerm);
+            "where c.emplyrCompany.id = :#{#company} ")
+    List<Employer> search(@Param("company") Integer company);
 
     Employer getByEmail(String email);
 }

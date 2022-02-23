@@ -39,12 +39,8 @@ public class IngredientsService implements IIngredientsService {
     }
 
     @Override
-    public List<Ingredients> findAllIngredients(String filterText) {
-        if (filterText == null || filterText.isEmpty()) {
-            return ingredientsRepository.findAll();
-        } else {
-            return ingredientsRepository.search(filterText);
-        }
+    public List<Ingredients> findAllIngredients(Integer id) {
+        return ingredientsRepository.search(id);
     }
 
     public List<QuantityUnit> findAllUnit(){
