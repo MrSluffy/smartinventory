@@ -106,6 +106,8 @@ public class AccountView extends VerticalLayout {
         Employer employer = new Employer();
         form.setEmployerNew(employer);
         form.setVisible(true);
+        form.add.setVisible(true);
+        form.save.setVisible(false);
         plusButton.setVisible(false);
         delete.setVisible(true);
         addClassName("editing");
@@ -168,9 +170,24 @@ public class AccountView extends VerticalLayout {
         updateList();
     }
 
+    private void saveEmployer(AccountForm.AccountFormEvent.SaveEvent saveEvent){
+        Employer employer = saveEvent.getEmployer();
+        service.updateEmployer(
+                employer.getId(),
+                form.email.getValue(),
+                form.firstName.getValue(),
+                form.lastName.getValue(),
+                form.position.getValue(),
+                utilities);
+
+        closeEditor();
+        updateList();
+    }
+
     private void configureForm() {
         form.setWidth("25em");
         form.addListener(AccountForm.AccountFormEvent.AddEvent.class, this::addEmployer);
+        form.addListener(AccountForm.AccountFormEvent.SaveEvent.class, this::saveEmployer);
         addListener(AccountViewEvent.DeleteEvent.class, this::deleteEmployer);
         form.addListener(AccountForm.AccountFormEvent.CloseEvent.class, closeEvent -> closeEditor());
     }
@@ -192,10 +209,27 @@ public class AccountView extends VerticalLayout {
                 Exporter.exportAsExcel(grid)), "Download As Excel");
         grid.addSelectionListener(selection -> {
             int size = selection.getAllSelectedItems().size();
-            form.setVisible(false);
+            if (selection.getFirstSelectedItem().isPresent()) {
+                editEmployer(selection.getFirstSelectedItem().get());
+            }
+            boolean isSingleSelection = size == 1;
+            form.setVisible(isSingleSelection);
             plusButton.setVisible(size == 0);
             delete.setVisible(size != 0);
         });
+    }
+
+    private void editEmployer(Employer employer) {
+        if (employer != null) {
+            form.setEmployerNew(employer);
+            form.setVisible(true);
+            form.save.setVisible(true);
+            form.add.setVisible(false);
+            plusButton.setVisible(false);
+            delete.setVisible(true);
+            addClassName("editing");
+        }
+        delete.setVisible(false);
     }
 
     private String getCurrentPageTitle() {

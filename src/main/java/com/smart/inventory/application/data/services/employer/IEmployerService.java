@@ -15,4 +15,6 @@ public interface IEmployerService {
     List<Employer> findAllEmployer(Integer id);
 
     List<Position> findAllPosition();
+
+    void updateEmployer(Integer id, String email, String fname, String lname, Position position, Utilities utilities);
 }
