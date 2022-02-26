@@ -4,12 +4,13 @@ import com.smart.inventory.application.data.Role;
 import com.smart.inventory.application.data.entity.Company;
 import com.smart.inventory.application.data.entity.Employer;
 import com.smart.inventory.application.data.entity.Position;
-import com.smart.inventory.application.data.repository.ICompanyRepository;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IPositionRepository;
+import com.smart.inventory.application.exeptions.NotFoundExeption;
 import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -21,16 +22,12 @@ public class EmployerService implements IEmployerService{
 
     private final IPositionRepository positionRepository;
 
-    private final ICompanyRepository companyRepository;
-
     @Autowired
     public EmployerService(
             IEmployerRepository employerRepository,
-            IPositionRepository positionRepository,
-            ICompanyRepository companyRepository) {
+            IPositionRepository positionRepository) {
         this.employerRepository = employerRepository;
         this.positionRepository = positionRepository;
-        this.companyRepository = companyRepository;
     }
 
     @Override
@@ -46,6 +43,31 @@ public class EmployerService implements IEmployerService{
     @Override
     public List<Position> findAllPosition() {
         return positionRepository.findAll();
+    }
+
+    public Employer getEmployerById(Integer id){
+        return employerRepository.findById(id).orElseThrow(NotFoundExeption::new);
+    }
+
+    @Transactional
+    @Override
+    public void updateEmployer(Integer id,
+                               String email,
+                               String fname,
+                               String lname,
+                               Position position,
+                               Utilities utilities) {
+
+        var employer = getEmployerById(id);
+
+        employer.setEmail(email);
+        employer.setFirstName(fname);
+        employer.setLastName(lname);
+        employer.setPosition(position);
+
+        employerRepository.save(employer);
+
+
     }
 
     @Override

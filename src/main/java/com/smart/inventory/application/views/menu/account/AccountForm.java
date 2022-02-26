@@ -39,6 +39,8 @@ public class AccountForm extends FormLayout {
 
     Button add = new Button("Add");
 
+    Button save = new Button("Save");
+
 
 
     private Employer employer;
@@ -60,19 +62,31 @@ public class AccountForm extends FormLayout {
         cancel.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
         add.addClickShortcut(Key.ENTER);
+        save.addClickShortcut(Key.ENTER);
         cancel.addClickShortcut(Key.ESCAPE);
 
         add.addClickListener(event -> addNewEmployer());
+        save.addClickListener(event -> validateAndSave());
         add.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         cancel.addClickListener(event -> fireEvent(new AccountFormEvent.CloseEvent(this)));
 
-        return new HorizontalLayout(add, cancel);
+        return new HorizontalLayout(add, save, cancel);
     }
 
     private void addNewEmployer() {
         try {
             employerBinder.writeBean(employer);
             fireEvent(new AccountFormEvent.AddEvent(this, employer));
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void validateAndSave() {
+        try {
+            employerBinder.writeBean(employer);
+            fireEvent(new AccountFormEvent.SaveEvent(this, employer));
         } catch (ValidationException e) {
             e.printStackTrace();
         }
@@ -106,6 +120,17 @@ public class AccountForm extends FormLayout {
                 super(source, employer);
                 if (source.isVisible()) {
                     Notification.show( source.email.getValue() + " successfully added",
+                                    5000, Notification.Position.TOP_CENTER)
+                            .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                }
+            }
+        }
+
+        public static class SaveEvent extends AccountFormEvent {
+            SaveEvent(AccountForm source, Employer employer) {
+                super(source, employer);
+                if (source.isVisible()) {
+                    Notification.show( source.email.getValue() + " successfully updated",
                                     5000, Notification.Position.TOP_CENTER)
                             .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 }
