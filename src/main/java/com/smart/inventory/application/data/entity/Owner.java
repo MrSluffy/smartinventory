@@ -45,6 +45,12 @@ public class Owner extends AbstractEntity {
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private SoldItem soldItemOwner;
+
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Ingredients ingredientsOwner;
 
 

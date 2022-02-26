@@ -11,6 +11,7 @@ import com.smart.inventory.application.exeptions.AuthException;
 import com.smart.inventory.application.exeptions.ValueExeptionHandler;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.menu.account.AccountView;
+import com.smart.inventory.application.views.menu.sold.SoldItemView;
 import com.smart.inventory.application.views.menu.dashboard.DashboardView;
 import com.smart.inventory.application.views.menu.ingredient.IngredientView;
 import com.smart.inventory.application.views.menu.item.ItemView;
@@ -122,10 +123,13 @@ public class OwnerService implements IOwnerService {
         if (role.equals(Role.CMP_OWNER)) {
             routes.add(new AuthorizedRoute(company + "/item", "Item Stock", ItemView.class));
             routes.add(new AuthorizedRoute(company +"/costing", "Costing", IngredientView.class));
-            routes.add(new AuthorizedRoute(company +"/employer", "My Employer", AccountView.class));
+            routes.add(new AuthorizedRoute(company +"/sold-items", "Sold Items", SoldItemView.class));
+            routes.add(new AuthorizedRoute(company +"/myemployers", "My Employer", AccountView.class));
         } else if (role.equals(Role.EMPLOYER)) {
             routes.add(new AuthorizedRoute(company + "/employer/item", "Item Stock", ItemView.class));
-            routes.add(new AuthorizedRoute(company +"/costing", "Costing", IngredientView.class));
+            routes.add(new AuthorizedRoute(company +"/employer/costing", "Costing", IngredientView.class));
+            routes.add(new AuthorizedRoute(company +"/employer/sold-items", "Sold Items", SoldItemView.class));
+
         } else if (role.equals(Role.ADMIN)) {
             routes.add(new AuthorizedRoute("admin/dashboard", "Dashboard", DashboardView.class));
             routes.add(new AuthorizedRoute("admin/item", "Item Stock", ItemView.class));

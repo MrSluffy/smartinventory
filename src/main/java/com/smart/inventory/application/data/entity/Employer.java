@@ -45,8 +45,8 @@ public class Employer extends AbstractEntity {
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @NotFound(
             action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
-    private Customer customer;
+    @JoinColumn(name = "soldItem_id", referencedColumnName = "id")
+    private SoldItem soldItem;
 
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,
@@ -146,14 +146,6 @@ public class Employer extends AbstractEntity {
         this.emplyrCompany = emplyrCompany;
     }
 
-    public Customer getBuyer() {
-        return customer;
-    }
-
-    public void setBuyer(Customer customer) {
-        this.customer = customer;
-    }
-
     public Role getRoles() {
         return roles;
     }
@@ -168,5 +160,13 @@ public class Employer extends AbstractEntity {
 
     public void setIngredients(Ingredients ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public SoldItem getSoldItem() {
+        return soldItem;
+    }
+
+    public void setSoldItem(SoldItem soldItem) {
+        this.soldItem = soldItem;
     }
 }
