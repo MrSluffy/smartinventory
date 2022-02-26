@@ -169,7 +169,7 @@ public class ItemView extends VerticalLayout {
                 .setHeader("Last Updated ")
                 .setAutoWidth(false);
 
-        anchor = new Anchor(new StreamResource("smartinventory-" + getCurrentPageTitle()+
+        anchor = new Anchor(new StreamResource("smartinventory-" + "item-"+
                 LocalDateTime.now().toLocalDate().toString() +".xlsx",
                 Exporter.exportAsExcel(itemGrid)), "Download As Excel");
         itemGrid.addSelectionListener(selection -> {

@@ -24,13 +24,13 @@ public class DataGenerator {
     private List<Company> companies;
     private List<Owner> owners;
     private List<Item> items;
-    private List<Customer> customers;
+    private List<SoldItem> soldItems;
     private List<Ingredients> ingredients;
     private ExampleDataGenerator<Company> companyGenerator;
     private ExampleDataGenerator<Employer> employerGenerator;
     private ExampleDataGenerator<Owner> ownerGenerator;
     private ExampleDataGenerator<Item> itemGenerator;
-    private ExampleDataGenerator<Customer> buyerGenerator;
+    private ExampleDataGenerator<SoldItem> buyerGenerator;
     private ExampleDataGenerator<Ingredients> costingDataGenerator;
 
 
@@ -38,7 +38,7 @@ public class DataGenerator {
     CommandLineRunner loadData(IOwnerRepository ownerRepository,
                                ICompanyRepository ICompanyRepository,
                                IEmployerRepository IEmployerRepository,
-                               CustomerRepository customerRepository,
+                               ISoldItemRepository ISoldItemRepository,
                                IItemRepository IItemRepository,
                                IPositionRepository IPositionRepository,
                                IIngredientsRepository IIngredientsRepository,
