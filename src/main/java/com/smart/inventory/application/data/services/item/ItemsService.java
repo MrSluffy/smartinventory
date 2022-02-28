@@ -67,7 +67,7 @@ public class ItemsService implements IItemsService{
     @Override
     public void updateItem(Integer id,
                            String name,
-                           Integer quantity,
+                           int quantity,
                            Double price,
                            Double totalPrice,
                            Utilities utilities) {

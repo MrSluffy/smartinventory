@@ -34,7 +34,7 @@ public class SoldItemService implements ISoldItemService {
     }
 
     @Override
-    public void addNewSoldItem(Item items, String description, Integer quantity, @Nonnull Utilities utilities) {
+    public void addNewSoldItem(Item items, String description, int quantity, @Nonnull Utilities utilities) {
         SoldItem soldItem = new SoldItem();
         soldItem.setItem(items);
         if(utilities.employer != null) {
@@ -64,13 +64,13 @@ public class SoldItemService implements ISoldItemService {
 
     @Transactional
     @Override
-    public void updateSoldItem(Integer id, String description, Item item, Integer quantity, Utilities utilities) {
+    public void updateSoldItem(Integer id, String description, Item item, int quantity, Utilities utilities) {
 
         SoldItem soldItem = getSoldItemById(id);
         utils(item, description, quantity, utilities, soldItem);
     }
 
-    public void utils(Item item, String description, Integer quantity, Utilities utilities, SoldItem soldItem) {
+    public void utils(Item item, String description, int quantity, Utilities utilities, SoldItem soldItem) {
         soldItem.setItemName(item.getItemName());
         soldItem.setDescription(description);
         soldItem.setQuantity(quantity);
