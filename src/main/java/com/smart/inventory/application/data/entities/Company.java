@@ -1,14 +1,11 @@
-package com.smart.inventory.application.data.entity;
+package com.smart.inventory.application.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
-import com.smart.inventory.application.data.entity.ingredients.Ingredients;
+import com.smart.inventory.application.data.entities.ingredients.Ingredients;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Company extends AbstractEntity {
@@ -119,5 +116,19 @@ public class Company extends AbstractEntity {
 
     public void setCompanyIngredients(Set<Ingredients> companyIngredients) {
         this.companyIngredients = companyIngredients;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Company company = (Company) o;
+        return Objects.equals(ownerInCompany, company.ownerInCompany) && Objects.equals(itemInCompany, company.itemInCompany) && Objects.equals(soldItemInCompany, company.soldItemInCompany) && Objects.equals(ingredientsInCompany, company.ingredientsInCompany) && Objects.equals(name, company.name) && Objects.equals(owner, company.owner) && Objects.equals(emplyr, company.emplyr) && Objects.equals(companyItems, company.companyItems) && Objects.equals(companyIngredients, company.companyIngredients);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), ownerInCompany, itemInCompany, soldItemInCompany, ingredientsInCompany, name, owner, emplyr, companyItems, companyIngredients);
     }
 }

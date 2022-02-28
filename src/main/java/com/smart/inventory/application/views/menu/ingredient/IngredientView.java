@@ -1,6 +1,6 @@
 package com.smart.inventory.application.views.menu.ingredient;
 
-import com.smart.inventory.application.data.entity.ingredients.Ingredients;
+import com.smart.inventory.application.data.entities.ingredients.Ingredients;
 import com.smart.inventory.application.data.services.ingredient.IngredientsService;
 import com.smart.inventory.application.util.Utilities;
 import com.smart.inventory.application.views.widgets.CustomDialog;

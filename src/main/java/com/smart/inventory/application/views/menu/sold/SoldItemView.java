@@ -1,6 +1,6 @@
 package com.smart.inventory.application.views.menu.sold;
 
-import com.smart.inventory.application.data.entity.SoldItem;
+import com.smart.inventory.application.data.entities.SoldItem;
 import com.smart.inventory.application.data.services.solditem.SoldItemService;
 import com.smart.inventory.application.util.Utilities;
 import com.smart.inventory.application.views.widgets.CustomDialog;

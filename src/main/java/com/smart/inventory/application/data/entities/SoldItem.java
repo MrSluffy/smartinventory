@@ -1,4 +1,4 @@
-package com.smart.inventory.application.data.entity;
+package com.smart.inventory.application.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -124,5 +125,19 @@ public class SoldItem extends AbstractEntity {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SoldItem soldItem = (SoldItem) o;
+        return Double.compare(soldItem.purchaseAmount, purchaseAmount) == 0 && quantity == soldItem.quantity && Objects.equals(description, soldItem.description) && Objects.equals(item, soldItem.item) && Objects.equals(addedByEmployer, soldItem.addedByEmployer) && Objects.equals(addedByOwner, soldItem.addedByOwner) && Objects.equals(company, soldItem.company) && Objects.equals(soldItemCompany, soldItem.soldItemCompany) && Objects.equals(dateAndTime, soldItem.dateAndTime) && Objects.equals(itemName, soldItem.itemName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), description, item, addedByEmployer, addedByOwner, company, soldItemCompany, dateAndTime, itemName, purchaseAmount, quantity);
     }
 }

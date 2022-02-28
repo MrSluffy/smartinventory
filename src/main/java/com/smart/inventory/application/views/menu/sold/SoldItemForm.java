@@ -1,7 +1,7 @@
 package com.smart.inventory.application.views.menu.sold;
 
-import com.smart.inventory.application.data.entity.Item;
-import com.smart.inventory.application.data.entity.SoldItem;
+import com.smart.inventory.application.data.entities.Item;
+import com.smart.inventory.application.data.entities.SoldItem;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;

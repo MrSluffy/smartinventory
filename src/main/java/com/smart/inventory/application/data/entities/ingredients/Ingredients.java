@@ -1,15 +1,16 @@
-package com.smart.inventory.application.data.entity.ingredients;
+package com.smart.inventory.application.data.entities.ingredients;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
-import com.smart.inventory.application.data.entity.Company;
-import com.smart.inventory.application.data.entity.Employer;
-import com.smart.inventory.application.data.entity.Owner;
+import com.smart.inventory.application.data.entities.Company;
+import com.smart.inventory.application.data.entities.Employer;
+import com.smart.inventory.application.data.entities.Owner;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -127,5 +128,19 @@ public class Ingredients extends AbstractEntity {
 
     public Set<Company> getCompany() {
         return company;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Ingredients that = (Ingredients) o;
+        return Double.compare(that.productPrice, productPrice) == 0 && Double.compare(that.totalCost, totalCost) == 0 && productQuantity == that.productQuantity && Objects.equals(productName, that.productName) && Objects.equals(company, that.company) && Objects.equals(addedByEmployer, that.addedByEmployer) && Objects.equals(addedByOwner, that.addedByOwner) && Objects.equals(ingredientCompany, that.ingredientCompany) && Objects.equals(quantityUnit, that.quantityUnit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), productName, productPrice, totalCost, productQuantity, company, addedByEmployer, addedByOwner, ingredientCompany, quantityUnit);
     }
 }

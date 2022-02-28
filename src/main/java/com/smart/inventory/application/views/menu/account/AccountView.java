@@ -1,6 +1,6 @@
 package com.smart.inventory.application.views.menu.account;
 
-import com.smart.inventory.application.data.entity.Employer;
+import com.smart.inventory.application.data.entities.Employer;
 import com.smart.inventory.application.data.services.employer.EmployerService;
 import com.smart.inventory.application.util.Utilities;
 import com.smart.inventory.application.views.widgets.CustomDialog;
