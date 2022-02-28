@@ -7,8 +7,8 @@ import com.smart.inventory.application.data.entities.Owner;
 import com.smart.inventory.application.data.repository.ICompanyRepository;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IOwnerRepository;
-import com.smart.inventory.application.exeptions.AuthException;
-import com.smart.inventory.application.exeptions.ValueExeptionHandler;
+import com.smart.inventory.application.exceptions.AuthException;
+import com.smart.inventory.application.exceptions.ValueExceptionHandler;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.menu.account.AccountView;
 import com.smart.inventory.application.views.menu.sold.SoldItemView;
@@ -94,7 +94,7 @@ public class OwnerService implements IOwnerService {
         company.setOwner(owner);
         companyRepository.save(company);
         if(ownerRepository.findOwnerByEmail(email).isPresent()){
-            throw new ValueExeptionHandler(email +" email is already taken");
+            throw new ValueExceptionHandler(email +" email is already taken");
         } else {
             ownerRepository.save(owner);
         }
