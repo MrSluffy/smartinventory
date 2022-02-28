@@ -1,7 +1,7 @@
 package com.smart.inventory.application.views.menu.account;
 
-import com.smart.inventory.application.data.entity.Employer;
-import com.smart.inventory.application.data.entity.Position;
+import com.smart.inventory.application.data.entities.Employer;
+import com.smart.inventory.application.data.entities.Position;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;

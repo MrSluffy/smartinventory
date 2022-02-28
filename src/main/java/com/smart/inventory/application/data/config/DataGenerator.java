@@ -1,8 +1,8 @@
 package com.smart.inventory.application.data.config;
 
-import com.smart.inventory.application.data.entity.*;
-import com.smart.inventory.application.data.entity.ingredients.Ingredients;
-import com.smart.inventory.application.data.entity.ingredients.QuantityUnit;
+import com.smart.inventory.application.data.entities.*;
+import com.smart.inventory.application.data.entities.ingredients.Ingredients;
+import com.smart.inventory.application.data.entities.ingredients.QuantityUnit;
 import com.smart.inventory.application.data.repository.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.slf4j.Logger;

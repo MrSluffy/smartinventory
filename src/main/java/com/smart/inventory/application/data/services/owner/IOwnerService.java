@@ -1,6 +1,6 @@
 package com.smart.inventory.application.data.services.owner;
 
-import com.smart.inventory.application.data.entity.Owner;
+import com.smart.inventory.application.data.entities.Owner;
 import com.smart.inventory.application.exeptions.AuthException;
 
 import java.util.Optional;

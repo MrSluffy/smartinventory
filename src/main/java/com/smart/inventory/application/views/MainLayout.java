@@ -1,8 +1,8 @@
 package com.smart.inventory.application.views;
 
-import com.smart.inventory.application.data.entity.Company;
-import com.smart.inventory.application.data.entity.Employer;
-import com.smart.inventory.application.data.entity.Owner;
+import com.smart.inventory.application.data.entities.Company;
+import com.smart.inventory.application.data.entities.Employer;
+import com.smart.inventory.application.data.entities.Owner;
 import com.smart.inventory.application.data.services.owner.OwnerService;
 import com.smart.inventory.application.views.session.LogoutView;
 import com.vaadin.flow.component.Component;

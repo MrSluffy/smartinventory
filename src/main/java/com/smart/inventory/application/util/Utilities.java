@@ -1,8 +1,8 @@
 package com.smart.inventory.application.util;
 
-import com.smart.inventory.application.data.entity.Company;
-import com.smart.inventory.application.data.entity.Employer;
-import com.smart.inventory.application.data.entity.Owner;
+import com.smart.inventory.application.data.entities.Company;
+import com.smart.inventory.application.data.entities.Employer;
+import com.smart.inventory.application.data.entities.Owner;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;

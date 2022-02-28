@@ -1,7 +1,7 @@
 package com.smart.inventory.application.views.menu.ingredient;
 
-import com.smart.inventory.application.data.entity.ingredients.Ingredients;
-import com.smart.inventory.application.data.entity.ingredients.QuantityUnit;
+import com.smart.inventory.application.data.entities.ingredients.Ingredients;
+import com.smart.inventory.application.data.entities.ingredients.QuantityUnit;
 import com.smart.inventory.application.util.Utilities;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;

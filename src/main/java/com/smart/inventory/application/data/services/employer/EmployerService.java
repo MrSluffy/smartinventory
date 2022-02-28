@@ -1,9 +1,9 @@
 package com.smart.inventory.application.data.services.employer;
 
 import com.smart.inventory.application.data.Role;
-import com.smart.inventory.application.data.entity.Company;
-import com.smart.inventory.application.data.entity.Employer;
-import com.smart.inventory.application.data.entity.Position;
+import com.smart.inventory.application.data.entities.Company;
+import com.smart.inventory.application.data.entities.Employer;
+import com.smart.inventory.application.data.entities.Position;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IPositionRepository;
 import com.smart.inventory.application.exeptions.NotFoundExeption;

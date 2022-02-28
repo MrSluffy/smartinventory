@@ -1,7 +1,7 @@
 package com.smart.inventory.application.data.services.item;
 
-import com.smart.inventory.application.data.entity.Company;
-import com.smart.inventory.application.data.entity.Item;
+import com.smart.inventory.application.data.entities.Company;
+import com.smart.inventory.application.data.entities.Item;
 import com.smart.inventory.application.data.repository.ICompanyRepository;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IItemRepository;

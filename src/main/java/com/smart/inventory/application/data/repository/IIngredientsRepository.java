@@ -1,6 +1,6 @@
 package com.smart.inventory.application.data.repository;
 
-import com.smart.inventory.application.data.entity.ingredients.Ingredients;
+import com.smart.inventory.application.data.entities.ingredients.Ingredients;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

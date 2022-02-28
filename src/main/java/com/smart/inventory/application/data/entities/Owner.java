@@ -1,9 +1,9 @@
-package com.smart.inventory.application.data.entity;
+package com.smart.inventory.application.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
 import com.smart.inventory.application.data.Role;
-import com.smart.inventory.application.data.entity.ingredients.Ingredients;
+import com.smart.inventory.application.data.entities.ingredients.Ingredients;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -156,5 +157,19 @@ public class Owner extends AbstractEntity {
 
     public void setIngredientsOwner(Ingredients ingredientsOwner) {
         this.ingredientsOwner = ingredientsOwner;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Owner owner = (Owner) o;
+        return Objects.equals(firstName, owner.firstName) && Objects.equals(lastName, owner.lastName) && Objects.equals(email, owner.email) && Objects.equals(company, owner.company) && Objects.equals(passwordSalt, owner.passwordSalt) && Objects.equals(passwordHash, owner.passwordHash) && roles == owner.roles && Objects.equals(signMethod, owner.signMethod) && Objects.equals(itemOwner, owner.itemOwner) && Objects.equals(soldItemOwner, owner.soldItemOwner) && Objects.equals(ingredientsOwner, owner.ingredientsOwner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), firstName, lastName, email, company, passwordSalt, passwordHash, roles, signMethod, itemOwner, soldItemOwner, ingredientsOwner);
     }
 }
