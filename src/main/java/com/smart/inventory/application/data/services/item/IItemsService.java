@@ -17,5 +17,5 @@ public interface IItemsService {
 
     void addNewItem(Item item, Utilities utilities);
 
-    void updateItem(Integer id, String name, Integer quantity, Double price, Double totalPrice, Utilities utilities);
+    void updateItem(Integer id, String name, int quantity, Double price, Double totalPrice, Utilities utilities);
 }

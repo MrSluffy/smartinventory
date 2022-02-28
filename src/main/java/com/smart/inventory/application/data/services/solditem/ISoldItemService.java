@@ -10,11 +10,11 @@ public interface ISoldItemService {
 
     void deleteSelectedSoldItem(List<SoldItem> soldItems);
 
-    void addNewSoldItem(Item items, String description, Integer quantity,Utilities utilities);
+    void addNewSoldItem(Item items, String description, int quantity,Utilities utilities);
 
     List<Item> findAllItems(Integer companyId);
 
     List<SoldItem> findAllSoldItems(Integer id);
 
-    void updateSoldItem(Integer id, String description, Item item, Integer quantity, Utilities utilities);
+    void updateSoldItem(Integer id, String description, Item item, int quantity, Utilities utilities);
 }
