@@ -4,7 +4,7 @@ import com.smart.inventory.application.data.entities.Item;
 import com.smart.inventory.application.data.entities.SoldItem;
 import com.smart.inventory.application.data.repository.IItemRepository;
 import com.smart.inventory.application.data.repository.ISoldItemRepository;
-import com.smart.inventory.application.exeptions.NotFoundExeption;
+import com.smart.inventory.application.exceptions.NotFoundException;
 import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +58,7 @@ public class SoldItemService implements ISoldItemService {
     }
 
     public SoldItem getSoldItemById(Integer id){
-        return soldItemRepository.findById(id).orElseThrow(NotFoundExeption::new);
+        return soldItemRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
 

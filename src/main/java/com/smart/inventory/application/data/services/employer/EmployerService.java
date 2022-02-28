@@ -6,7 +6,7 @@ import com.smart.inventory.application.data.entities.Employer;
 import com.smart.inventory.application.data.entities.Position;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IPositionRepository;
-import com.smart.inventory.application.exeptions.NotFoundExeption;
+import com.smart.inventory.application.exceptions.NotFoundException;
 import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class EmployerService implements IEmployerService{
     }
 
     public Employer getEmployerById(Integer id){
-        return employerRepository.findById(id).orElseThrow(NotFoundExeption::new);
+        return employerRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Transactional

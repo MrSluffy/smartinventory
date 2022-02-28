@@ -6,7 +6,7 @@ import com.smart.inventory.application.data.repository.ICompanyRepository;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IItemRepository;
 import com.smart.inventory.application.data.repository.IOwnerRepository;
-import com.smart.inventory.application.exeptions.NotFoundExeption;
+import com.smart.inventory.application.exceptions.NotFoundException;
 import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,11 +81,11 @@ public class ItemsService implements IItemsService{
     }
 
     public Item getItemById(Integer id){
-        return itemRepository.findById(id).orElseThrow(NotFoundExeption::new);
+        return itemRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     private Company getCompanyById(Integer id){
-        return companyRepository.findById(id).orElseThrow(NotFoundExeption::new);
+        return companyRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public void utils(Item item, Utilities utilities) {

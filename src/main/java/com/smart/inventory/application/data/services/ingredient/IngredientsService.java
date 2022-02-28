@@ -4,7 +4,7 @@ import com.smart.inventory.application.data.entities.ingredients.Ingredients;
 import com.smart.inventory.application.data.entities.ingredients.QuantityUnit;
 import com.smart.inventory.application.data.repository.IIngredientsRepository;
 import com.smart.inventory.application.data.repository.IQuantityUnitRepository;
-import com.smart.inventory.application.exeptions.NotFoundExeption;
+import com.smart.inventory.application.exceptions.NotFoundException;
 import com.smart.inventory.application.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class IngredientsService implements IIngredientsService {
     }
 
     public Ingredients getIngredientById(Integer id){
-        return ingredientsRepository.findById(id).orElseThrow(NotFoundExeption::new);
+        return ingredientsRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Transactional
