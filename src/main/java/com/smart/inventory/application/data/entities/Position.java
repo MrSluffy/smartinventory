@@ -29,4 +29,9 @@ public class Position extends AbstractEntity {
         return super.equals(obj);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

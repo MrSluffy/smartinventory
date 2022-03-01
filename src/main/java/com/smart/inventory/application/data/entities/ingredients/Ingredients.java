@@ -134,5 +134,10 @@ public class Ingredients extends AbstractEntity {
         return super.equals(obj);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 
 }
