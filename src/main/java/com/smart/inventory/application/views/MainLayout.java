@@ -46,10 +46,6 @@ public class MainLayout extends AppLayout {
             add(link);
         }
 
-        public Class<?> getView() {
-            return view;
-        }
-
         /**
          * Simple wrapper to create icons using LineAwesome iconset. See
          * https://icons8.com/line-awesome
