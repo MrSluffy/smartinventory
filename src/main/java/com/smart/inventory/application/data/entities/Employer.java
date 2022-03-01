@@ -14,7 +14,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -171,17 +170,5 @@ public class Employer extends AbstractEntity {
         this.soldItem = soldItem;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Employer employer = (Employer) o;
-        return Objects.equals(firstName, employer.firstName) && Objects.equals(lastName, employer.lastName) && Objects.equals(email, employer.email) && Objects.equals(company, employer.company) && Objects.equals(position, employer.position) && Objects.equals(soldItem, employer.soldItem) && Objects.equals(emplyrCompany, employer.emplyrCompany) && Objects.equals(item, employer.item) && Objects.equals(ingredients, employer.ingredients) && Objects.equals(passwordSalt, employer.passwordSalt) && Objects.equals(passwordHash, employer.passwordHash) && roles == employer.roles;
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), firstName, lastName, email, company, position, soldItem, emplyrCompany, item, ingredients, passwordSalt, passwordHash, roles);
-    }
 }

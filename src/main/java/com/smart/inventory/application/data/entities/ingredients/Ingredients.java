@@ -130,17 +130,5 @@ public class Ingredients extends AbstractEntity {
         return company;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Ingredients that = (Ingredients) o;
-        return Double.compare(that.productPrice, productPrice) == 0 && Double.compare(that.totalCost, totalCost) == 0 && productQuantity == that.productQuantity && Objects.equals(productName, that.productName) && Objects.equals(company, that.company) && Objects.equals(addedByEmployer, that.addedByEmployer) && Objects.equals(addedByOwner, that.addedByOwner) && Objects.equals(ingredientCompany, that.ingredientCompany) && Objects.equals(quantityUnit, that.quantityUnit);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), productName, productPrice, totalCost, productQuantity, company, addedByEmployer, addedByOwner, ingredientCompany, quantityUnit);
-    }
 }

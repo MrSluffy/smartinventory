@@ -116,17 +116,5 @@ public class Item extends AbstractEntity {
         return company;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Item item = (Item) o;
-        return quantity == item.quantity && Double.compare(item.price, price) == 0 && Double.compare(item.totalPrice, totalPrice) == 0 && Objects.equals(itemName, item.itemName) && Objects.equals(dateAndTime, item.dateAndTime) && Objects.equals(company, item.company) && Objects.equals(addedByEmployer, item.addedByEmployer) && Objects.equals(addedByOwner, item.addedByOwner) && Objects.equals(itemCompany, item.itemCompany);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), itemName, quantity, price, totalPrice, dateAndTime, company, addedByEmployer, addedByOwner, itemCompany);
-    }
 }

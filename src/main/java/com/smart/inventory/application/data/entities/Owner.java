@@ -159,17 +159,5 @@ public class Owner extends AbstractEntity {
         this.ingredientsOwner = ingredientsOwner;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Owner owner = (Owner) o;
-        return Objects.equals(firstName, owner.firstName) && Objects.equals(lastName, owner.lastName) && Objects.equals(email, owner.email) && Objects.equals(company, owner.company) && Objects.equals(passwordSalt, owner.passwordSalt) && Objects.equals(passwordHash, owner.passwordHash) && roles == owner.roles && Objects.equals(signMethod, owner.signMethod) && Objects.equals(itemOwner, owner.itemOwner) && Objects.equals(soldItemOwner, owner.soldItemOwner) && Objects.equals(ingredientsOwner, owner.ingredientsOwner);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), firstName, lastName, email, company, passwordSalt, passwordHash, roles, signMethod, itemOwner, soldItemOwner, ingredientsOwner);
-    }
 }
