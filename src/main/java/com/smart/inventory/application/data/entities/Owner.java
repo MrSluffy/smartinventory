@@ -11,7 +11,6 @@ import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -47,6 +46,12 @@ public class Owner extends AbstractEntity {
     @ManyToOne(cascade={CascadeType.MERGE,
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private SoldItem soldItemOwner;
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id", referencedColumnName = "id")
+    private Activity activity;
 
 
     @JsonIgnore
@@ -160,4 +165,11 @@ public class Owner extends AbstractEntity {
     }
 
 
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 }

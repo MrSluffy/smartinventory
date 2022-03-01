@@ -210,7 +210,7 @@ public class IngredientView extends VerticalLayout {
 
 
     private void deleteIngredient(CostingViewEvent.DeleteEvent deleteEvent) {
-        service.deleteIngredientSelected(new ArrayList<>(grid.getSelectedItems()));
+        service.deleteIngredientSelected(new ArrayList<>(grid.getSelectedItems()), utilities);
         grid.getDataProvider().refreshAll();
         updateList();
         Notification.show("Successfully deleted ",

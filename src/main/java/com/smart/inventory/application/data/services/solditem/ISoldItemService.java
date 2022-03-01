@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ISoldItemService {
 
-    void deleteSelectedSoldItem(List<SoldItem> soldItems);
+    void deleteSelectedSoldItem(List<SoldItem> soldItems, Utilities utilities);
 
     void addNewSoldItem(Item items, String description, int quantity,Utilities utilities);
 

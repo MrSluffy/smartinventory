@@ -13,7 +13,7 @@ public interface IItemsService {
 
     long countItems();
 
-    void deleteItemSelected(List<Item> item);
+    void deleteItemSelected(List<Item> item, Utilities utilities);
 
     void addNewItem(Item item, Utilities utilities);
 

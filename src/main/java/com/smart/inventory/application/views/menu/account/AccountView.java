@@ -2,6 +2,7 @@ package com.smart.inventory.application.views.menu.account;
 
 import com.smart.inventory.application.data.entities.Employer;
 import com.smart.inventory.application.data.services.employer.EmployerService;
+import com.smart.inventory.application.data.services.request.RequestService;
 import com.smart.inventory.application.util.Utilities;
 import com.smart.inventory.application.views.widgets.CustomDialog;
 import com.smart.inventory.application.views.widgets.DeleteButton;
@@ -26,6 +27,7 @@ import com.vaadin.flow.shared.Registration;
 import org.vaadin.haijian.Exporter;
 
 import javax.annotation.Nonnull;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -49,9 +51,13 @@ public class AccountView extends VerticalLayout {
     private final AccountForm form;
 
     private final EmployerService service;
+    private RequestService requestService;
+    private HttpServletRequest request;
 
-    public AccountView(EmployerService service){
+    public AccountView(EmployerService service, RequestService requestService, HttpServletRequest request){
         this.service = service;
+        this.requestService = requestService;
+        this.request = request;
         addClassName("gen-view");
         setSizeFull();
 
@@ -150,7 +156,7 @@ public class AccountView extends VerticalLayout {
     }
 
     private void deleteEmployer(AccountViewEvent.DeleteEvent deleteEvent) {
-        service.deleteEmployerSelected(new ArrayList<>(grid.getSelectedItems()));
+        service.deleteEmployerSelected(new ArrayList<>(grid.getSelectedItems()), utilities);
         grid.getDataProvider().refreshAll();
         updateList();
         Notification.show("Successfully deleted ",

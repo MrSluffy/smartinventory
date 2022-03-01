@@ -2,6 +2,7 @@ package com.smart.inventory.application.data.services.ingredient;
 
 import com.smart.inventory.application.data.entities.ingredients.Ingredients;
 import com.smart.inventory.application.data.entities.ingredients.QuantityUnit;
+import com.smart.inventory.application.data.repository.IActivityRepository;
 import com.smart.inventory.application.data.repository.IIngredientsRepository;
 import com.smart.inventory.application.data.repository.IQuantityUnitRepository;
 import com.smart.inventory.application.exceptions.NotFoundException;
@@ -20,22 +21,40 @@ public class IngredientsService implements IIngredientsService {
 
     private final IQuantityUnitRepository quantityUnitRepository;
 
+    private final IActivityRepository activityRepository;
+
+    String title;
+
     @Autowired
     public IngredientsService(IIngredientsRepository ingredientsRepository,
-                              IQuantityUnitRepository quantityUnitRepository) {
+                              IQuantityUnitRepository quantityUnitRepository,
+                              IActivityRepository activityRepository) {
         this.ingredientsRepository = ingredientsRepository;
         this.quantityUnitRepository = quantityUnitRepository;
+        this.activityRepository = activityRepository;
     }
 
     @Override
-    public void deleteIngredientSelected(List<Ingredients> ingredients) {
+    public void deleteIngredientSelected(List<Ingredients> ingredients, @Nonnull Utilities utilities) {
         ingredientsRepository.deleteAll(ingredients);
+
+        utilities.configureActivity(
+                title + " delete product costing: " + ingredients,
+                "",
+                activityRepository
+        );
     }
 
     @Override
     public void addIngredient(@Nonnull Ingredients ingredients, QuantityUnit unit, Utilities utilities) {
         utils(unit, ingredients, utilities);
         ingredientsRepository.save(ingredients);
+
+        utilities.configureActivity(
+                title + " added product costing: " + ingredients.getProductName(),
+                "",
+                activityRepository
+        );
     }
 
     @Override
@@ -67,6 +86,13 @@ public class IngredientsService implements IIngredientsService {
         ingredients.setTotalCost(productQuantity);
 
         ingredientsRepository.save(ingredients);
+
+        utilities.configureActivity(
+                title + " update product costing: " + productName,
+                "",
+                activityRepository
+                );
+
     }
 
     public List<Ingredients> findAllIngredients() {
@@ -75,12 +101,15 @@ public class IngredientsService implements IIngredientsService {
 
     private void utils(QuantityUnit unit,
                        Ingredients ingredients,
-                       Utilities utilities) {
+                       @Nonnull Utilities utilities) {
         if(utilities.employer != null){
             ingredients.getAddedByEmployer().add(utilities.employer);
+            title = utilities.employer.getEmail();
         }
         if(utilities.owner != null){
             ingredients.getAddedByOwner().add(utilities.owner);
+            title = utilities.owner.getEmail();
+
         }
         ingredients.getCompany().add(utilities.company);
         ingredients.setIngredientCompany(utilities.company);

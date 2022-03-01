@@ -159,7 +159,7 @@ public class SoldItemView extends VerticalLayout {
     }
 
     private void deleteSoldItem(SoldItemView.SoldItemViewEvent.DeleteEvent deleteEvent) {
-        service.deleteSelectedSoldItem(new ArrayList<>(grid.getSelectedItems()));
+        service.deleteSelectedSoldItem(new ArrayList<>(grid.getSelectedItems()), utilities);
         updateList();
         Notification.show("Successfully deleted ",
                         5000, Notification.Position.TOP_CENTER)

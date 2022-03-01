@@ -104,11 +104,12 @@ public class SoldItemForm extends FormLayout {
     public void setSoldItem(@Nonnull SoldItem soldItem) {
         this.soldItem = soldItem;
         binder.readBean(soldItem);
-        itemList.setValue(soldItem.getItem());
-        description.setValue(soldItem.getDescription());
-        quantity.setValue(soldItem.getQuantity());
-        purchaseAmount.setValue(soldItem.getItem().getPrice() * quantity.getValue());
-
+        if(soldItem.getItem() != null){
+            itemList.setValue(soldItem.getItem());
+            description.setValue(soldItem.getDescription());
+            quantity.setValue(soldItem.getQuantity());
+            purchaseAmount.setValue(soldItem.getItem().getPrice() * quantity.getValue());
+        }
     }
 
     public static abstract class SoldItemFormEvent extends ComponentEvent<SoldItemForm> {

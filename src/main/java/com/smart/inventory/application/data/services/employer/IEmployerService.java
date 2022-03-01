@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IEmployerService {
 
-    void deleteEmployerSelected(List<Employer> employers);
+    void deleteEmployerSelected(List<Employer> employers, Utilities utilities);
 
     void addNewEmployer(String email, String firstname, String lastname, String password, Position position, Utilities utilities);
 

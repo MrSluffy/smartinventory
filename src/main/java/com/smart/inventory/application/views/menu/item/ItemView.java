@@ -238,7 +238,7 @@ public class ItemView extends VerticalLayout {
     }
 
     private void deleteItem(ItemViewEvent event) {
-        service.deleteItemSelected(new ArrayList<>(itemGrid.getSelectedItems()));
+        service.deleteItemSelected(new ArrayList<>(itemGrid.getSelectedItems()), utilities);
         itemGrid.getDataProvider().refreshAll();
         updateList();
         Notification.show("Successfully deleted ",

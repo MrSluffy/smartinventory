@@ -9,7 +9,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -45,6 +44,12 @@ public class Item extends AbstractEntity {
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company itemCompany;
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id", referencedColumnName = "id")
+    private Activity activity;
 
     public Item(){
         dateAndTime = LocalDateTime.now().toString();
@@ -117,4 +122,11 @@ public class Item extends AbstractEntity {
     }
 
 
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 }

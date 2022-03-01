@@ -4,6 +4,7 @@ import com.smart.inventory.application.data.Role;
 import com.smart.inventory.application.data.entities.Company;
 import com.smart.inventory.application.data.entities.Employer;
 import com.smart.inventory.application.data.entities.Position;
+import com.smart.inventory.application.data.repository.IActivityRepository;
 import com.smart.inventory.application.data.repository.IEmployerRepository;
 import com.smart.inventory.application.data.repository.IPositionRepository;
 import com.smart.inventory.application.exceptions.NotFoundException;
@@ -22,17 +23,26 @@ public class EmployerService implements IEmployerService{
 
     private final IPositionRepository positionRepository;
 
+    private final IActivityRepository activityRepository;
+
     @Autowired
     public EmployerService(
             IEmployerRepository employerRepository,
-            IPositionRepository positionRepository) {
+            IPositionRepository positionRepository,
+            IActivityRepository activityRepository) {
         this.employerRepository = employerRepository;
         this.positionRepository = positionRepository;
+        this.activityRepository = activityRepository;
     }
 
     @Override
-    public void deleteEmployerSelected(List<Employer> employers) {
+    public void deleteEmployerSelected(List<Employer> employers, Utilities utilities) {
         employerRepository.deleteAll(employers);
+
+        utilities.configureActivity(
+                utilities.owner.getEmail() + " delete employer: " + employers,
+                "more details",
+                activityRepository);
     }
 
     @Override
@@ -56,7 +66,7 @@ public class EmployerService implements IEmployerService{
                                String fname,
                                String lname,
                                Position position,
-                               Utilities utilities) {
+                               @Nonnull Utilities utilities) {
 
         var employer = getEmployerById(id);
 
@@ -66,6 +76,11 @@ public class EmployerService implements IEmployerService{
         employer.setPosition(position);
 
         employerRepository.save(employer);
+
+        utilities.configureActivity(
+                utilities.owner.getEmail() + " update employer: " + employer.getId(),
+                "more details",
+                activityRepository);
 
 
     }
@@ -78,10 +93,16 @@ public class EmployerService implements IEmployerService{
                                Position position,
                                @Nonnull Utilities utilities) {
         var employer = new Employer(email, firstname, lastname, password, Role.EMPLOYER);
+
         Company company = utilities.company;
         employer.getCompany().add(company);
         employer.setPosition(position);
         employer.setEmplyrCompany(company);
         employerRepository.save(employer);
+
+        utilities.configureActivity(
+                utilities.owner.getEmail() + " added new employer: " + employer.getEmail(),
+                "more details",
+                activityRepository);
     }
 }

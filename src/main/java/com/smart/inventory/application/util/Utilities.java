@@ -1,8 +1,10 @@
 package com.smart.inventory.application.util;
 
+import com.smart.inventory.application.data.entities.Activity;
 import com.smart.inventory.application.data.entities.Company;
 import com.smart.inventory.application.data.entities.Employer;
 import com.smart.inventory.application.data.entities.Owner;
+import com.smart.inventory.application.data.repository.IActivityRepository;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
@@ -13,6 +15,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.server.VaadinSession;
 
 import javax.annotation.Nonnull;
+import java.time.LocalDateTime;
 
 public class Utilities {
 
@@ -51,6 +54,22 @@ public class Utilities {
         totalPrice.setPrefixComponent(currencyPrefix1);
 
         return new HorizontalLayout(selectCurrency, price);
+    }
+
+    public void configureActivity(String activityTitle,
+                                  String activitySub,
+                                  @Nonnull IActivityRepository activityRepository){
+        var activity = new Activity();
+        activity.setActivityTitle(activityTitle);
+        activity.setActivitySubTitle(activitySub);
+        activity.setActivityLocation(null);
+        activity.setDate(LocalDateTime.now().toLocalTime().toString().substring(0, 5)
+                + "-" + LocalDateTime.now().toLocalDate().toString());
+        activity.getCompanySet().add(company);
+        activity.setCompany(company);
+
+        activityRepository.save(activity);
+
     }
 
 }

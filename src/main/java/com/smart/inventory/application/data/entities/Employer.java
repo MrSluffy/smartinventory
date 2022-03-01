@@ -60,6 +60,14 @@ public class Employer extends AbstractEntity {
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private Item item;
 
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id", referencedColumnName = "id")
+    private Activity activity;
+
+
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
@@ -171,4 +179,11 @@ public class Employer extends AbstractEntity {
     }
 
 
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 }

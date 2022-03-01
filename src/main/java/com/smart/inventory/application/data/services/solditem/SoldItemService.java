@@ -2,6 +2,7 @@ package com.smart.inventory.application.data.services.solditem;
 
 import com.smart.inventory.application.data.entities.Item;
 import com.smart.inventory.application.data.entities.SoldItem;
+import com.smart.inventory.application.data.repository.IActivityRepository;
 import com.smart.inventory.application.data.repository.IItemRepository;
 import com.smart.inventory.application.data.repository.ISoldItemRepository;
 import com.smart.inventory.application.exceptions.NotFoundException;
@@ -19,18 +20,28 @@ public class SoldItemService implements ISoldItemService {
 
     private final ISoldItemRepository soldItemRepository;
     private final IItemRepository itemRepository;
+    private final IActivityRepository activityRepository;
+
+    String activityTitle;
 
     @Autowired
     public SoldItemService(ISoldItemRepository soldItemRepository,
-                           IItemRepository itemRepository) {
+                           IItemRepository itemRepository,
+                           IActivityRepository activityRepository) {
         this.soldItemRepository = soldItemRepository;
         this.itemRepository = itemRepository;
+        this.activityRepository = activityRepository;
     }
 
 
     @Override
-    public void deleteSelectedSoldItem(List<SoldItem> soldItems) {
+    public void deleteSelectedSoldItem(List<SoldItem> soldItems, Utilities utilities) {
         soldItemRepository.deleteAll(soldItems);
+
+        utilities.configureActivity(
+                activityTitle + " delete sold item:  " + soldItems,
+                "",
+                activityRepository);
     }
 
     @Override
@@ -39,12 +50,20 @@ public class SoldItemService implements ISoldItemService {
         soldItem.setItem(items);
         if(utilities.employer != null) {
             soldItem.getAddedByEmployer().add(utilities.employer);
+            activityTitle = utilities.employer.getEmail() + "";
         }
 
         if(utilities.owner != null){
             soldItem.getAddedByOwner().add(utilities.owner);
+            activityTitle = utilities.owner.getEmail();
         }
         utils(items, description, quantity, utilities, soldItem);
+
+        utilities.configureActivity(
+                activityTitle + " added sold item: " + items.getItemName(),
+                "",
+                activityRepository);
+
     }
 
     @Override
@@ -68,6 +87,13 @@ public class SoldItemService implements ISoldItemService {
 
         SoldItem soldItem = getSoldItemById(id);
         utils(item, description, quantity, utilities, soldItem);
+
+        utilities.configureActivity(
+                activityTitle + " update sold item: " + item.getItemName(),
+                "",
+                activityRepository);
+
+
     }
 
     public void utils(Item item, String description, int quantity, Utilities utilities, SoldItem soldItem) {

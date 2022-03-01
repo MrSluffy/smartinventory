@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IIngredientsService {
 
-    void deleteIngredientSelected(List<Ingredients> ingredients);
+    void deleteIngredientSelected(List<Ingredients> ingredients, Utilities utilities);
 
     void addIngredient(@Nonnull Ingredients ingredients, QuantityUnit unit, Utilities utilities);
 
