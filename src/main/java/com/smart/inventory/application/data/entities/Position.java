@@ -24,5 +24,9 @@ public class Position extends AbstractEntity {
         this.postionName = postionName;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 
 }

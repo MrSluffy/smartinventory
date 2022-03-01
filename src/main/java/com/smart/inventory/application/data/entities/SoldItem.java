@@ -125,4 +125,9 @@ public class SoldItem extends AbstractEntity {
     public void setItemName(String itemName) {
         this.itemName = itemName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

@@ -129,4 +129,9 @@ public class Item extends AbstractEntity {
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

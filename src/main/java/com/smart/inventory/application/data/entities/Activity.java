@@ -92,4 +92,9 @@ public class Activity extends AbstractEntity {
     public void setActivitySubTitle(String activitySubTitle) {
         this.activitySubTitle = activitySubTitle;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

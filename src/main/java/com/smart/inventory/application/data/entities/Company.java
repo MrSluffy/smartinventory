@@ -130,4 +130,9 @@ public class Company extends AbstractEntity {
     public void setCompanyIngredients(Set<Ingredients> companyIngredients) {
         this.companyIngredients = companyIngredients;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

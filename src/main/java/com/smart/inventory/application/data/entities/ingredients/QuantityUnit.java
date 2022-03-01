@@ -3,7 +3,6 @@ package com.smart.inventory.application.data.entities.ingredients;
 import com.smart.inventory.application.data.AbstractEntity;
 
 import javax.persistence.Entity;
-import java.util.Objects;
 
 @Entity
 public class QuantityUnit extends AbstractEntity {
@@ -25,5 +24,8 @@ public class QuantityUnit extends AbstractEntity {
         this.unitName = unitName;
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }
