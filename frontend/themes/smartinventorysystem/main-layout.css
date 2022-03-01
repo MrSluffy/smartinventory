@@ -30,6 +30,10 @@
     height: 200px;
 }
 
+.bold-label{
+    font-weight: bold;
+}
+
 [slot='drawer'] nav a::before {
     border-radius: var(--lumo-border-radius);
     bottom: calc(var(--lumo-space-xs) * 0.5);

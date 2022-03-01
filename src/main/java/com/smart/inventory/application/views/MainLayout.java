@@ -4,6 +4,7 @@ import com.smart.inventory.application.data.entities.Company;
 import com.smart.inventory.application.data.entities.Employer;
 import com.smart.inventory.application.data.entities.Owner;
 import com.smart.inventory.application.data.services.owner.OwnerService;
+import com.smart.inventory.application.util.constants.TextConstant;
 import com.smart.inventory.application.views.session.LogoutView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -103,9 +104,13 @@ public class MainLayout extends AppLayout {
             text = employer.getRoles().getRoleName();
         }
 
-        var sub = new Label("(Smart Inventory)");
+        var build = new Label(TextConstant.buildName.toUpperCase());
+        build.addClassName("bold-label");
+
+        var sub = new Label("Smart Inventory.");
         sub.addClassName("sub");
         sub.addClassNames("m-0", "px-m");
+        sub.add(build);
 
 
         var role = new Label(text);
