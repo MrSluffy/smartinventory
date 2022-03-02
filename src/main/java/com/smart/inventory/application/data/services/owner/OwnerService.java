@@ -11,6 +11,7 @@ import com.smart.inventory.application.exceptions.AuthException;
 import com.smart.inventory.application.exceptions.ValueExceptionHandler;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.menu.account.AccountView;
+import com.smart.inventory.application.views.menu.recent.RecentActivityView;
 import com.smart.inventory.application.views.menu.sold.SoldItemView;
 import com.smart.inventory.application.views.menu.dashboard.DashboardView;
 import com.smart.inventory.application.views.menu.ingredient.IngredientView;
@@ -125,6 +126,8 @@ public class OwnerService implements IOwnerService {
             routes.add(new AuthorizedRoute(company +"/costing", "Costing", IngredientView.class));
             routes.add(new AuthorizedRoute(company +"/sold-items", "Sold Items", SoldItemView.class));
             routes.add(new AuthorizedRoute(company +"/myemployers", "My Employer", AccountView.class));
+            routes.add(new AuthorizedRoute(company +"/history", "Recent History", RecentActivityView.class));
+
         } else if (role.equals(Role.EMPLOYER)) {
             routes.add(new AuthorizedRoute(company + "/employer/item", "Item Stock", ItemView.class));
             routes.add(new AuthorizedRoute(company +"/employer/costing", "Costing", IngredientView.class));

@@ -31,23 +31,6 @@ public class Activity extends AbstractEntity {
     @ManyToMany(mappedBy = "activityInCompany")
     private final Set<Company> companySet = new HashSet<>();
 
-    @OneToMany(mappedBy = "activity", orphanRemoval = true)
-    private Set<Employer> employer = new HashSet<>();
-
-    @OneToMany(mappedBy = "activity", orphanRemoval = true)
-    private Set<Owner> owner = new HashSet<>();
-
-    @OneToMany(mappedBy = "activity", orphanRemoval = true)
-    private Set<Item> item = new HashSet<>();
-
-
-    public Set<Employer> getEmployer() {
-        return employer;
-    }
-
-    public Set<Owner> getOwner() {
-        return owner;
-    }
 
     public Set<Company> getCompanySet() {
         return companySet;

@@ -61,7 +61,7 @@ public class Utilities {
                                   @Nonnull IActivityRepository activityRepository){
         var activity = new Activity();
         activity.setActivityTitle(activityTitle);
-        activity.setActivitySubTitle(activitySub);
+        activity.setActivitySubTitle("more details");
         activity.setActivityLocation(null);
         activity.setDate(LocalDateTime.now().toLocalTime().toString().substring(0, 5)
                 + "-" + LocalDateTime.now().toLocalDate().toString());
