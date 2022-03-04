@@ -17,11 +17,13 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.shared.Registration;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
+@PageTitle("Recent History")
 public class RecentActivityView extends VerticalLayout {
 
     Grid<Activity> activityGrid = new Grid<>(Activity.class, false);
