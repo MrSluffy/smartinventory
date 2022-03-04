@@ -10,13 +10,13 @@ import com.smart.inventory.application.data.repository.IOwnerRepository;
 import com.smart.inventory.application.exceptions.AuthException;
 import com.smart.inventory.application.exceptions.ValueExceptionHandler;
 import com.smart.inventory.application.util.constants.RouteConstant;
+import com.smart.inventory.application.util.constants.TextConstant;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.menu.account.AccountView;
-import com.smart.inventory.application.views.menu.recent.RecentActivityView;
-import com.smart.inventory.application.views.menu.sold.SoldItemView;
-import com.smart.inventory.application.views.menu.dashboard.DashboardView;
 import com.smart.inventory.application.views.menu.ingredient.IngredientView;
 import com.smart.inventory.application.views.menu.item.ItemView;
+import com.smart.inventory.application.views.menu.recent.RecentActivityView;
+import com.smart.inventory.application.views.menu.sold.SoldItemView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinSession;
@@ -127,35 +127,35 @@ public class OwnerService implements IOwnerService {
         if (role.equals(Role.CMP_OWNER)) {
             routes.add(new AuthorizedRoute(
                     company + RouteConstant.itemRoute,
-                    "Item Stock", ItemView.class));
+                    TextConstant.itemStock, ItemView.class));
             routes.add(new AuthorizedRoute(
                     company + RouteConstant.costingRoute,
-                    "Costing", IngredientView.class));
+                    TextConstant.costing, IngredientView.class));
             routes.add(new AuthorizedRoute(
                     company + RouteConstant.soldRoute,
-                    "Sold Items", SoldItemView.class));
+                    TextConstant.soldItem, SoldItemView.class));
             routes.add(new AuthorizedRoute(
                     company + RouteConstant.myEmployerRoute,
-                    "My Employer", AccountView.class));
+                    TextConstant.myEmployer, AccountView.class));
             routes.add(new AuthorizedRoute(
                     company + RouteConstant.activityRoute,
-                    "Recent History", RecentActivityView.class));
+                    TextConstant.recentHistory, RecentActivityView.class));
 
         } else if (role.equals(Role.EMPLOYER)) {
             routes.add(new AuthorizedRoute(
                     company + employerRoute + RouteConstant.itemRoute,
-                    "Item Stock", ItemView.class));
+                    TextConstant.itemStock, ItemView.class));
             routes.add(new AuthorizedRoute(
                     company + employerRoute + RouteConstant.costingRoute,
-                    "Costing", IngredientView.class));
+                    TextConstant.costing, IngredientView.class));
             routes.add(new AuthorizedRoute(
                     company + employerRoute + RouteConstant.soldRoute,
-                    "Sold Items", SoldItemView.class));
+                    TextConstant.soldItem, SoldItemView.class));
 
         } else if (role.equals(Role.ADMIN)) {
-            routes.add(new AuthorizedRoute("admin/dashboard", "Dashboard", DashboardView.class));
-            routes.add(new AuthorizedRoute("admin/item", "Item Stock", ItemView.class));
-            routes.add(new AuthorizedRoute("admin/costing", "Costing", IngredientView.class));
+            
+            //TODO add for Addmin
+
         }
         return routes;
     }
