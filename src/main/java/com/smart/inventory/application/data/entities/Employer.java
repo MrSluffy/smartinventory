@@ -13,7 +13,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -54,11 +56,21 @@ public class Employer extends AbstractEntity {
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company emplyrCompany;
 
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private final List<TodoItem> todoItemList = new ArrayList<>();
+
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private Item item;
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "todoItem_id", referencedColumnName = "id")
+    private TodoItem todoItem;
 
 
     @JsonIgnore
@@ -195,5 +207,17 @@ public class Employer extends AbstractEntity {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    public List<TodoItem> getTodoItemList() {
+        return todoItemList;
+    }
+
+    public TodoItem getTodoItem() {
+        return todoItem;
+    }
+
+    public void setTodoItem(TodoItem todoItem) {
+        this.todoItem = todoItem;
     }
 }

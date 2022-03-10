@@ -33,6 +33,15 @@ public class Company extends AbstractEntity {
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
+            name = "todo_items",
+            joinColumns = @JoinColumn(name = "companys_id"),
+            inverseJoinColumns = @JoinColumn(name = "todo_id")
+    )
+    List<TodoItem> todoItems = new ArrayList<>();
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
             name = "company_activity",
             joinColumns = @JoinColumn(name = "companys_id"),
             inverseJoinColumns = @JoinColumn(name = "activity_id")

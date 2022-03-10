@@ -50,6 +50,12 @@ public class Owner extends AbstractEntity {
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private SoldItem todoItems;
+
+
+    @JsonIgnore
+    @ManyToOne(cascade={CascadeType.MERGE,
+            CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "activity_id", referencedColumnName = "id")
     private Activity activity;
 

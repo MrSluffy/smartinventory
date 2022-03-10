@@ -8,6 +8,8 @@ public class RouteConstant {
     public static String myEmployerRoute = "/myemployers";
     public static String activityRoute = "/history";
     public static String employerRoute = "/employer";
+    public static String dashboardRoute = "/dashboard";
+
 
 
 }

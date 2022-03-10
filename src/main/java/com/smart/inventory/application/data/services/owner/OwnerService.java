@@ -13,6 +13,7 @@ import com.smart.inventory.application.util.constants.RouteConstant;
 import com.smart.inventory.application.util.constants.TextConstant;
 import com.smart.inventory.application.views.MainLayout;
 import com.smart.inventory.application.views.menu.account.AccountView;
+import com.smart.inventory.application.views.menu.dashboard.DashboardView;
 import com.smart.inventory.application.views.menu.ingredient.IngredientView;
 import com.smart.inventory.application.views.menu.item.ItemView;
 import com.smart.inventory.application.views.menu.recent.RecentActivityView;
@@ -31,14 +32,14 @@ import java.util.Optional;
 @Service
 public class OwnerService implements IOwnerService {
 
-    String employerRoute = RouteConstant.employerRoute;
-
     public record AuthorizedRoute(String route,
                                   String name,
                                   Class<? extends Component> view) {
 
     }
 
+
+    String employerRoute = RouteConstant.employerRoute;
 
     private final IOwnerRepository ownerRepository;
 
@@ -126,6 +127,9 @@ public class OwnerService implements IOwnerService {
 
         if (role.equals(Role.CMP_OWNER)) {
             routes.add(new AuthorizedRoute(
+                    company + RouteConstant.dashboardRoute,
+                    TextConstant.dashboard, DashboardView.class));
+            routes.add(new AuthorizedRoute(
                     company + RouteConstant.itemRoute,
                     TextConstant.itemStock, ItemView.class));
             routes.add(new AuthorizedRoute(
@@ -142,6 +146,9 @@ public class OwnerService implements IOwnerService {
                     TextConstant.recentHistory, RecentActivityView.class));
 
         } else if (role.equals(Role.EMPLOYER)) {
+            routes.add(new AuthorizedRoute(
+                    company + employerRoute + RouteConstant.dashboardRoute,
+                    TextConstant.dashboard, DashboardView.class));
             routes.add(new AuthorizedRoute(
                     company + employerRoute + RouteConstant.itemRoute,
                     TextConstant.itemStock, ItemView.class));
