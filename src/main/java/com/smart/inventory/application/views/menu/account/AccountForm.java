@@ -99,6 +99,7 @@ public class AccountForm extends FormLayout {
 
     public void setEmployerNew(Employer employer) {
         this.employer = employer;
+        employerBinder.readBean(employer);
     }
 
     public static abstract class AccountFormEvent extends ComponentEvent<AccountForm> {
