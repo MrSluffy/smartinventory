@@ -8,13 +8,12 @@ import com.smart.inventory.application.views.widgets.MaterialCardBackground;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.contextmenu.ContextMenu;
-import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.ComboBoxVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -36,9 +35,6 @@ public class DashboardView extends VerticalLayout {
 
     MaterialCardBackground materialCardBackground;
 
-    Span assignee = new Span();
-    ContextMenu menu = new ContextMenu();
-
     Dialog dialog = new Dialog();
 
     Button save = new Button("Save");
@@ -51,9 +47,9 @@ public class DashboardView extends VerticalLayout {
 
     MultiSelectListBox<TodoItem> listBox = new MultiSelectListBox<>();
 
-    private Employer employer;
-
     Utilities utilities = new Utilities();
+
+    ComboBox<Employer> employerComboBox = new ComboBox<>("Assign to :");
 
 
     public DashboardView(@Nonnull TodoService service) {
@@ -64,10 +60,11 @@ public class DashboardView extends VerticalLayout {
 
         materialCardBackground = new MaterialCardBackground();
 
-        materialCardBackground.add(configureTodo());
-
-        menu.setTarget(assignee);
         listBox.setWidthFull();
+        listBox.addClassNames("db-note-content");
+
+        materialCardBackground.add(configureTodo(),listBox);
+
 
 
         setPadding(true);
@@ -85,7 +82,7 @@ public class DashboardView extends VerticalLayout {
         listBox.setRenderer(new ComponentRenderer<>(todoItem -> {
             HorizontalLayout row = new HorizontalLayout();
             row.setAlignItems(FlexComponent.Alignment.CENTER);
-            Span employee = new Span(todoItem.getEmployer().getEmail());
+            Span employee = new Span(todoItem.getEmployer().getFirstName());
             Span title = new Span(todoItem.getTitle());
             title.getStyle()
                     .set("color", "var(--lumo-secondary-text-color)")
@@ -102,6 +99,8 @@ public class DashboardView extends VerticalLayout {
     @Nonnull
     private VerticalLayout createDialogLayout(@Nonnull Dialog dialog) {
         VerticalLayout layout = new VerticalLayout();
+
+        layout.addClassName("db-dialog");
 
         var headline = new H3("Add new note");
 
@@ -133,36 +132,27 @@ public class DashboardView extends VerticalLayout {
 
         List<Employer> employerList = service.findAllEmployer(utilities);
 
-        for (Employer employer : employerList) {
-            MenuItem menuItem = menu.addItem(employer.getEmail(), event -> {
-                setAssignee(employer);
-            });
-            menuItem.setCheckable(true);
-            this.employer = employer;
-        }
+        employerComboBox.setItems(employerList);
+        employerComboBox.setItemLabelGenerator(Employer::getEmail);
+        employerComboBox.setPlaceholder("Select employee");
+        employerComboBox.setWidthFull();
+        employerComboBox.addThemeVariants(ComboBoxVariant.LUMO_ALIGN_LEFT);
 
-        if (!employerList.isEmpty()){
-            setAssignee(employerList.get(0));
-        }
-        else{
-            assignee.setText("You don't have any employer to assign");
+
+        if (employerList.isEmpty()){
             textField.setEnabled(false);
+            employerComboBox.setPlaceholder("No employees");
             save.setEnabled(false);
         }
 
-        save.addClickListener(buttonClickEvent -> addTodo(employer));
+        save.addClickListener(buttonClickEvent -> addTodo(employerComboBox.getValue()));
         var hl = new HorizontalLayout();
         hl.setDefaultVerticalComponentAlignment(Alignment.END);
         hl.setJustifyContentMode(JustifyContentMode.END);
         hl.setWidthFull();
         hl.add(save);
 
-        var hlfirstRow = new HorizontalLayout();
-        hlfirstRow.setJustifyContentMode(JustifyContentMode.BETWEEN);
-        hlfirstRow.setWidthFull();
-        hlfirstRow.add(new Label("Assign to: "), assignee);
-
-        layout.add(header, hlfirstRow, textField, hl);
+        layout.add(header, employerComboBox, textField, hl);
 
         return layout;
     }
@@ -171,21 +161,6 @@ public class DashboardView extends VerticalLayout {
         service.addTodo(textField.getValue(), employer, utilities);
         updateList();
         dialog.close();
-    }
-
-    private void setAssignee(Employer employer) {
-        // Update checked state of menu items
-        menu.getItems().forEach(
-                item -> item.setChecked(item.getText().equals(employer.getEmail()))
-        );
-
-
-        if (employer != null) {
-            assignee.setText(employer.getEmail());
-        } else {
-            // Todo : extract this and determine if user/client is using mobile or desktop
-            assignee.setText("Tap and hold | Right Click");
-        }
     }
 
     @Nonnull
@@ -207,10 +182,11 @@ public class DashboardView extends VerticalLayout {
         hr.add(title, plusButton);
 
         VerticalLayout layout = new VerticalLayout();
+        layout.addClassName("db-note");
         layout.setPadding(true);
 
 
-        layout.add(hr, listBox);
+        layout.add(hr);
 
         return layout;
     }
