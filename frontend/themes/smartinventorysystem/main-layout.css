@@ -36,13 +36,24 @@
 
 .material-background{
     max-width: 28%;
+    border-radius: 24px;
+}
+
+.db-note-content{
+    max-height: 48%;
+}
+
+.db-dialog{
     border-radius: var(--lumo-border-radius);
 }
 
-div .material-background{
-    border-style: solid;
-    border-width: 0.01px;
+.db-note{
     max-height: 48%;
+}
+
+
+div .material-background {
+    border: 0.1px solid rgba(159, 159, 159, 0.4);
 }
 
 [slot='drawer'] nav a::before {

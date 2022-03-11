@@ -18,7 +18,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.listbox.MultiSelectListBox;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -63,9 +62,7 @@ public class DashboardView extends VerticalLayout {
         listBox.setWidthFull();
         listBox.addClassNames("db-note-content");
 
-        materialCardBackground.add(configureTodo(),listBox);
-
-
+        materialCardBackground.add(configureTodo());
 
         setPadding(true);
 
@@ -78,22 +75,37 @@ public class DashboardView extends VerticalLayout {
     }
 
     private void updateList() {
+        if(utilities.owner != null){
+            listBox.setRenderer(new ComponentRenderer<>(todoItem -> {
+                HorizontalLayout row = new HorizontalLayout();
+                Span employee = new Span(todoItem.getEmployer().getFirstName());
+                Span title = new Span(todoItem.getTitle());
+                title.getStyle()
+                        .set("color", "var(--lumo-secondary-text-color)")
+                        .set("font-size", "var(--lumo-font-size-s)");
+                VerticalLayout column = new VerticalLayout(employee, title);
+                column.setPadding(false);
+                column.setSpacing(false);
+                row.add(column);
+                row.getStyle().set("line-height", "var(--lumo-line-height-m)");
+                return row;
+            }));
+        }
+        if(utilities.employer != null){
+            listBox.setRenderer(new ComponentRenderer<>(todoItem -> {
+                HorizontalLayout row = new HorizontalLayout();
+                Span title = new Span(todoItem.getTitle());
+                VerticalLayout column = new VerticalLayout(title);
+                column.setPadding(false);
+                column.setSpacing(false);
+                row.add(column);
+                row.getStyle().set("line-height", "var(--lumo-line-height-m)");
+                return row;
+            }));
+        }
+
         listBox.setItems(service.findAllTodoItem(utilities));
-        listBox.setRenderer(new ComponentRenderer<>(todoItem -> {
-            HorizontalLayout row = new HorizontalLayout();
-            row.setAlignItems(FlexComponent.Alignment.CENTER);
-            Span employee = new Span(todoItem.getEmployer().getFirstName());
-            Span title = new Span(todoItem.getTitle());
-            title.getStyle()
-                    .set("color", "var(--lumo-secondary-text-color)")
-                    .set("font-size", "var(--lumo-font-size-s)");
-            VerticalLayout column = new VerticalLayout(employee, title);
-            column.setPadding(false);
-            column.setSpacing(false);
-            row.add(column);
-            row.getStyle().set("line-height", "var(--lumo-line-height-m)");
-            return row;
-        }));
+
     }
 
     @Nonnull
@@ -166,7 +178,9 @@ public class DashboardView extends VerticalLayout {
     @Nonnull
     private Component configureTodo() {
 
-        H4 title = new H4("Note");
+        String titleNote = utilities.employer != null ? "Note" : "Master Note";
+
+        H4 title = new H4(titleNote);
 
         Button plusButton = new Button(new Icon(VaadinIcon.PLUS));
 
@@ -186,7 +200,7 @@ public class DashboardView extends VerticalLayout {
         layout.setPadding(true);
 
 
-        layout.add(hr);
+        layout.add(hr, listBox);
 
         return layout;
     }

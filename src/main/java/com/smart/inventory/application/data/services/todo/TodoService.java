@@ -38,12 +38,15 @@ public class TodoService implements ITodoService{
 
 
     @Override
-    public List<TodoItem> findAllTodoItem(Utilities util) {
+    public List<TodoItem> findAllTodoItem(@Nonnull Utilities util) {
+        if(util.employer != null){
+            return todoItemRepository.findByEmployerId(util.employer.getId());
+        }
         return todoItemRepository.findByCompanyId(util.company.getId());
     }
 
     @Override
-    public List<Employer> findAllEmployer(Utilities util) {
+    public List<Employer> findAllEmployer(@Nonnull Utilities util) {
         return employerRepository.search(util.company.getId());
     }
 

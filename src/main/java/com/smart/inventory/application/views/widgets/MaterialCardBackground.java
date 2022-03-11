@@ -10,6 +10,8 @@ public class MaterialCardBackground extends Div {
 
     public MaterialCardBackground(){
         addClassName("material-background");
+        addClassNames("border-b", "border-contrast-40");
         setSizeFull();
+
     }
 }

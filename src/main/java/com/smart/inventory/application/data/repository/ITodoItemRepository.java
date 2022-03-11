@@ -14,4 +14,7 @@ public interface ITodoItemRepository extends JpaRepository<TodoItem, String> {
 
     @Query("select c from TodoItem c where c.company.id = :#{#company}")
     List<TodoItem> findByCompanyId(@Param("company") Integer company);
+
+    @Query("select c from TodoItem c where c.employer.id = :#{#employer}")
+    List<TodoItem> findByEmployerId(@Param("employer") Integer employer);
 }
