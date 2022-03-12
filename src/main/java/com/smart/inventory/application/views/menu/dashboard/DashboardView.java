@@ -75,7 +75,7 @@ public class DashboardView extends VerticalLayout {
     }
 
     private void updateList() {
-        if(utilities.owner != null){
+        if (utilities.owner != null) {
             listBox.setRenderer(new ComponentRenderer<>(todoItem -> {
                 HorizontalLayout row = new HorizontalLayout();
                 Span employee = new Span(todoItem.getEmployer().getFirstName());
@@ -91,7 +91,7 @@ public class DashboardView extends VerticalLayout {
                 return row;
             }));
         }
-        if(utilities.employer != null){
+        if (utilities.employer != null) {
             listBox.setRenderer(new ComponentRenderer<>(todoItem -> {
                 HorizontalLayout row = new HorizontalLayout();
                 Span title = new Span(todoItem.getTitle());
@@ -151,7 +151,7 @@ public class DashboardView extends VerticalLayout {
         employerComboBox.addThemeVariants(ComboBoxVariant.LUMO_ALIGN_LEFT);
 
 
-        if (employerList.isEmpty()){
+        if (employerList.isEmpty()) {
             textField.setEnabled(false);
             employerComboBox.setPlaceholder("No employees");
             save.setEnabled(false);
@@ -182,11 +182,18 @@ public class DashboardView extends VerticalLayout {
 
         H4 title = new H4(titleNote);
 
-        Button plusButton = new Button(new Icon(VaadinIcon.PLUS));
+        Button plusButton;
+
+
+        if (utilities.owner != null) {
+            plusButton = new Button(new Icon(VaadinIcon.PLUS));
+            plusButton.addClickListener(event -> dialog.open());
+        } else {
+            plusButton = new Button(new Icon(VaadinIcon.ELLIPSIS_DOTS_V));
+        }
 
         plusButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_ICON);
 
-        plusButton.addClickListener(event -> dialog.open());
 
         HorizontalLayout hr = new HorizontalLayout();
         hr.setWidthFull();

@@ -2,7 +2,6 @@ package com.smart.inventory.application.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart.inventory.application.data.AbstractEntity;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -69,10 +68,6 @@ public class Item extends AbstractEntity {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public String dt(){
-        return DateTime.now().toString();
     }
 
     public double getPrice() {

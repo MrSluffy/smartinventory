@@ -1,6 +1,6 @@
 package com.smart.inventory.application.data.services.request;
 
-import com.github.jknack.handlebars.internal.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
