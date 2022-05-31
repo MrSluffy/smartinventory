@@ -117,6 +117,7 @@
     "@webcomponents/shadycss": "1.9.6",
     "construct-style-sheets-polyfill": "3.0.4",
     "date-fns": "2.23.0",
+    "echarts": "5.3.2",
     "line-awesome": "1.3.0",
     "lit": "2.1.4"
   },
@@ -263,7 +264,8 @@
     "date-fns": "$date-fns",
     "line-awesome": "$line-awesome",
     "lit": "$lit",
-    "chokidar": "$chokidar"
+    "chokidar": "$chokidar",
+    "echarts": "$echarts"
   },
   "vaadin": {
     "dependencies": {
@@ -381,6 +383,7 @@
       "@webcomponents/shadycss": "1.9.6",
       "construct-style-sheets-polyfill": "3.0.4",
       "date-fns": "2.23.0",
+      "echarts": "5.3.2",
       "line-awesome": "1.3.0",
       "lit": "2.1.4"
     },
@@ -406,7 +409,7 @@
       "workbox-precaching": "6.5.0",
       "workbox-webpack-plugin": "6.5.0"
     },
-    "hash": "be72098aa417601e543ce1b7fbc62008cdf47e72d482ba681a613b0550195220"
+    "hash": "eb4af5ba9099947160999ea99b51c0e72c2d7fd3aebbf70f16b59be210fbfad2"
   },
   "scripts": {
     "dev": "react-scripts start",

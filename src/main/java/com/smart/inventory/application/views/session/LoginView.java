@@ -1,7 +1,10 @@
 package com.smart.inventory.application.views.session;
 
+import com.smart.inventory.application.data.entities.Company;
+import com.smart.inventory.application.data.entities.Employer;
 import com.smart.inventory.application.data.services.owner.OwnerService;
 import com.smart.inventory.application.exceptions.AuthException;
+import com.smart.inventory.application.util.constants.RouteConstant;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -13,14 +16,12 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
 
 @Route("login")
 @PageTitle("Login")
 public class LoginView extends VerticalLayout {
-
-
     String widthSize = "20em";
-
 
     public LoginView(OwnerService ownerService){
         addClassName("login-view");
@@ -39,7 +40,9 @@ public class LoginView extends VerticalLayout {
         btnLogin.addClickListener(buttonClickEvent ->{
             try {
                 ownerService.authenticate(email.getValue(), password.getValue(), companyName.getValue());
-                UI.getCurrent().navigate("home");
+                String company = VaadinSession.getCurrent().getAttribute(Company.class).getName().trim().toLowerCase();
+                Employer employer = VaadinSession.getCurrent().getAttribute(Employer.class);
+                UI.getCurrent().navigate(employer != null ? company + RouteConstant.employerRoute + RouteConstant.dashboardRoute : company + RouteConstant.dashboardRoute);
             } catch (AuthException e) {
                 Notification.show("Wrong Credentials");
             }

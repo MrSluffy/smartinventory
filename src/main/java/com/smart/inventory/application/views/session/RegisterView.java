@@ -3,6 +3,7 @@ package com.smart.inventory.application.views.session;
 import com.smart.inventory.application.data.services.owner.OwnerService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
@@ -13,7 +14,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
-@Route("Register")
+@Route("register")
 public class RegisterView extends Composite {
 
     private final OwnerService ownerService;
@@ -39,7 +40,15 @@ public class RegisterView extends Composite {
         HorizontalLayout line3 = new HorizontalLayout(email, company);
 
         btnRegister.addClickListener(event -> {
-            register(fName.getValue(), lName.getValue(), email.getValue(), password1.getValue(), password2.getValue(), company.getValue());
+            try {
+                register(fName.getValue(), lName.getValue(), email.getValue(), password1.getValue(), password2.getValue(), company.getValue());
+                Notification.show("Successfully Signing up");
+                Thread.sleep(2000);
+                UI.getCurrent().navigate("login");
+            } catch (InterruptedException e) {
+                Notification.show("Failed to register");
+                throw new RuntimeException(e);
+            }
         });
 
         return new VerticalLayout(head, line1, line2, line3, btnRegister);
@@ -52,7 +61,7 @@ public class RegisterView extends Composite {
                           String email,
                           String password1,
                           String password2,
-                          String company) {
+                          String company) throws InterruptedException {
 
         if (fname.trim().isEmpty()) {
             notif(fname);
@@ -69,7 +78,7 @@ public class RegisterView extends Composite {
         } else if (company.trim().isEmpty()) {
             notif(company);
         } else {
-            ownerService.register(fname, lname, password1, email, company);
+            ownerService.register(fname, lname, password1, email, company);;
         }
 
     }
